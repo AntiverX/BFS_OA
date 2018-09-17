@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">姓名</th>
+                <th scope="col">本周工作</th>
+                <th scope="col">下周工作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for key, value in submitted_weekly_summarys.items %}
+                <tr>
+                    {% for data in value %}
+                        {% autoescape off %}
+                        <td>{{ data }}</td>
+                        {% endautoescape %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

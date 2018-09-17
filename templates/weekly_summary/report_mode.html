@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container-fluid">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row mt-5 col-6">
+
+                <div class="col-3">
+                    <button type="submit" name="btn" value="is_present" class="btn btn-primary">到场</button>
+                </div>
+                <div class="col-3">
+                    <button type="submit" name="btn" value="is_absent" class="btn btn-primary">请假</button>
+                </div>
+                <div class="col-3">
+                    <button type="submit" name="btn" value="is_left" class="btn btn-primary">未到</button>
+                </div>
+                <input style="display: none" name="real_name" value="{{ current_weekly_summary.real_name }}"></input>
+
+            </div>
+        </form>
+        <table class="table mt-5">
+            <thead>
+            <tr>
+                <th scope="col">姓名</th>
+                <th scope="col">本周工作</th>
+                <th scope="col">下周工作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr>
+                {% autoescape off %}
+                    <td style="font-size: 2rem">{{ current_weekly_summary.real_name }}</td>
+                    <td style="font-size: 2rem">{{ current_weekly_summary.this_week_task }}</td>
+                    <td style="font-size: 2rem">{{ current_weekly_summary.next_week_task }}</td>
+                {% endautoescape %}
+            </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+    </div>
+{% endblock %}
+
+<script>
+
+</script>

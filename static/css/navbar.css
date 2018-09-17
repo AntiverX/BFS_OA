@@ -1,0 +1,9 @@
+/*.navbar {*/
+    /*position: relative;*/
+/*}*/
+
+.nav-link {
+    color: #6c757d;
+    font-size: .875rem;
+    height: 40px;
+}
