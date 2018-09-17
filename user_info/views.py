@@ -43,6 +43,6 @@ def deauth(request):
 
 
 def register(request):
-    user = User.objects.create_user(username="Antiver", password="wang@85#2")
+    user = User.objects.create_user(username="1234", password="1234")
     user.save()
     return render(request, 'register.html')
