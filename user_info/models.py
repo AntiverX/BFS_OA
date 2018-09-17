@@ -110,5 +110,5 @@ class Work(models.Model):
 
 
 class Time_Table(models.Model):
-    # TODO 课程表及template编写 
+    # TODO 课程表及template编写
     pass
