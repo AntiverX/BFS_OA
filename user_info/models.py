@@ -95,9 +95,15 @@ class Metting_Record(models.Model):
 
 
 class Target(models.Model):
-    # TODO 目标及template编写
-    pass
-
+    # TODO template编写
+    user_id = models.IntegerField()
+    term = models.CharField(max_length=32)
+    time = models.DateTimeField()
+    expected_result = models.CharField(max_length=32)
+    time_consumed = models.IntegerField()
+    content = models.TextField()
+    remark = models.TextField()
+    end_of_term_summary = models.TextField()
 
 class Plan(models.Model):
     # TODO 计划及template编写
