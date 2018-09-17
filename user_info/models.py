@@ -107,3 +107,8 @@ class Plan(models.Model):
 class Work(models.Model):
     # TODO 工作总结及template编写
     pass
+
+
+class Time_Table(models.Model):
+    # TODO 课程表及template编写 
+    pass
