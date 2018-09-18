@@ -4,21 +4,22 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
+context = {
+    'menus': {'my_info': "我的信息",
+              'time_table': "课程表",
+              'attendance': "考勤",
+              'meeting_record': "会议记录",
+              'target': "目标",
+              'plan': "计划",
+              'weekly_summary': "周报",
+              'work_summary': "工作总结"
+              }
+}
+
 
 @login_required
 def info(request):
-    context = {
-        'menus': {'my_info': "我的信息",
-                  'schedule': "课程表",
-                  'attendance': "考勤",
-                  'meeting_record': "会议记录",
-                  'target': "目标",
-                  'plan': "计划",
-                  'weekly_summary': "周报",
-                  'work_summary': "工作总结"
-                  },
-        'username': request.user.username,
-    }
+    context['username'] = request.user.username
     return render(request, 'index.html', context=context)
 
 
@@ -46,3 +47,40 @@ def register(request):
     user = User.objects.create_user(username="Antiver", password="wang@85#2")
     user.save()
     return render(request, 'register.html')
+
+
+@login_required
+def attendance(request):
+    # TODO template及逻辑
+    context['username'] = request.user.username
+    return render(request, "under_construction.html", context=context)
+
+
+def meeting_record(request):
+    # TODO template及逻辑
+    context['username'] = request.user.username
+    return render(request, "under_construction.html", context=context)
+
+
+def target(request):
+    # TODO template及逻辑
+    context['username'] = request.user.username
+    return render(request, "under_construction.html", context=context)
+
+
+def plan(request):
+    # TODO template及逻辑
+    context['username'] = request.user.username
+    return render(request, "under_construction.html", context=context)
+
+
+def work_summary(request):
+    # TODO template及逻辑
+    context['username'] = request.user.username
+    return render(request, "under_construction.html", context=context)
+
+
+def time_table(request):
+    # TODO template及逻辑
+    context['username'] = request.user.username
+    return render(request, "under_construction.html", context=context)

@@ -95,7 +95,6 @@ class MettingRecord(models.Model):
 
 
 class Target(models.Model):
-    # TODO template编写
     user_id = models.IntegerField()
     term = models.CharField(max_length=32)
     time = models.DateTimeField()
@@ -107,7 +106,6 @@ class Target(models.Model):
 
 
 class Plan(models.Model):
-    # TODO template编写
     user_id = models.IntegerField()
     type = models.CharField(max_length=32)
     plan_name = models.CharField(max_length=32)
@@ -127,7 +125,6 @@ class Plan(models.Model):
 
 
 class WorkSummary(models.Model):
-    # TODO template编写
     user_id = models.IntegerField()
     date = models.DateField()
     type = models.CharField(max_length=32)
@@ -139,7 +136,6 @@ class WorkSummary(models.Model):
 
 
 class TimeTable(models.Model):
-    # TODO template编写
     user_id = models.IntegerField()
     date = models.DateField()
     monday = models.TextField()
