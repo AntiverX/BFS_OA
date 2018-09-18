@@ -89,7 +89,7 @@ class User(AbstractBaseUser):
     #     send_mail(subject, message, from_email, [self.email], **kwargs)
 
 
-class Metting_Record(models.Model):
+class MettingRecord(models.Model):
     # TODO 会议记录及template编写
     pass
 
@@ -107,9 +107,9 @@ class Target(models.Model):
 
 
 class Plan(models.Model):
-    # TODO 计划及template编写
+    # TODO template编写
     user_id = models.IntegerField()
-    plan_type = models.CharField(max_length=32)
+    type = models.CharField(max_length=32)
     plan_name = models.CharField(max_length=32)
     plan_result = models.TextField()
     is_reviewed = models.BooleanField()
@@ -126,11 +126,26 @@ class Plan(models.Model):
     remark = models.TextField()
 
 
-class Work(models.Model):
-    # TODO 工作总结及template编写
-    pass
+class WorkSummary(models.Model):
+    # TODO template编写
+    user_id = models.IntegerField()
+    date = models.DateField()
+    type = models.CharField(max_length=32)
+    summary = models.TextField()
+    average_time = models.CharField(max_length=32)
+    man_day = models.IntegerField()
+    natural_day = models.IntegerField()
+    remark = models.TextField()
 
 
-class Time_Table(models.Model):
-    # TODO 课程表及template编写
-    pass
+class TimeTable(models.Model):
+    # TODO template编写
+    user_id = models.IntegerField()
+    date = models.DateField()
+    monday = models.TextField()
+    tuesday = models.TextField()
+    wednesday = models.TextField()
+    thursday = models.TextField()
+    friday = models.TextField()
+    saturday = models.TextField()
+    sunday = models.TextField()
