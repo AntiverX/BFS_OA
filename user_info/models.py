@@ -89,9 +89,19 @@ class User(AbstractBaseUser):
     #     send_mail(subject, message, from_email, [self.email], **kwargs)
 
 
-class Metting_Record(models.Model):
+class MeetingRecord(models.Model):
     # TODO 会议记录及template编写
-    pass
+    user_id = models.IntegerField()
+    date = models.DateField()
+    time = models.TimeField()
+    cost_time = models.IntegerField()
+    place = models.CharField(max_length=50)
+    theme = models.CharField(max_length=100)
+    theme_content = models.CharField(max_length=300)
+    remark = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.username
 
 
 class Target(models.Model):
