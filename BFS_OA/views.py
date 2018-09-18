@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 
 def index(request):
+    # TODO 主页制作，模仿其他系统样式
     context = {
         'menus': {'bulletin': "通知公告",
                   'news': "新闻",

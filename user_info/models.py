@@ -105,9 +105,25 @@ class Target(models.Model):
     remark = models.TextField()
     end_of_term_summary = models.TextField()
 
+
 class Plan(models.Model):
     # TODO 计划及template编写
-    pass
+    user_id = models.IntegerField()
+    plan_type = models.CharField(max_length=32)
+    plan_name = models.CharField(max_length=32)
+    plan_result = models.TextField()
+    is_reviewed = models.BooleanField()
+    head_person = models.CharField(max_length=32)
+    affiliated_person = models.TextField()
+    planed_time = models.IntegerField()
+    planed_start_time = models.DateField()
+    planed_end_time = models.DateField()
+    actual_time = models.IntegerField()
+    actual_start_time = models.DateField()
+    actual_end_time = models.DateField()
+    is_advanced = models.BooleanField()
+    is_postponed = models.BooleanField()
+    remark = models.TextField()
 
 
 class Work(models.Model):
