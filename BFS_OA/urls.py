@@ -24,5 +24,8 @@ urlpatterns = [
     path('', views.index),
     path('info/', include('user_info.urls')),
     path('weekly_summary/', include('weekly_summary.urls')),
-    path('monthly_summary/', include('monthly_summary.urls'))
+    path('monthly_summary/', include('monthly_summary.urls')),
+    path('bulletin',views.bulletin),
+    path('news', views.news),
+    path('library', views.library),
 ]

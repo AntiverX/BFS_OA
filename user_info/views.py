@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse
-from user_info.models import User
+from user_info.models import User, Target, Plan
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -20,7 +20,7 @@ context = {
 @login_required
 def info(request):
     context['username'] = request.user.username
-    return render(request, 'index.html', context=context)
+    return render(request, 'info/info.html', context=context)
 
 
 def auth(request):
@@ -63,15 +63,35 @@ def meeting_record(request):
 
 
 def target(request):
-    # TODO template及逻辑
     context['username'] = request.user.username
-    return render(request, "under_construction.html", context=context)
+    if request.method == "POST":
+        expected_result = request.POST['expected_result']
+        content = request.POST['content']
+        time_consumed = request.POST['time_consumed']
+        target = Target(user_id=request.user.id, expected_result=expected_result, content=content,
+                        time_consumed=time_consumed)
+        target.save()
+        return render(request, "success.html", context=context)
+    else:
+        results = Target.objects.all()
+        context['results'] = results
+        return render(request, "info/target.html", context=context)
 
 
 def plan(request):
-    # TODO template及逻辑
     context['username'] = request.user.username
-    return render(request, "under_construction.html", context=context)
+    if request.method == "POST":
+        expected_result = request.POST['expected_result']
+        content = request.POST['content']
+        time_consumed = request.POST['time_consumed']
+        target = Target(user_id=request.user.id, expected_result=expected_result, content=content,
+                        time_consumed=time_consumed)
+        target.save()
+        return render(request, "success.html", context=context)
+    else:
+        results = Plan.objects.all()
+        context['results'] = results
+        return render(request, "info/plan.html", context=context)
 
 
 def work_summary(request):
@@ -83,4 +103,10 @@ def work_summary(request):
 def time_table(request):
     # TODO template及逻辑
     context['username'] = request.user.username
-    return render(request, "under_construction.html", context=context)
+    return render(request, "info/time_table.html", context=context)
+
+
+def my_info(request):
+    # TODO template及逻辑
+    context['user'] = request.user
+    return render(request, "info/my_info.html", context=context)

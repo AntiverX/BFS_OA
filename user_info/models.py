@@ -97,11 +97,10 @@ class MettingRecord(models.Model):
 class Target(models.Model):
     user_id = models.IntegerField()
     term = models.CharField(max_length=32)
-    time = models.DateTimeField()
+    time = models.DateTimeField(auto_now=True)
     expected_result = models.CharField(max_length=32)
     time_consumed = models.IntegerField()
     content = models.TextField()
-    remark = models.TextField()
     end_of_term_summary = models.TextField()
 
 
