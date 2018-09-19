@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+<style type="text/css">
+    td {
+        padding-top: 15px;
+    }
+</style>
+{% block content %}
+    <div class="container mt-5">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">编号</th>
+                <th scope="col">书名</th>
+                <th scope="col">作者</th>
+                <th scope="col">状态</th>
+                <th scope="col">借阅</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr>
+                <th scope="row">1</th>
+                <td STYLE="padding-top: 15px;">加密与解密 第4版</td>
+                <td style="padding-top: 15px;">段钢</td>
+                <td style="padding-top: 15px;">可借</td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm">借阅</button>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">1</th>
+                <td STYLE="padding-top: 15px;">深度学习 [deep learning]</td>
+                <td style="padding-top: 15px;"> Ian Goodfellow</td>
+                <td style="padding-top: 15px;">可借</td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm">借阅</button>
+                </td>
+            </tr>
+
+            </tbody>
+
+        </table>
+    </div>
+{% endblock %}
+
+
+
+
+

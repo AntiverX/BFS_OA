@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container ">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mt-5">
+                <div class="form-group">
+                    <label for="expected_result">预期有性成果</label>
+                    <input type="text" class="form-control" id="expected_result" name="expected_result">
+                </div>
+                <div class="form-group">
+                    <label for="content">目标说明</label>
+                    <input type="text" class="form-control" id="content" name="content">
+                </div>
+                <div class="form-group">
+                    <label for="content">用时</label>
+                    <input type="text" class="form-control" id="time_consumed" name="time_consumed">
+                </div>
+                <button type="submit" class="btn btn-primary">提交</button>
+
+            </div>
+        </form>
+
+        <table class="table mt-5">
+            <thead>
+            <tr>
+                <th scope="col">序号</th>
+                <th scope="col">填表日期</th>
+                <th scope="col">预期有性成果</th>
+                <th scope="col">用时</th>
+                <th scope="col">目标说明</th>
+                <th scope="col">期末总结</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if results %}
+                hello.
+            {% endif %}
+            {% for result in results %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ result.time }}</td>
+                    <td>{{ result.expected_result }}</td>
+                    <td>{{ result.time_consumed }}</td>
+                    <td>{{ result.content }}</td>
+                    <td>无</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}
