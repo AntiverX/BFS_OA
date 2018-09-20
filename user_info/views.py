@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse
-from user_info.models import User, Target, Plan, weekly_summary, WorkSummary
+from user_info.models import User, Target, Plan, weekly_summary, WorkSummary, MeetingRecord
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -45,7 +45,7 @@ def deauth(request):
 
 
 def register(request):
-    user = User.objects.create_user(username="Antiver", password="wang@85#2")
+    user = User.objects.create_user(username="1234", password="1234")
     user.save()
     return render(request, 'register.html')
 
@@ -57,10 +57,11 @@ def attendance(request):
     return render(request, "under_construction.html", context=context)
 
 
-def meeting_record(request):
-    # TODO template及逻辑
-    context['username'] = request.user.username
-    return render(request, "under_construction.html", context=context)
+def record(request):
+    MeetingRecord.objects.create(user_id=1, date="2018-09-18", time="20:17:00", cost_time=60, place="10#102",
+                                 theme="马克思主义好", theme_content="学习十九大精神", remark="明天继续学习")
+    records = MeetingRecord.objects.all()
+    return render(request, 'user_info/meeting_record.html', {'records': records})
 
 
 def target(request):

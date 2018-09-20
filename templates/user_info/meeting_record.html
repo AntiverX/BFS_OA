@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered mt-5">
+                <thread class="thread-light">
+                    <tr>
+                        <th>姓名</th>
+                        <th>日期</th>
+                        <th>时间</th>
+                        <th>用时(Min)</th>
+                        <th>地点</th>
+                        <th>序号</th>
+                        <th>主题</th>
+                        <th>主题内容说明</th>
+                        <th>备注</th>
+                    </tr>
+                </thread>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ record.user_id }}</td>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.time }}</td>
+                        <td>{{ record.cost_time }}</td>
+                        <td>{{ record.place }}</td>
+                        <td>{{ record.id }}</td>
+                        <td>{{ record.theme }}</td>
+                        <td>{{ record.theme_content }}</td>
+                        <td>{{ record.remark }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <form method="post">
+              {% csrf_token %}
+              <div class="row mt-5">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="date">日期：</label>
+                        <input type="text" class="form-control" placeholder="2018-01-01" id="date">
+                    </div>
+                    <div class="form-group">
+                        <label for="time">时间：</label>
+                        <input type="text" class="form-control" placeholder="09:00" id="time">
+                    </div>
+                    <div class="form-group">
+                        <label for="cost_time">用时(Min)：</label>
+                        <input type="text" class="form-control" placeholder="60" id="cost_time">
+                    </div>
+                    <div class="form-group">
+                        <label for="place">地点：</label>
+                        <input type="text" class="form-control" placeholder="10#420" id="place">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="theme">主题：</label>
+                        <textarea class="form-control" id="theme" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="theme_content">主题内容说明：</label>
+                        <textarea class="form-control" id="theme_content" rows="5"></textarea>
+                    </div>
+                </div>
+                </div>
+              <div class="form-group">
+                  <label for="remark">备注：</label>
+                  <textarea class="form-control" id="remark" rows="1"></textarea>
+              </div>
+              <div class="row mt-5 form-group col-6">
+                  <button type="submit" class="btn btn-primary">提交</button>
+              </div>
+        </form>
+    </div>
+{% endblock %}
