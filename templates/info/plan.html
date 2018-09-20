@@ -7,56 +7,132 @@
             {% csrf_token %}
             <div class="mt-5">
                 <div class="form-group">
-                    <label for="expected_result">预期有性成果</label>
-                    <input type="text" class="form-control" id="expected_result" name="expected_result">
+                    <label for="plan_name">任务名称</label>
+                    <input type="text" class="form-control" id="expected_result" name="plan_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="content">目标说明</label>
-                    <input type="text" class="form-control" id="content" name="content">
+                    <label for="plan_result">工作成果</label>
+                    <input type="text" class="form-control" id="plan_result" name="plan_result" required>
                 </div>
-                <div class="form-group">
-                    <label for="content">用时</label>
-                    <input type="text" class="form-control" id="time_consumed" name="time_consumed">
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label for="type">任务类型</label>
+                        <input type="text" class="form-control" id="type" name="type" required>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label for="is_reviewed">是否通过评审</label>
+                        <input type="text" class="form-control" id="is_reviewed" name="is_reviewed" required>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label for="head_person">负责人</label>
+                        <input type="text" class="form-control" id="head_person" name="head_person" required>
+                    </div>
+
+                    <div class="form-group col-6">
+                        <label for="affiliated_person">参与人</label>
+                        <input type="text" class="form-control" id="affiliated_person" name="affiliated_person"
+                               required>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label for="planed_time">计划持续时间</label>
+                        <input type="text" class="form-control" id="planed_time" name="planed_time" required>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label for="planed_start_time">计划开始日期</label>
+                        <input type="text" class="form-control" id="planed_start_time" name="planed_start_time"
+                               required>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label for="planed_end_time">计划完成日期</label>
+                        <input type="text" class="form-control" id="planed_end_time" name="planed_end_time" required>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label for="actual_time">实际持续时间</label>
+                        <input type="text" class="form-control" id="actual_time" name="actual_time" required>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label for="actual_start_time">实际开始日期</label>
+                        <input type="text" class="form-control" id="actual_start_time" name="actual_start_time"
+                               required>
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="actual_end_time">实际完成日期</label>
+                        <input type="text" class="form-control" id="actual_end_time" name="actual_end_time" required>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label for="advanced_postponed_time">提前/推迟（天）</label>
+                        <input type="text" class="form-control" id="advanced_postponed_time"
+                               name="advanced_postponed_time" required>
+                    </div>
+
+                    <div class="form-group col-10">
+                        <label for="remark">备注（文档页数、程序量，修改意见等）</label>
+                        <input type="text" class="form-control" id="remark" name="remark" required>
+                    </div>
+                </div>
+
+
                 <button type="submit" class="btn btn-primary">提交</button>
 
             </div>
         </form>
-{#        <div class="dtHorizontalExampleWrapper">#}
-            <table id="dtHorizontalExample_wrapper" class="table mt-5 table-responsive">
-                <thead>
-                <tr>
-                    <th scope="col" nowrap>序号</th>
-                    <th scope="col" nowrap>任务类型</th>
-                    <th scope="col" nowrap>任务名称</th>
-                    <th scope="col" nowrap>工作成果</th>
-                    <th scope="col" nowrap>是否通过评审</th>
-                    <th scope="col" nowrap>负责人</th>
-                    <th scope="col" nowrap>参与人</th>
-                    <th scope="col" nowrap>计划持续时间</th>
-                    <th scope="col" nowrap>计划开始日期</th>
-                    <th scope="col" nowrap>计划完成日期</th>
-                    <th scope="col" nowrap>实际持续时间</th>
-                    <th scope="col" nowrap>实际开始日期</th>
-                    <th scope="col" nowrap>实际完成日期</th>
-                    <th scope="col" nowrap>提前/推迟（天）</th>
-                    <th scope="col" nowrap>备注（文档页数、程序量，修改意见等）</th>
-                </tr>
-                </thead>
-                <tbody>
+        {#        <div class="dtHorizontalExampleWrapper">#}
+        <table id="dtHorizontalExample_wrapper" class="table mt-5 table-responsive">
+            <thead>
+            <tr>
+                <th scope="col" nowrap>序号</th>
+                <th scope="col" nowrap>任务类型</th>
+                <th scope="col" nowrap>任务名称</th>
+                <th scope="col" nowrap>工作成果</th>
+                <th scope="col" nowrap>是否通过评审</th>
+                <th scope="col" nowrap>负责人</th>
+                <th scope="col" nowrap>参与人</th>
+                <th scope="col" nowrap>计划持续时间</th>
+                <th scope="col" nowrap>计划开始日期</th>
+                <th scope="col" nowrap>计划完成日期</th>
+                <th scope="col" nowrap>实际持续时间</th>
+                <th scope="col" nowrap>实际开始日期</th>
+                <th scope="col" nowrap>实际完成日期</th>
+                <th scope="col" nowrap>提前/推迟（天）</th>
+                <th scope="col" nowrap>备注（文档页数、程序量，修改意见等）</th>
+            </tr>
+            </thead>
+            <tbody>
 
-                {% for result in results %}
-                    <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td nowrap>{{ result.type }}</td>
-                        <td>{{ result.plan_name }}</td>
-                        <td>{{ result.plan_result }}</td>
-                        <td>{{ result.is_reviewed }}</td>
-                        <td>无</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-{#        </div>#}
+            {% for result in results %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td nowrap>{{ result.type }}</td>
+                    <td nowrap>{{ result.plan_name }}</td>
+                    <td nowrap>{{ result.plan_result }}</td>
+                    <td nowrap>{{ result.is_reviewed }}</td>
+                    <td nowrap>{{ result.head_person }}</td>
+                    <td nowrap>{{ result.affiliated_person }}</td>
+                    <td nowrap>{{ result.planed_time }}</td>
+                    <td nowrap>{{ result.planed_start_time }}</td>
+                    <td nowrap>{{ result.planed_end_time }}</td>
+                    <td nowrap>{{ result.actual_time }}</td>
+                    <td nowrap>{{ result.actual_start_time }}</td>
+                    <td nowrap>{{ result.actual_end_time }}</td>
+                    <td nowrap>{{ result.advanced_postponed_time }}</td>
+                    {#                    <td>{{ result.remark }}</td>#}
+                    <td>无</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {#        </div>#}
     </div>
 {% endblock %}

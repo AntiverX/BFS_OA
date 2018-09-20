@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container ">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mt-5">
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label for="type">类型（月/学期）</label>
+                        <input type="text" class="form-control" id="type" name="type">
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="average_time">平均工作小时数（实际/有效）</label>
+                        <input type="text" class="form-control" id="average_time" name="average_time">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="man_day">人日数（天）</label>
+                        <input type="text" class="form-control" id="man_day" name="man_day">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="natural_day">自然日（天）</label>
+                        <input type="text" class="form-control" id="natural_day" name="natural_day">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="summary">工作总结</label>
+                    <input type="text" class="form-control" id="summary" name="summary">
+                </div>
+                <div class="form-group">
+                    <label for="remark">计划执行情况和工作效果说明</label>
+                    <input type="text" class="form-control" id="remark" name="remark">
+                </div>
+                <button type="submit" class="btn btn-primary">提交</button>
+
+            </div>
+        </form>
+
+        <table class="table mt-5 table-responsive">
+            <thead>
+            <tr>
+                <th scope="col" nowrap>填表日期</th>
+                <th scope="col" nowrap>类型（月、学期）</th>
+                <th scope="col" nowrap>工作总结</th>
+                <th scope="col" nowrap>平均工作小时数（实际/有效）</th>
+                <th scope="col" nowrap>人日数（天）</th>
+                <th scope="col" nowrap>自然日（天）</th>
+                <th scope="col" nowrap>计划执行情况和工作效果说明</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for result in results %}
+                <tr>
+                    <td nowrap>{{ result.date }}</td>
+                    <td>{{ result.type }}</td>
+                    <td>{{ result.summary }}</td>
+                    <td>{{ result.average_time }}</td>
+                    <td>{{ result.man_day }}</td>
+                    <td>{{ result.natural_day }}</td>
+                    <td>{{ result.remark }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}

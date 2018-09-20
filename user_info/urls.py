@@ -12,5 +12,6 @@ urlpatterns = [
     path('plan', views.plan),
     path('weekly_summary', views.work_summary),
     path('work_summary', views.work_summary),
-    path('my_info', views.my_info)
+    path('my_info', views.my_info),
+    path('my_summary', views.my_summary)
 ]

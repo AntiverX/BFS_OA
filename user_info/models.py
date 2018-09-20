@@ -118,14 +118,13 @@ class Plan(models.Model):
     actual_time = models.IntegerField()
     actual_start_time = models.DateField()
     actual_end_time = models.DateField()
-    is_advanced = models.BooleanField()
-    is_postponed = models.BooleanField()
+    advanced_postponed_time = models.IntegerField()
     remark = models.TextField()
 
 
 class WorkSummary(models.Model):
     user_id = models.IntegerField()
-    date = models.DateField()
+    date = models.DateTimeField(auto_now=True)
     type = models.CharField(max_length=32)
     summary = models.TextField()
     average_time = models.CharField(max_length=32)
@@ -144,3 +143,15 @@ class TimeTable(models.Model):
     friday = models.TextField()
     saturday = models.TextField()
     sunday = models.TextField()
+
+
+class weekly_summary(models.Model):
+    # TODO 把周报model移到user_info里
+    real_name = models.CharField(max_length=150)
+    this_week_task = models.TextField()
+    next_week_task = models.TextField()
+    submit_time = models.DateTimeField(auto_now=True)
+    week = models.IntegerField(default=0)
+    is_present = models.BooleanField(default=False)
+    is_absent = models.BooleanField(default=False)
+    is_left = models.BooleanField(default=False)
