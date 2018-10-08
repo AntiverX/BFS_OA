@@ -1,8 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+    <script>
+        $(document).ready(function () {
+            $("tr").click(function () {
+                $("#expected_result").val($(this).children("td").eq(1).text());
+                $("#content").val($(this).children("td").eq(3).text());
+                $("#time_consumed").val($(this).children("td").eq(2).text());
+                $("#end_of_term_summary").val($(this).children("td").eq(4).text());
+                $("#target_id").val(this.title);
+            });
+        });
+    </script>
+
     <div class="container ">
         <form method="POST">
+            <input type="hidden" id="target_id" name="target_id" value="{{ target_id }}">
             {% csrf_token %}
             <div class="mt-5">
                 <div class="form-group">
@@ -13,39 +27,48 @@
                     <label for="content">目标说明</label>
                     <input type="text" class="form-control" id="content" name="content">
                 </div>
-                <div class="form-group">
-                    <label for="content">用时</label>
-                    <input type="text" class="form-control" id="time_consumed" name="time_consumed">
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label for="content">用时</label>
+                        <input type="text" class="form-control" id="time_consumed" name="time_consumed">
+                    </div>
+                    <div class="form-group col-10">
+                        <label for="content"> 期末总结</label>
+                        <input type="text" class="form-control" id="end_of_term_summary" name="end_of_term_summary">
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">提交</button>
 
             </div>
         </form>
-
-        <table class="table mt-5">
-            <thead>
-            <tr>
-                <th scope="col">序号</th>
-                <th scope="col">填表日期</th>
-                <th scope="col">预期有性成果</th>
-                <th scope="col">用时</th>
-                <th scope="col">目标说明</th>
-                <th scope="col">期末总结</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for result in results %}
+        <div class="table-responsive">
+            <table class="mt-5 table">
+                <thead>
                 <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ result.time }}</td>
-                    <td>{{ result.expected_result }}</td>
-                    <td>{{ result.time_consumed }}</td>
-                    <td>{{ result.content }}</td>
-                    <td>无</td>
+                    <th scope="col" nowrap>序号</th>
+                    <th scope="col" nowrap>填表日期</th>
+                    <th scope="col" nowrap>预期有性成果</th>
+                    <th scope="col" nowrap>用时</th>
+                    <th scope="col" nowrap>目标说明</th>
+                    <th scope="col" nowrap>期末总结</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr title="{{ result.id }}">
+                        <th scope="row" nowrap>{{ forloop.counter }}</th>
+                        <td nowrap>{{ result.time|date:"Y-m-d G:i" }}</td>
+                        <td nowrap>{{ result.expected_result }}</td>
+                        <td nowrap>{{ result.time_consumed }}</td>
+                        <td nowrap>{{ result.content }}</td>
+                        <td nowrap>{{ result.end_of_term_summary }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
+        </div>
     </div>
+
+
 {% endblock %}

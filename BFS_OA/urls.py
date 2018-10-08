@@ -17,15 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 from user_info import views as user_views
+
 urlpatterns = [
-    path('login',user_views.auth),
+    path('login', user_views.auth),
     path('logout', user_views.deauth),
     path('admin/', admin.site.urls),
     path('', views.index),
     path('info/', include('user_info.urls')),
     path('weekly_summary/', include('weekly_summary.urls')),
     path('monthly_summary/', include('monthly_summary.urls')),
-    path('bulletin',views.bulletin),
+    path('topic_manager/', include('topic_manager.urls')),
+    path('bulletin', views.bulletin),
     path('news', views.news),
     path('library', views.library),
 ]

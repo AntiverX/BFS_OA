@@ -9,7 +9,9 @@
     {% load static %}
     <link rel="stylesheet" href="{% static "css/navbar.css" %}">
     <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
-
+    <script src="{% static "js/jquery-3.3.1.slim.min.js" %}"></script>
+    <script src="{% static "js/popper.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
 </head>
 
 <body>
@@ -31,14 +33,19 @@
                     <a class="nav-link" href="/info">我的</a>
                 </li>
                 <li class="nav-item ml-3">
+                    <a class="nav-link" href="/topic_manager">课题管理</a>
+                </li>
+                <li class="nav-item ml-3">
                     <a class="nav-link" href="/weekly_summary">周报</a>
                 </li>
+
                 <li class="nav-item ml-3">
                     <a class="nav-link" href="/monthly_summary">月工作总结</a>
                 </li>
-                <li class="nav-item ml-3">
+
             {% endif %}
-            <a class="nav-link" href="#">关于</a>
+            <li class="nav-item ml-3">
+                <a class="nav-link" href="#">关于</a>
             </li>
         </ul>
         <div class="my-2 my-lg-0">
@@ -70,9 +77,5 @@
 {% block content %}
 {% endblock %}
 </body>
-
-<script src="{% static "js/jquery-3.3.1.slim.min.js" %}"></script>
-<script src="{% static "js/popper.min.js" %}"></script>
-<script src="{% static "js/bootstrap.min.js" %}"></script>
 
 </html>

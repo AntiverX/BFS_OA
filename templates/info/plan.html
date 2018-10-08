@@ -1,14 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+    <script>
+        $(document).ready(function () {
+            $("tr").click(function () {
+                $("#plan_name").val($(this).children("td").eq(1).text());
+                $("#plan_result").val($(this).children("td").eq(2).text());
+                $("#type").val($(this).children("td").eq(0).text());
+                $("#is_reviewed").val($(this).children("td").eq(3).text());
+                $("#head_person").val($(this).children("td").eq(4).text());
+                $("#affiliated_person").val($(this).children("td").eq(5).text());
+                $("#planed_time").val($(this).children("td").eq(6).text());
+                $("#planed_start_time").val($(this).children("td").eq(7).text());
+                $("#planed_end_time").val($(this).children("td").eq(8).text());
+                $("#actual_time").val($(this).children("td").eq(9).text());
+                $("#actual_start_time").val($(this).children("td").eq(10).text());
+                $("#actual_end_time").val($(this).children("td").eq(11).text());
+                $("#advanced_postponed_time").val($(this).children("td").eq(12).text());
+                $("#remark").val($(this).children("td").eq(13).text());
+                $("#target_id").val(this.title);
+            });
+        });
+    </script>
     <div class="container">
         <form method="POST">
+            <input type="hidden" id="target_id" name="target_id" value="">
             {% csrf_token %}
             <div class="mt-5">
                 <div class="form-group">
                     <label for="plan_name">任务名称</label>
-                    <input type="text" class="form-control" id="expected_result" name="plan_name" required>
+                    <input type="text" class="form-control" id="plan_name" name="plan_name" required>
                 </div>
                 <div class="form-group">
                     <label for="plan_result">工作成果</label>
@@ -22,9 +43,11 @@
 
                     <div class="form-group col-2">
                         <label for="is_reviewed">是否通过评审</label>
-                        <input type="text" class="form-control" id="is_reviewed" name="is_reviewed" required>
+                        <select class="custom-select" name="is_reviewed">
+                            <option value="1" selected>是</option>
+                            <option value="0">否</option>
+                        </select>
                     </div>
-
                     <div class="form-group col-2">
                         <label for="head_person">负责人</label>
                         <input type="text" class="form-control" id="head_person" name="head_person" required>
@@ -69,7 +92,6 @@
                     </div>
                 </div>
 
-
                 <div class="row">
                     <div class="form-group col-2">
                         <label for="advanced_postponed_time">提前/推迟（天）</label>
@@ -88,51 +110,51 @@
 
             </div>
         </form>
-        {#        <div class="dtHorizontalExampleWrapper">#}
-        <table id="dtHorizontalExample_wrapper" class="table mt-5 table-responsive">
-            <thead>
-            <tr>
-                <th scope="col" nowrap>序号</th>
-                <th scope="col" nowrap>任务类型</th>
-                <th scope="col" nowrap>任务名称</th>
-                <th scope="col" nowrap>工作成果</th>
-                <th scope="col" nowrap>是否通过评审</th>
-                <th scope="col" nowrap>负责人</th>
-                <th scope="col" nowrap>参与人</th>
-                <th scope="col" nowrap>计划持续时间</th>
-                <th scope="col" nowrap>计划开始日期</th>
-                <th scope="col" nowrap>计划完成日期</th>
-                <th scope="col" nowrap>实际持续时间</th>
-                <th scope="col" nowrap>实际开始日期</th>
-                <th scope="col" nowrap>实际完成日期</th>
-                <th scope="col" nowrap>提前/推迟（天）</th>
-                <th scope="col" nowrap>备注（文档页数、程序量，修改意见等）</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            {% for result in results %}
+        <div class="table-responsive">
+            <table class="table mt-5">
+                <thead>
                 <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td nowrap>{{ result.type }}</td>
-                    <td nowrap>{{ result.plan_name }}</td>
-                    <td nowrap>{{ result.plan_result }}</td>
-                    <td nowrap>{{ result.is_reviewed }}</td>
-                    <td nowrap>{{ result.head_person }}</td>
-                    <td nowrap>{{ result.affiliated_person }}</td>
-                    <td nowrap>{{ result.planed_time }}</td>
-                    <td nowrap>{{ result.planed_start_time }}</td>
-                    <td nowrap>{{ result.planed_end_time }}</td>
-                    <td nowrap>{{ result.actual_time }}</td>
-                    <td nowrap>{{ result.actual_start_time }}</td>
-                    <td nowrap>{{ result.actual_end_time }}</td>
-                    <td nowrap>{{ result.advanced_postponed_time }}</td>
-                    {#                    <td>{{ result.remark }}</td>#}
-                    <td>无</td>
+                    <th scope="col" nowrap>序号</th>
+                    <th scope="col" nowrap>任务类型</th>
+                    <th scope="col" nowrap>任务名称</th>
+                    <th scope="col" nowrap>工作成果</th>
+                    <th scope="col" nowrap>是否通过评审</th>
+                    <th scope="col" nowrap>负责人</th>
+                    <th scope="col" nowrap>参与人</th>
+                    <th scope="col" nowrap>计划持续时间</th>
+                    <th scope="col" nowrap>计划开始日期</th>
+                    <th scope="col" nowrap>计划完成日期</th>
+                    <th scope="col" nowrap>实际持续时间</th>
+                    <th scope="col" nowrap>实际开始日期</th>
+                    <th scope="col" nowrap>实际完成日期</th>
+                    <th scope="col" nowrap>提前/推迟（天）</th>
+                    <th scope="col" nowrap>备注（文档页数、程序量，修改意见等）</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {#        </div>#}
+                </thead>
+                <tbody>
+
+                {% for result in results %}
+                    <tr title="{{ result.id }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td nowrap>{{ result.type }}</td>
+                        <td nowrap>{{ result.plan_name }}</td>
+                        <td nowrap>{{ result.plan_result }}</td>
+                        <td nowrap>{% if result.is_reviewed %}是{% else %}否{% endif %}</td>
+                        <td nowrap>{{ result.head_person }}</td>
+                        <td nowrap>{{ result.affiliated_person }}</td>
+                        <td nowrap>{{ result.planed_time }}</td>
+                        <td nowrap>{{ result.planed_start_time|date:"Y-m-d" }}</td>
+                        <td nowrap>{{ result.planed_end_time|date:"Y-m-d" }}</td>
+                        <td nowrap>{{ result.actual_time }}</td>
+                        <td nowrap>{{ result.actual_start_time|date:"Y-m-d" }}</td>
+                        <td nowrap>{{ result.actual_end_time|date:"Y-m-d" }}</td>
+                        <td nowrap>{{ result.advanced_postponed_time }}</td>
+                        <td>{{ result.remark }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
     </div>
 {% endblock %}

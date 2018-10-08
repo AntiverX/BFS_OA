@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_info.apps.UserInfoConfig',
     'weekly_summary.apps.WeeklySummaryConfig',
-    'monthly_summary.apps.MonthlySummaryConfig'
+    'monthly_summary.apps.MonthlySummaryConfig',
+    'topic_manager.apps.TopicManagerConfig'
 ]
 
 MIDDLEWARE = [
@@ -104,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 

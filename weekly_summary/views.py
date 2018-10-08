@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from user_info.models import weekly_summary
+from topic_manager.models import WeeklySummary
 import time
 
 context = {

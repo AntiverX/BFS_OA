@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row mt-5">
+                <div class="form-group col-4">
+                    <label for="this_week_task">周平均日工作时间</label>
+                    <input class="form-control" id="average_work_hour" name="average_work_hour"></input>
+                </div>
+                <div class="form-group col-4">
+                    <label for="this_week_task">周请假(×0.5 天)</label>
+                    <input class="form-control" id="average_work_hour" name="average_work_hour"></input>
+                </div>
+                <div class="form-group col-4">
+                    <label for="this_week_task">学术报告问题数</label>
+                    <input class="form-control" id="average_work_hour" name="average_work_hour"></input>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-6">
+                    <label for="this_week_task">本周工作</label>
+                    <textarea class="form-control" id="this_week_task" rows="5"
+                              name="this_week_task">{% if submitted_weekly_summary %}{{ submitted_weekly_summary.this_week_task }}{% endif %}</textarea>
+                </div>
+                <div class="form-group col-6">
+                    <label for="this_week_task">下周工作</label>
+                    <textarea class="form-control" id="this_week_task" rows="5"
+                              name="next_week_task">{% if submitted_weekly_summary %}{{ submitted_weekly_summary.next_week_task }}{% endif %}</textarea>
+                </div>
+            </div>
+            <div class="row form-group col-6">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+        </form>
+
+
+        <div class="table-responsive">
+            <table class="table mt-5">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap>序号</th>
+                    <th scope="col" nowrap>工作周</th>
+                    <th scope="col" nowrap>提交日期</th>
+                    <th scope="col" nowrap>周平均日工作时间</th>
+                    <th scope="col" nowrap>周请假（X0.5天）</th>
+                    <th scope="col" nowrap>学术报告问题数</th>
+                    <th scope="col" nowrap>本周主要工作成果</th>
+                    <th scope="col" nowrap>下周的工作计划</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for weekly_summary in weekly_summarys %}
+                    <tr title="{{ weekly_summary.id }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td nowrap>{{ weekly_summary.week }}</td>
+                        <td nowrap>{{ weekly_summary.submit_time }}</td>
+                        <td nowrap>{{ weekly_summary.average_work_hour }}</td>
+                        <td nowrap>{{ weekly_summary.absent_hour }}</td>
+                        <td nowrap>{{ weekly_summary.this_week_task }}</td>
+                        <td nowrap>{{ weekly_summary.next_week_task }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+{% endblock %}
