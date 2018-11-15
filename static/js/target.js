@@ -167,6 +167,7 @@ $(document).ready(function () {
         var month = date.getMonth() + 1;
         var day = date.getDate();
         $("#date").val(year + "-" + month + "-" + day);
+        $("#date").addClass("is-valid");
         $(".all_target").replaceWith("                            <div class=\"all_target\">\n" +
             "                                <div class=\"target\">\n" +
             "                                    <hr>\n" +

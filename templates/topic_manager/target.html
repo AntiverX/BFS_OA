@@ -122,38 +122,33 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="table-responsive">
-        <table class="mt-3 table table-hover">
-            <thead>
-            <tr>
-                <th scope="col" nowrap>序号</th>
-                <th scope="col" nowrap>学期</th>
-                <th scope="col" nowrap>填表日期</th>
-                <th scope="col" nowrap>预期有型成果</th>
-                <th scope="col" nowrap>用时（天）</th>
-                <th scope="col" nowrap>目标说明</th>
-                <th scope="col" nowrap>期末总结</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for result in results %}
-                <tr title="{{ result.id }}">
-                    <th scope="row" nowrap>{{ forloop.counter }}</th>
-                    <td style="white-space: pre-wrap">{{ result.semester }}</td>
-                    <td style="white-space: pre-wrap">{{ result.time|date:"Y-m-d" }}</td>
-                    <td style="white-space: pre-wrap">{{ result.expected_result }}</td>
-                    <td style="white-space: pre-wrap">{{ result.time_consumed }}</td>
-                    <td style="white-space: pre-wrap">{{ result.content }}</td>
-                    <td style="white-space: pre-wrap">{{ result.end_of_term_summary }}</td>
+        <div class="table-responsive">
+            <table class="mt-3 table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap style="width: 5%">序号</th>
+                    <th scope="col" nowrap style="width: 10%">学期</th>
+                    <th scope="col" nowrap style="width: 10%">填表日期</th>
+                    <th scope="col" nowrap>预期有型成果</th>
+                    <th scope="col" nowrap style="width: 5%">用时（天）</th>
+                    <th scope="col" nowrap>目标说明</th>
+                    <th scope="col" nowrap>期末总结</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr title="{{ result.id }}">
+                        <th scope="row" nowrap>{{ forloop.counter }}</th>
+                        <td style="white-space: pre-wrap">{{ result.semester }}</td>
+                        <td style="white-space: pre-wrap">{{ result.time|date:"Y-m-d" }}</td>
+                        <td style="white-space: pre-wrap">{{ result.expected_result }}</td>
+                        <td style="white-space: pre-wrap">{{ result.time_consumed }}</td>
+                        <td style="white-space: pre-wrap">{{ result.content }}</td>
+                        <td style="white-space: pre-wrap">{{ result.end_of_term_summary }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-    </div>
-
-
 {% endblock %}
