@@ -1,28 +1,65 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">姓名</th>
-                <th scope="col">本周工作</th>
-                <th scope="col">下周工作</th>
-            </tr>
-            </thead>
-            <tbody>
+    <script>
+        /* 对json进行处理，分行显示本周和下周工作 */
+        $(document).ready(function () {
+            $("tr").each(function () {
+                if ($(this).find("td").length != 0) {
+                    var array_ = JSON.parse($(this).find("td").eq(1).text());
+                    new_text = "";
+                    for (var i = 0; i < array_.length - 1; i++) {
+                        new_text = new_text + array_[i] + "\n";
+                    }
+                    new_text = new_text + array_[array_.length - 1];
+                    $(this).find("td").eq(1).text(new_text);
+                }
+            });
+            $("tr").each(function () {
+                if ($(this).find("td").length != 0) {
+                    var array_ = JSON.parse($(this).find("td").eq(2).text());
+                    new_text = "";
+                    for (var i = 0; i < array_.length - 1; i++) {
+                        new_text = new_text + array_[i] + "\n";
+                    }
+                    new_text = new_text + array_[array_.length - 1];
+                    $(this).find("td").eq(2).text(new_text);
+                }
+            });
+        });
 
-            {% for key, value in submitted_weekly_summarys.items %}
+    </script>
+    <div class="container-fluid mt-3">
+        <div class="table-hover">
+            <table class="table">
+                <thead>
                 <tr>
-                    {% for data in value %}
-                        {% autoescape off %}
-                        <td>{{ data }}</td>
-                        {% endautoescape %}
-                    {% endfor %}
+                    <th scope="col">序号</th>
+                    <th scope="col">姓名</th>
+                    <th scope="col">本周工作</th>
+                    <th scope="col">下周工作</th>
+                    <th scope="col">到场</th>
+                    <th scope="col">请假</th>
+                    <th scope="col">未到</th>
                 </tr>
-            {% endfor %}
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
+                {% for result in results %}
+                    <tr title="{{ result.id }}" class="">
+                        {% autoescape off %}
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ result.real_name }}</td>
+                            <td style="white-space: pre-wrap">{{ result.this_week_task }}</td>
+                            <td style="white-space: pre-wrap">{{ result.next_week_task }}</td>
+                            <td>{% if result.is_present %}是{% else %}{% endif %}</td>
+                            <td>{% if result.is_left %}是{% else %}{% endif %}</td>
+                            <td>{% if result.is_absent %}是{% else %}{% endif %}</td>
+                        {% endautoescape %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

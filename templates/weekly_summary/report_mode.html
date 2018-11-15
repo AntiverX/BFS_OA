@@ -1,46 +1,65 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container-fluid">
+    <script>
+        $(document).ready(function () {
+            $("tr").click(function () {
+                $("#target_id").val(this.title);
+                $(this).addClass("table-active");
+            });
+        });
+    </script>
+    <div class="container-fluid mt-3">
         <form method="POST">
+            <input type="hidden" id="target_id" name="target_id" value="">
             {% csrf_token %}
-            <div class="row mt-5 col-6">
-
-                <div class="col-3">
+            <div class="row">
+                <div class="col-12">
                     <button type="submit" name="btn" value="is_present" class="btn btn-primary">到场</button>
+                    <button type="submit" name="btn" value="is_left" class="btn btn-primary ml-4">请假</button>
+                    <button type="submit" name="btn" value="is_absent" class="btn btn-primary ml-4">未到</button>
                 </div>
-                <div class="col-3">
-                    <button type="submit" name="btn" value="is_absent" class="btn btn-primary">请假</button>
-                </div>
-                <div class="col-3">
-                    <button type="submit" name="btn" value="is_left" class="btn btn-primary">未到</button>
-                </div>
-                <input style="display: none" name="real_name" value="{{ current_weekly_summary.real_name }}"></input>
-
             </div>
         </form>
-        <table class="table mt-5">
-            <thead>
-            <tr>
-                <th scope="col">姓名</th>
-                <th scope="col">本周工作</th>
-                <th scope="col">下周工作</th>
-            </tr>
-            </thead>
-            <tbody>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">序号</th>
+                    <th scope="col">姓名</th>
+                    <th scope="col">本周工作</th>
+                    <th scope="col">下周工作</th>
+                    <th scope="col">到场</th>
+                    <th scope="col">请假</th>
+                    <th scope="col">未到</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr title="{{ result.id }}" class="">
+                        {% autoescape off %}
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ result.real_name }}</td>
+                            <td style="white-space: pre-wrap">{{ result.this_week_task }}</td>
+                            <td style="white-space: pre-wrap">{{ result.next_week_task }}</td>
+                            <td>{% if result.is_present %}是{% else %}{% endif %}</td>
+                            <td>{% if result.is_left %}是{% else %}{% endif %}</td>
+                            <td>{% if result.is_absent %}是{% else %}{% endif %}</td>
+                        {% endautoescape %}
+                    </tr>
+                {% endfor %}
+                {#            <tr>#}
+                {#                {% autoescape off %}#}
+                {#                    <td style="font-size: 2rem">{{ current_weekly_summary.real_name }}</td>#}
+                {#                    <td style="font-size: 2rem">{{ current_weekly_summary.this_week_task }}</td>#}
+                {#                    <td style="font-size: 2rem">{{ current_weekly_summary.next_week_task }}</td>#}
+                {#                {% endautoescape %}#}
+                {#            </tr>#}
 
-            <tr>
-                {% autoescape off %}
-                    <td style="font-size: 2rem">{{ current_weekly_summary.real_name }}</td>
-                    <td style="font-size: 2rem">{{ current_weekly_summary.this_week_task }}</td>
-                    <td style="font-size: 2rem">{{ current_weekly_summary.next_week_task }}</td>
-                {% endautoescape %}
-            </tr>
+                </tbody>
+            </table>
 
-            </tbody>
-        </table>
-
-
+        </div>
     </div>
     </div>
 {% endblock %}

@@ -24,7 +24,7 @@ SECRET_KEY = 'cfnj_h3e_1oe_6lco+o8cqwb-0)v3&5hzywan)^5)f(9#%*3pc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['subject.isclab.org']
 
 # Application definition
 
@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_info.apps.UserInfoConfig',
     'weekly_summary.apps.WeeklySummaryConfig',
-    'monthly_summary.apps.MonthlySummaryConfig',
-    'topic_manager.apps.TopicManagerConfig'
+    'topic_manager.apps.TopicManagerConfig',
+    'main_site.apps.MainSiteConfig'
 ]
 
 MIDDLEWARE = [

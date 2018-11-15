@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -27,7 +26,6 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    # TODO User表需要添加额外的信息，如新生基础信息
     username_validator = UnicodeUsernameValidator()
     username = models.CharField(
         _('用户名'),
@@ -40,7 +38,8 @@ class User(AbstractBaseUser):
         },
     )
     password = models.CharField(max_length=128)
-    real_name = models.CharField(_, max_length=30, blank=True)
+    # 姓名
+    real_name = models.CharField(max_length=30, blank=True)
     email = models.EmailField(_('email address'), blank=True)
     is_student = models.BooleanField(default=True)
     is_teacher = models.BooleanField(default=False)
@@ -57,6 +56,42 @@ class User(AbstractBaseUser):
         ),
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    # 性别
+    gender = models.TextField(blank=True)
+    # 民族
+    nationality = models.TextField(blank=True)
+    # 生源地
+    born_in = models.TextField(blank=True)
+    # 身份证号
+    id_number = models.TextField(blank=True)
+    # 学号
+    student_id = models.TextField(blank=True)
+    # 入学时间
+    entrance_time = models.TextField(blank=True)
+    # 毕业时间
+    graduate_time = models.TextField(blank=True)
+    # 专业
+    major = models.TextField(blank=True)
+    # 组别
+    group_name = models.TextField(blank=True)
+    # 导师
+    tutor = models.TextField(blank=True)
+    # 银行名称
+    bank_name = models.TextField(blank=True)
+    # 银行卡号
+    bank_id = models.TextField(blank=True)
+    # 电话号码
+    phone_number = models.TextField(blank=True)
+    # email
+    email = models.TextField(blank=True)
+    # 毕业学校
+    past_school = models.TextField(blank=True)
+    # 原单位
+    past_unit = models.TextField(blank=True)
+    # 论文得分
+    thesis_defense_score = models.TextField(blank=True)
+    # 论文题目
+    degree_paper = models.TextField(blank=True)
 
     objects = UserManager()
 
@@ -89,13 +124,33 @@ class User(AbstractBaseUser):
     #     send_mail(subject, message, from_email, [self.email], **kwargs)
 
 
+# 课表
 class TimeTable(models.Model):
-    user_id = models.IntegerField()
-    date = models.DateField()
-    monday = models.TextField()
-    tuesday = models.TextField()
-    wednesday = models.TextField()
-    thursday = models.TextField()
-    friday = models.TextField()
-    saturday = models.TextField()
-    sunday = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # 班级名称
+    class_name = models.TextField()
+    # 教师名称
+    teacher_name = models.TextField()
+    # 开始周
+    week_start = models.IntegerField()
+    # 结束周
+    week_end = models.IntegerField()
+    # 星期
+    day = models.IntegerField()
+    # 大节
+    class_number = models.IntegerField()
+    # 上课地点
+    class_location = models.TextField()
+
+
+# 资产
+class Asset(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    type = models.TextField()
+    name = models.TextField()
+    model = models.TextField()
+    manufacturer = models.TextField()
+    number = models.TextField()
+    parameter = models.TextField()
+    buying_date = models.DateField()
+    storing_place = models.TextField()

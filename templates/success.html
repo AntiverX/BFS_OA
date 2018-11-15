@@ -1,4 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-    success.
+    <div class="container">
+    <div class="container">
+        <div class="card mt-5">
+            <div class="card-header">
+                成功
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ success }}</p>
+                <a href="{{ return_link }}" class="btn btn-primary">返回</a>
+            </div>
+        </div>
+    </div>
+    </div>
 {% endblock %}

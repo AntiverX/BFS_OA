@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <script>
+        $(document).ready(function () {
+            $("#register").click(function (event) {
+                event.preventDefault();
+                $(window).attr('location', '/register');
+            });
+        });
+    </script>
+    <div class="container">
+        <form class="align-items-end" style="margin-top: 5em;" action="/login" method="post">
+
+            <div class="form-group">
+                {% csrf_token %}
+                <label for="exampleInputEmail1">用户名</label>
+                <input type="text" class="form-control" name="username">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">密码</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <button type="submit" class="btn btn-primary">登录</button>
+                </div>
+                <div class="col-1">
+                    <button id="register" class="btn btn-primary">注册</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+{% endblock %}

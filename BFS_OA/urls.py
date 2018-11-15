@@ -15,19 +15,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from main_site import views as main_site_views
 from user_info import views as user_views
 
 urlpatterns = [
     path('login', user_views.auth),
     path('logout', user_views.deauth),
+    path('register', user_views.register),
     path('admin/', admin.site.urls),
-    path('', views.index),
+    path('', main_site_views.index),
     path('info/', include('user_info.urls')),
     path('weekly_summary/', include('weekly_summary.urls')),
-    path('monthly_summary/', include('monthly_summary.urls')),
     path('topic_manager/', include('topic_manager.urls')),
-    path('bulletin', views.bulletin),
-    path('news', views.news),
-    path('library', views.library),
+    path('bulletin', main_site_views.bulletin),
+    path('news', main_site_views.news),
+    path('library', main_site_views.library),
+    path('system/', include('main_site.urls')),
+    path('about', main_site_views.about),
+    path('competition', main_site_views.competition),
+    path('upload', main_site_views.uploader),
+    path('random', main_site_views.random_service),
 ]
