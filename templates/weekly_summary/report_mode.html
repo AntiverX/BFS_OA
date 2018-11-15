@@ -1,14 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <script>
-        $(document).ready(function () {
-            $("tr").click(function () {
-                $("#target_id").val(this.title);
-                $(this).addClass("table-active");
-            });
-        });
-    </script>
+        {% load static %}
+    <script src="{% static "js/report_mode.js" %}"></script>
     <div class="container-fluid mt-3">
         <form method="POST">
             <input type="hidden" id="target_id" name="target_id" value="">
