@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="nav-scroller bg-white shadow-sm mt-1">
+        <nav class="nav nav-underline">
+            <a class="nav-link" href="time_table">课表</a>
+            <a class="nav-link" href="time_table_list">课程列表</a>
+        </nav>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("tr").click(function () {
+                $("#class_name").val($(this).children("td").eq(0).text());
+                $("#teacher_name").val($(this).children("td").eq(1).text());
+                $("#week_start").val($(this).children("td").eq(2).text());
+                $("#week_end").val($(this).children("td").eq(3).text());
+                $("#day").val($(this).children("td").eq(4).text());
+                $("#class_number").val($(this).children("td").eq(5).text());
+                $("#class_location").val($(this).children("td").eq(6).text());
+                $("#target_id").val(this.title);
+            });
+        });
+    </script>
+    <div class="container">
+        <form method="POST" action="time_table_list">
+            <input type="hidden" id="target_id" name="target_id" value="">
+            {% csrf_token %}
+            <div class="mt-5">
+                <div class="form-group">
+                    <label for="plan_name">课程名称</label>
+                    <input type="text" class="form-control" id="class_name" name="class_name" required>
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label for="plan_result">教师名称</label>
+                        <input type="text" class="form-control" id="teacher_name" name="teacher_name" required>
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="plan_result">开始周</label>
+                        <input type="text" class="form-control" id="week_start" name="week_start" required>
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="plan_result">结束周</label>
+                        <input type="text" class="form-control" id="week_end" name="week_end" required>
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="plan_result">星期</label>
+                        <select class="form-control" id="day" name="day">
+                            <option value="1">一</option>
+                            <option value="2">二</option>
+                            <option value="3">三</option>
+                            <option value="4">四</option>
+                            <option value="5">五</option>
+                            <option value="6">六</option>
+                            <option value="7">日</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="plan_result">大节</label>
+                        <select class="form-control" id="class_number" name="class_number">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="plan_result">地点</label>
+                        <input type="text" class="form-control" id="class_location" name="class_location" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary" name="btn" value="sumbit">提交</button>
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary" name="btn" value="delete">删除</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table mt-5 table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap>序号</th>
+                    <th scope="col" nowrap>课程名称</th>
+                    <th scope="col" nowrap>教师名称</th>
+                    <th scope="col" nowrap>开始周</th>
+                    <th scope="col" nowrap>结束周</th>
+                    <th scope="col" nowrap>星期</th>
+                    <th scope="col" nowrap>大节</th>
+                    <th scope="col" nowrap>地点</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for result in results %}
+                    <tr title="{{ result.id }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td nowrap>{{ result.class_name }}</td>
+                        <td nowrap>{{ result.teacher_name }}</td>
+                        <td nowrap>{{ result.week_start }}</td>
+                        <td nowrap>{{ result.week_end }}</td>
+                        <td nowrap>{{ result.day }}</td>
+                        <td nowrap>{{ result.class_number }}</td>
+                        <td nowrap>{{ result.class_location }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

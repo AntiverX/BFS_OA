@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <script>
+        $(document).ready(function () {
+            $("#username").change(function () {
+                text = $("#username").val();
+                csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                $.post('/info/valid', {username: text, csrfmiddlewaretoken: csrftoken}, function (result) {
+                    if (result == "OK") {
+                        $("#username").removeClass("is-invalid");
+                        $("#username").addClass("is-valid");
+                        if (!$("input").hasClass("is-invalid")) {
+                            $("#submitForm").attr("disabled", false);
+                        }
+                    }
+                    else {
+                        $("#username-invalid").text(result);
+                        $("#username").removeClass("is-valid");
+                        $("#username").addClass("is-invalid");
+                        $("#submitForm").attr("disabled", true);
+                    }
+                });
+            });
+            $("#password").change(function () {
+                text = $("#password").val();
+                csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                $.post('/info/valid', {password: text, csrfmiddlewaretoken: csrftoken}, function (result) {
+                    if (result == "OK") {
+                        $("#password").removeClass("is-invalid");
+                        $("#password").addClass("is-valid");
+                        if (!$("input").hasClass("is-invalid")) {
+                            $("#submitForm").attr("disabled", false);
+                        }
+                    }
+                    else {
+                        $("#password-invalid").text(result);
+                        $("#password").removeClass("is-valid");
+                        $("#password").addClass("is-invalid");
+                        $("#submitForm").attr("disabled", true);
+                    }
+                });
+            });
+            $("#real_name").change(function () {
+                text = $("#real_name").val();
+                csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                $.post('/info/valid', {real_name: text, csrfmiddlewaretoken: csrftoken}, function (result) {
+                    if (result == "OK") {
+                        $("#real_name").removeClass("is-invalid");
+                        $("#real_name").addClass("is-valid");
+                        if (!$("input").hasClass("is-invalid")) {
+                            $("#submitForm").attr("disabled", false);
+                        }
+                    }
+                    else {
+                        $("#real_name-invalid").text(result);
+                        $("#real_name").removeClass("is-valid");
+                        $("#real_name").addClass("is-invalid");
+                        $("#submitForm").attr("disabled", true);
+                    }
+                });
+            });
+            $("#student_id").change(function () {
+                text = $("#student_id").val();
+                csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                $.post('/info/valid', {student_id: text, csrfmiddlewaretoken: csrftoken}, function (result) {
+                    if (result == "OK") {
+                        $("#student_id").removeClass("is-invalid");
+                        $("#student_id").addClass("is-valid");
+                        if (!$("input").hasClass("is-invalid")) {
+                            $("#submitForm").attr("disabled", false);
+                        }
+                    }
+                    else {
+                        $("#student_id-invalid").text(result);
+                        $("#student_id").removeClass("is-valid");
+                        $("#student_id").addClass("is-invalid");
+                        $("#submitForm").attr("disabled", true);
+                    }
+                });
+            });
+        });
+    </script>
+    <div class="container">
+        <form class="align-items-end" style="margin-top: 5em;" action="/register" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="exampleInputEmail1">用户名</label>
+                <input type="text" class="form-control" id="username" name="username"
+                       placeholder="" required>
+                <div id="username-valid" class="valid-feedback">
+                    用户名可用
+                </div>
+                <div id="username-invalid" class="invalid-feedback">
+                    请输入一个可用的用户名
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputPassword1">密码</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder=""
+                       required>
+                <div id="password-valid" class="valid-feedback">
+                    密码可用
+                </div>
+                <div id="password-invalid" class="invalid-feedback">
+                    请输入一个可用的密码
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">姓名</label>
+                <input class="form-control" id="real_name" name="real_name" placeholder="" required>
+                <div id="real_name-valid" class="valid-feedback">
+                    名字没问题
+                </div>
+                <div id="real_name-invalid" class="invalid-feedback">
+                    请输入一个可用的密码
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">学号</label>
+                <input class="form-control" id="student_id" name="student_id" placeholder="" required>
+                <div id="student_id-valid" class="valid-feedback">
+                    学号可用
+                </div>
+                <div id="student_id-invalid" class="invalid-feedback">
+                    请输入一个可用的密码
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <button type="submit" id="submitForm" class="btn btn-primary">注册</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container-fluid mt-3">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12">
+                    <button id="modifyConfig" class="btn btn-primary" type="submit">修改</button>
+                    <button id="submitConfig" class="btn btn-primary ml-4" type="submit">保存</button>
+                </div>
+            </div>
+            <form method="post" id="Config">
+                <div class="row mt-3">
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="semester_start_time">学期开始时间</label>
+                            <input type="text" class="form-control" id="semester_start_time" name="semester_start_time" value="{{ config.semester_start_time|date:"Y-m-d" }}" required>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </form>
+
+    </div>
+{% endblock %}

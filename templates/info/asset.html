@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <script>
+        $(document).ready(function () {
+            $("tr").click(function () {
+                $("#type").val($(this).children("td").eq(0).text());
+                $("#name").val($(this).children("td").eq(1).text());
+                $("#model").val($(this).children("td").eq(3).text());
+                $("#manufacturer").val($(this).children("td").eq(4).text());
+                $("#number").val($(this).children("td").eq(5).text());
+                $("#parameter").val($(this).children("td").eq(2).text());
+                $("#buying_date").val($(this).children("td").eq(6).text());
+                $("#storing_place").val($(this).children("td").eq(7).text());
+                $(".target_id").val(this.title);
+            });
+        });
+    </script>
+
+    <div class="container">
+        <form method="post">
+            <input type="hidden" class="target_id" name="target_id" value="">
+            {% csrf_token %}
+            <div class="row mt-5">
+                <div class="form-group col-3">
+                    <label for="this_week_task">类型</label>
+                    <input class="form-control" id="type" name="type" required="required">
+                </div>
+                <div class="form-group col-3">
+                    <label for="this_week_task">名称</label>
+                    <input class="form-control" id="name" name="name" required="required">
+                </div>
+                <div class="form-group col-3">
+                    <label for="this_week_task">型号</label>
+                    <input class="form-control" id="model" name="model" required="required">
+                </div>
+                <div class="form-group col-2">
+                    <label for="this_week_task">制造商</label>
+                    <input class="form-control" id="manufacturer" name="manufacturer" required="required">
+                </div>
+                <div class="form-group col-1">
+                    <label for="this_week_task">数量</label>
+                    <input class="form-control" id="number" name="number" required="required">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-8">
+                    <label for="this_week_task">参数</label>
+                    <input class="form-control" id="parameter" name="parameter" required="required">
+                </div>
+                <div class="form-group col-2">
+                    <label for="this_week_task">购置日期</label>
+                    <input class="form-control" id="buying_date" name="buying_date" required="required">
+                </div>
+                <div class="form-group col-2">
+                    <label for="this_week_task">存放地点</label>
+                    <input class="form-control" id="storing_place" name="storing_place" required="required">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-1">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" class="target_id" name="target_to_delete" value="">
+                    <div class="form-group col-1">
+                        <button id="delete" class="btn btn-primary">删除</button>
+                    </div>
+                </form>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-hover mt-5">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap>序号</th>
+                    <th scope="col" nowrap>类型</th>
+                    <th scope="col" nowrap>名称</th>
+                    <th scope="col" nowrap>指标参数</th>
+                    <th scope="col" nowrap>型号</th>
+                    <th scope="col" nowrap>制造商</th>
+                    <th scope="col" nowrap>数量</th>
+                    <th scope="col" nowrap>购置日期</th>
+                    <th scope="col" nowrap>存放地点</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for asset in assets %}
+                    <tr title="{{ asset.id }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td nowrap>{{ asset.type }}</td>
+                        <td nowrap>{{ asset.name }}</td>
+                        <td nowrap>{{ asset.parameter }}</td>
+                        <td nowrap>{{ asset.model }}</td>
+                        <td nowrap>{{ asset.manufacturer }}</td>
+                        <td nowrap>{{ asset.number }}</td>
+                        <td nowrap>{{ asset.buying_date|date:"Y-m-d" }}</td>
+                        <td nowrap>{{ asset.storing_place }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
