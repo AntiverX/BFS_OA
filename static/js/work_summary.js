@@ -1,8 +1,20 @@
 $(document).ready(function () {
+    /*
+* 对json进行处理
+* 禁用按钮
+* 删除按钮实现
+* 修改按钮实现
+* 添加按钮实现
+* 提交按钮实现
+* 点击某一行实现选中效果,并启用删除和修改按钮
+* 点击加号增加表单
+* 表单验证（服务端验证和本地验证）
+* */
+
     /* 禁用修改和删除按钮 */
     $("#deleteForm").attr("disabled", true);
     $("#modifyForm").attr("disabled", true);
-
+    $("#submitForm").attr("disabled", true);
     /* 保存一份未经修改过的表单 */
     var originalForm = $("form").clone(true);
 
@@ -50,20 +62,44 @@ $(document).ready(function () {
             "                                        <hr>\n" +
             "                                        <div class=\"form-group\">\n" +
             "                                            <label for=\"summary\">工作总结</label>\n" +
-            "                                            <input type=\"text\" class=\"form-control summary\" id=\"summary\" name=\"summary\" required>\n" +
+            "                                            <input type=\"text\" class=\"summary form-control\" id=\"summary\" name=\"summary\" required>\n" +
+            "                                            <div id=\"summary-valid\" class=\"valid-feedback\">\n" +
+            "                                                OK\n" +
+            "                                            </div>\n" +
+            "                                            <div id=\"summary-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                ERROR\n" +
+            "                                            </div>\n" +
             "                                        </div>\n" +
             "                                        <div class=\"row\">\n" +
             "                                            <div class=\"form-group col-2\">\n" +
             "                                                <label for=\"man_day\">人日数（天）</label>\n" +
-            "                                                <input type=\"text\" class=\"form-control man_day\" id=\"\" required>\n" +
+            "                                                <input type=\"text\" class=\"man_day form-control\" id=\"\" required>\n" +
+            "                                                <div id=\"man_day-valid\" class=\"valid-feedback\">\n" +
+            "                                                    OK\n" +
+            "                                                </div>\n" +
+            "                                                <div id=\"man_day-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                    ERROR\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
             "                                            <div class=\"form-group col-2\">\n" +
             "                                                <label for=\"natural_day\">自然日（天）</label>\n" +
-            "                                                <input type=\"text\" class=\"form-control natural_day\" id=\"natural_day\" name=\"natural_day\" required>\n" +
+            "                                                <input type=\"text\" class=\"natural_day form-control\" id=\"natural_day\" name=\"natural_day\" required>\n" +
+            "                                                <div id=\"natural_day-valid\" class=\"valid-feedback\">\n" +
+            "                                                    OK\n" +
+            "                                                </div>\n" +
+            "                                                <div id=\"natural_day-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                    ERROR\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
             "                                            <div class=\"form-group col-8\">\n" +
             "                                                <label for=\"remark\">计划执行情况和工作效果说明</label>\n" +
-            "                                                <input type=\"text\" class=\"form-control remark\" id=\"remark\" name=\"remark\">\n" +
+            "                                                <input type=\"text\" class=\"remark form-control\" id=\"remark\" name=\"remark\">\n" +
+            "                                                <div id=\"remark-valid\" class=\"valid-feedback\">\n" +
+            "                                                    OK\n" +
+            "                                                </div>\n" +
+            "                                                <div id=\"remark-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                    ERROR\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
             "                                        </div>\n" +
             "                                    </div>\n" +
@@ -189,23 +225,15 @@ $(document).ready(function () {
         $(this).addClass("table-active");
     });
 
-    /* 点击添加按钮，会自动增加 */
+    /* 点击加号按钮，会自动增加 */
     $("#add_plan").click(function () {
         element_ = $(".plan:first").clone(true);
         $(element_).find("input").val("");
-        $(element_).find("textarea").val("");
+        $(element_).find("input").removeClass("is-valid");
+        $(element_).find("input").removeClass("is-invalid");
         element_.appendTo(".all_plan");
+        $("#submitForm").attr("disabled",true);
     });
-
-    /* 人日数自动计算 */
-    $(".man_day").change(function () {
-        var all_days = Number(0);
-        $(".man_day").each(function () {
-            all_days = Number(all_days) + Number($(this).val());
-        });
-        $("#all_days").val(all_days);
-    });
-
 
     $(document).on('change', ".man_day", function () {
         var all_days = Number(0);
@@ -224,25 +252,51 @@ $(document).ready(function () {
         var month = date.getMonth() + 1;
         var day = date.getDate();
         $("#date").val(year + "-" + month + "-" + day);
+        $("#date").addClass("is-valid");
+        $("#type").addClass("is-valid");
         $(".all_plan").replaceWith("                                <div class=\"all_plan\">\n" +
             "                                    <div class=\"plan\">\n" +
             "                                        <hr>\n" +
             "                                        <div class=\"form-group\">\n" +
             "                                            <label for=\"summary\">工作总结</label>\n" +
-            "                                            <input type=\"text\" class=\"form-control summary\" id=\"summary\" name=\"summary\" required>\n" +
+            "                                            <input type=\"text\" class=\"summary form-control\" id=\"summary\" name=\"summary\" required>\n" +
+            "                                            <div id=\"summary-valid\" class=\"valid-feedback\">\n" +
+            "                                                OK\n" +
+            "                                            </div>\n" +
+            "                                            <div id=\"summary-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                ERROR\n" +
+            "                                            </div>\n" +
             "                                        </div>\n" +
             "                                        <div class=\"row\">\n" +
             "                                            <div class=\"form-group col-2\">\n" +
             "                                                <label for=\"man_day\">人日数（天）</label>\n" +
-            "                                                <input type=\"text\" class=\"form-control man_day\" id=\"\" required>\n" +
+            "                                                <input type=\"text\" class=\"man_day form-control\" id=\"\" required>\n" +
+            "                                                <div id=\"man_day-valid\" class=\"valid-feedback\">\n" +
+            "                                                    OK\n" +
+            "                                                </div>\n" +
+            "                                                <div id=\"man_day-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                    ERROR\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
             "                                            <div class=\"form-group col-2\">\n" +
             "                                                <label for=\"natural_day\">自然日（天）</label>\n" +
-            "                                                <input type=\"text\" class=\"form-control natural_day\" id=\"natural_day\" name=\"natural_day\" required>\n" +
+            "                                                <input type=\"text\" class=\"natural_day form-control\" id=\"natural_day\" name=\"natural_day\" required>\n" +
+            "                                                <div id=\"natural_day-valid\" class=\"valid-feedback\">\n" +
+            "                                                    OK\n" +
+            "                                                </div>\n" +
+            "                                                <div id=\"natural_day-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                    ERROR\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
             "                                            <div class=\"form-group col-8\">\n" +
             "                                                <label for=\"remark\">计划执行情况和工作效果说明</label>\n" +
-            "                                                <input type=\"text\" class=\"form-control remark\" id=\"remark\" name=\"remark\">\n" +
+            "                                                <input type=\"text\" class=\"remark form-control\" id=\"remark\" name=\"remark\">\n" +
+            "                                                <div id=\"remark-valid\" class=\"valid-feedback\">\n" +
+            "                                                    OK\n" +
+            "                                                </div>\n" +
+            "                                                <div id=\"remark-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                    ERROR\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
             "                                        </div>\n" +
             "                                    </div>\n" +
@@ -251,4 +305,51 @@ $(document).ready(function () {
             $("tr").removeClass("table-active");
         }
     });
+
+    /* 表单验证 */
+    $(document).on('change', 'input', function () {
+        /* 在线验证表单内容 */
+        text = $(this).val();
+        class_name = $(this).attr('class').split(" ")[0];
+        csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        parent = $(this);
+        data = {
+            class_name: class_name,
+            value: text,
+            'csrfmiddlewaretoken': csrftoken
+        }
+        $.post('/topic_manager/valid', data, function (result) {
+
+            if (result == "OK") {
+                parent.removeClass("is-invalid");
+                parent.addClass("is-valid");
+            }
+            else {
+                $("#" + class_name + "-invalid").text(result);
+                parent.removeClass("is-valid");
+                parent.addClass("is-invalid");
+            }
+        });
+
+        /* 客户端验证是否有缺失内容 */
+        var form_complete = 1;
+        $("input").each(function () {
+
+            if (($(this).val() == "")) {
+                if ($(this).attr("id") != "target_id" && $(this).attr("class").split(" ")[0] != "remark") {
+                    form_complete = 0;
+                }
+            }
+            if ($(this).hasClass("is-invalid")) {
+                form_complete = 0;
+            }
+        });
+        if (form_complete) {
+            $("#submitForm").attr("disabled", false);
+        }
+        else {
+            $("#submitForm").attr("disabled", true);
+        }
+    });
+
 });

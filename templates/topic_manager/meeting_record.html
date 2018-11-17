@@ -34,21 +34,43 @@
                                 <div class="row">
                                     <div class="form-group col-3">
                                         <label for="time">日期</label>
-                                        <input type="text" class="form-control" placeholder="" id="date" name="date"
-                                               required>
+                                        <input type="text" class="date input form-control" placeholder="" id="date" required>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
                                     </div>
                                     <div class="form-group col-3">
                                         <label for="time">时间</label>
-                                        <input type="text" class="form-control" placeholder="" id="time" name="time" required>
+                                        <input type="text" class="time input form-control" placeholder="" id="time" required>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
                                     </div>
                                     <div class="form-group col-3">
                                         <label for="cost_time">用时(分)</label>
-                                        <input type="text" class="form-control" placeholder="" id="cost_time" name="cost_time"
-                                               required>
+                                        <input type="text" class="cost_time input form-control" placeholder="" id="cost_time" required>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
                                     </div>
                                     <div class="form-group col-3">
                                         <label for="place">地点</label>
-                                        <input type="text" class="form-control" placeholder="" id="place" name="place" value="10#420" required>
+                                        <input type="text" class="place input form-control" placeholder="" id="place" value="10#420" required>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="all_record">
@@ -58,17 +80,35 @@
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label for="theme">主题</label>
-                                                    <input class="form-control theme" required>
+                                                    <input class="theme input form-control" required>
+                                                    <div id="content-valid" class="valid-feedback">
+                                                        OK
+                                                    </div>
+                                                    <div id="content-invalid" class="invalid-feedback">
+                                                        ERROR
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="remark">备注</label>
-                                                    <input class="form-control remark" rows="1"></input>
+                                                    <input class="remark input form-control" rows="1"></input>
+                                                    <div id="content-valid" class="valid-feedback">
+                                                        OK
+                                                    </div>
+                                                    <div id="content-invalid" class="invalid-feedback">
+                                                        ERROR
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class=" col-6">
                                                 <div class="form-group">
                                                     <label for="theme_content">主题内容说明</label>
-                                                    <textarea class="form-control theme_content" rows="5" required></textarea>
+                                                    <textarea class="theme_content input form-control" rows="5" required></textarea>
+                                                    <div id="content-valid" class="valid-feedback">
+                                                        OK
+                                                    </div>
+                                                    <div id="content-invalid" class="invalid-feedback">
+                                                        ERROR
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

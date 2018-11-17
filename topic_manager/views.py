@@ -317,12 +317,72 @@ def valid(request):
             else:
                 return HttpResponse("请输入正确的用时")
         elif class_name == "expected_result":
-            if value.isdigit():
+            if len(value):
                 return HttpResponse("OK")
             else:
                 return HttpResponse("不能没有预期成果")
         elif class_name == "content":
+            if len(value):
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确内容")
+        elif class_name == "week":
             if value.isdigit():
                 return HttpResponse("OK")
             else:
-                return HttpResponse("不能没有预期成果")
+                return HttpResponse("请输入正确工作周")
+        elif class_name == "average_work_hour":
+            if value.isdigit():
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确工作周")
+        elif class_name == "this_week_task":
+            if value.isdigit():
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确工作周")
+        elif class_name == "next_week_task":
+            if value.isdigit():
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确工作周")
+        elif class_name == "cost_time":
+            if value.isdigit():
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确工作周")
+        elif class_name == "theme":
+            if len(value) != 0:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确工作周")
+        elif class_name == "remark":
+            if len(value) != 0:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确工作周")
+        elif class_name == "theme_content":
+            if len(value) != 0:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确工作周")
+        elif class_name == "average_time":
+            if re.match(r"[0-9]{1,2}.[0-9]/[0-9]{1,2}.[0-9]", value) is not None:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确平均工作小时")
+        elif class_name == "summary":
+            if len(value) != 0:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确平均工作小时")
+        elif class_name == "man_day":
+            if value.isdigit():
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确的人日")
+        elif class_name == "natural_day":
+            if value.isdigit():
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确的自然日")

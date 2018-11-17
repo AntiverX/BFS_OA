@@ -1,89 +1,134 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% load static %}
+    <script src="{% static "js/time_table_list.js" %}"></script>
     <div class="nav-scroller bg-white shadow-sm mt-1">
         <nav class="nav nav-underline">
             <a class="nav-link" href="time_table">课表</a>
             <a class="nav-link" href="time_table_list">课程列表</a>
         </nav>
     </div>
-    <script>
-        $(document).ready(function () {
-            $("tr").click(function () {
-                $("#class_name").val($(this).children("td").eq(0).text());
-                $("#teacher_name").val($(this).children("td").eq(1).text());
-                $("#week_start").val($(this).children("td").eq(2).text());
-                $("#week_end").val($(this).children("td").eq(3).text());
-                $("#day").val($(this).children("td").eq(4).text());
-                $("#class_number").val($(this).children("td").eq(5).text());
-                $("#class_location").val($(this).children("td").eq(6).text());
-                $("#target_id").val(this.title);
-            });
-        });
-    </script>
-    <div class="container">
-        <form method="POST" action="time_table_list">
-            <input type="hidden" id="target_id" name="target_id" value="">
-            {% csrf_token %}
-            <div class="mt-5">
-                <div class="form-group">
-                    <label for="plan_name">课程名称</label>
-                    <input type="text" class="form-control" id="class_name" name="class_name" required>
+    <div class="container-fluid mt-3">
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary" data-toggle="modal" id="addForm" data-target="#exampleModalCenter">添加</button>
+            <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm">修改</button>
+            <button type="button" class="btn btn-primary ml-4" id="deleteForm">删除</button>
+        </div>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">课程清单</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="metting_record_Form">
+                            <input type="hidden" id="target_id" name="target_id" value="">
+                            {% csrf_token %}
+                            <div id="single_form">
+                                <div class="form-group">
+                                    <label for="plan_name">课程名称</label>
+                                    <input type="text" class="class_name form-control" id="class_name" name="class_name" required>
+                                    <div id="content-valid" class="valid-feedback">
+                                        OK
+                                    </div>
+                                    <div id="content-invalid" class="invalid-feedback">
+                                        ERROR
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label for="plan_result">教师名称</label>
+                                        <input type="text" class="teacher_name form-control" id="teacher_name" name="teacher_name" required>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label for="plan_result">开始周</label>
+                                        <input type="text" class="week_start form-control" id="week_start" name="week_start" required>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label for="plan_result">结束周</label>
+                                        <input type="text" class="week_end form-control" id="week_end" name="week_end" required>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label for="plan_result">星期</label>
+                                        <select class="day form-control is-valid" id="day" name="day">
+                                            <option value="1">一</option>
+                                            <option value="2">二</option>
+                                            <option value="3">三</option>
+                                            <option value="4">四</option>
+                                            <option value="5">五</option>
+                                            <option value="6">六</option>
+                                            <option value="7">日</option>
+                                        </select>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label for="plan_result">大节</label>
+                                        <select class="class_number form-control is-valid" id="class_number" name="class_number">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label for="plan_result">地点</label>
+                                        <input type="text" class="class_location form-control" id="class_location" name="class_location" required>
+                                        <div id="content-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="content-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">
+                                <button class="btn btn-primary" id="submitForm">提交</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="form-group col-2">
-                        <label for="plan_result">教师名称</label>
-                        <input type="text" class="form-control" id="teacher_name" name="teacher_name" required>
-                    </div>
-                    <div class="form-group col-2">
-                        <label for="plan_result">开始周</label>
-                        <input type="text" class="form-control" id="week_start" name="week_start" required>
-                    </div>
-                    <div class="form-group col-2">
-                        <label for="plan_result">结束周</label>
-                        <input type="text" class="form-control" id="week_end" name="week_end" required>
-                    </div>
-                    <div class="form-group col-2">
-                        <label for="plan_result">星期</label>
-                        <select class="form-control" id="day" name="day">
-                            <option value="1">一</option>
-                            <option value="2">二</option>
-                            <option value="3">三</option>
-                            <option value="4">四</option>
-                            <option value="5">五</option>
-                            <option value="6">六</option>
-                            <option value="7">日</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-2">
-                        <label for="plan_result">大节</label>
-                        <select class="form-control" id="class_number" name="class_number">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-2">
-                        <label for="plan_result">地点</label>
-                        <input type="text" class="form-control" id="class_location" name="class_location" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-1">
-                        <button type="submit" class="btn btn-primary" name="btn" value="sumbit">提交</button>
-                    </div>
-                    <div class="col-1">
-                        <button type="submit" class="btn btn-primary" name="btn" value="delete">删除</button>
-                    </div>
-                </div>
-
-
             </div>
-        </form>
-        <div class="table-responsive">
-            <table class="table mt-5 table-hover">
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
                 <thead>
                 <tr>
                     <th scope="col" nowrap>序号</th>

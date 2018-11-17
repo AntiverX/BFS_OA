@@ -27,22 +27,52 @@
                                 <div class="row">
                                     <div class="form-group col-2">
                                         <label for="type">类型（月/学期）</label>
-                                        <select class="form-control" id="type" name="type" required>
+                                        <select class="type form-control" id="type" name="type" required>
                                             <option value="月总结">月总结</option>
                                             <option value="学期总结">学期总结</option>
+                                            <div id="content-valid" class="valid-feedback">
+                                                OK
+                                            </div>
+                                            <div id="content-invalid" class="invalid-feedback">
+                                                ERROR
+                                            </div>
                                         </select>
+                                        <div id="type-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="type-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
                                     </div>
                                     <div class="form-group col-2">
                                         <label for="average_time">填表日期</label>
-                                        <input type="text" class="form-control" id="date" name="date" required>
+                                        <input type="text" class="date form-control" id="date" name="date" required>
+                                        <div id="date-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="date-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
                                     </div>
                                     <div class="form-group col-3">
                                         <label for="average_time">平均工作小时（实际/有效）</label>
-                                        <input type="text" class="form-control" id="average_time" name="average_time" required>
+                                        <input type="text" class="average_time form-control" id="average_time" name="average_time" required>
+                                        <div id="average_time-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="average_time-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
                                     </div>
                                     <div class="form-group col-3" hidden="true">
                                         <label for="all_days">总人日数（日）</label>
-                                        <input type="text" class="form-control" id="all_days" name="all_days" required>
+                                        <input type="text" class="all_days form-control" id="all_days" name="all_days" required>
+                                        <div id="all_days-valid" class="valid-feedback">
+                                            OK
+                                        </div>
+                                        <div id="all_days-invalid" class="invalid-feedback">
+                                            ERROR
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="all_plan">
@@ -50,20 +80,44 @@
                                         <hr>
                                         <div class="form-group">
                                             <label for="summary">工作总结</label>
-                                            <input type="text" class="form-control summary" id="summary" name="summary" required>
+                                            <input type="text" class="summary form-control" id="summary" name="summary" required>
+                                            <div id="summary-valid" class="valid-feedback">
+                                                OK
+                                            </div>
+                                            <div id="summary-invalid" class="invalid-feedback">
+                                                ERROR
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-2">
                                                 <label for="man_day">人日数（天）</label>
-                                                <input type="text" class="form-control man_day" id="" required>
+                                                <input type="text" class="man_day form-control" id="" required>
+                                                <div id="man_day-valid" class="valid-feedback">
+                                                    OK
+                                                </div>
+                                                <div id="man_day-invalid" class="invalid-feedback">
+                                                    ERROR
+                                                </div>
                                             </div>
                                             <div class="form-group col-2">
                                                 <label for="natural_day">自然日（天）</label>
-                                                <input type="text" class="form-control natural_day" id="natural_day" name="natural_day" required>
+                                                <input type="text" class="natural_day form-control" id="natural_day" name="natural_day" required>
+                                                <div id="natural_day-valid" class="valid-feedback">
+                                                    OK
+                                                </div>
+                                                <div id="natural_day-invalid" class="invalid-feedback">
+                                                    ERROR
+                                                </div>
                                             </div>
                                             <div class="form-group col-8">
                                                 <label for="remark">计划执行情况和工作效果说明</label>
-                                                <input type="text" class="form-control remark" id="remark" name="remark">
+                                                <input type="text" class="remark form-control" id="remark" name="remark">
+                                                <div id="remark-valid" class="valid-feedback">
+                                                    OK
+                                                </div>
+                                                <div id="remark-invalid" class="invalid-feedback">
+                                                    ERROR
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

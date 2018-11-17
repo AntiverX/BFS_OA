@@ -247,25 +247,38 @@ def asset(request):
 
 def valid(request):
     if request.method == "POST":
-        if "username" in request.POST:
-            if len(request.POST['username']) < 5:
+        if request.POST['class_name'] == "username":
+            if len(request.POST['value']) < 5:
                 return HttpResponse("太短辣，至少五个字符哦")
             else:
                 return HttpResponse("OK")
-        if "password" in request.POST:
-            if len(request.POST['password']) < 8:
+        elif request.POST['class_name'] == "password":
+            if len(request.POST['value']) < 8:
                 return HttpResponse("太短辣，至少八个字符哦")
             else:
                 return HttpResponse("OK")
-        if "real_name" in request.POST:
-            if len(request.POST['real_name']) < 2:
+        elif request.POST['class_name'] == "real_name":
+            if len(request.POST['value']) < 2:
                 return HttpResponse("你的名字只有姓？")
             else:
                 return HttpResponse("OK")
-        if "student_id" in request.POST:
-            if not request.POST['student_id'].isdigit() or len(request.POST['student_id']) != 10:
+        elif request.POST['class_name'] == "student_id":
+            if not request.POST['value'].isdigit() or len(request.POST['value']) != 10:
                 return HttpResponse("学号必须是十位数字哦")
             else:
                 return HttpResponse("OK")
-    else:
-        return HttpResponse("OK")
+        elif request.POST['class_name'] == "week_start":
+            if request.POST['value'].isdigit():
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("不能为空")
+        elif request.POST['class_name'] == "week_end":
+            if request.POST['value'].isdigit():
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("不能为空")
+        else:
+            if len(request.POST['value']) != 0:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("不能为空")

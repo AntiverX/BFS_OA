@@ -1,19 +1,17 @@
 $(document).ready(function () {
     /*
-    * 对json进行处理
-    * 禁用按钮
-    * 删除按钮实现
-    * 修改按钮实现
-    * 添加按钮实现
-    * 提交按钮实现
-    * 点击某一行实现选中效果
-    * 点击加号增加表单
-    * 表单验证（服务端验证）
-    * 表单验证（本地验证）
-    * */
+* 对json进行处理
+* 禁用按钮
+* 删除按钮实现
+* 修改按钮实现
+* 添加按钮实现
+* 提交按钮实现
+* 点击某一行实现选中效果,并启用删除和修改按钮
+* 点击加号增加表单
+* 表单验证（服务端验证和本地验证）
+* */
 
     /* 对json进行处理 */
-
     $("tr").each(function () {
         if ($(this).find("td").length != 0) {
             var array_ = JSON.parse($(this).find("td").eq(-1).text());
@@ -94,7 +92,7 @@ $(document).ready(function () {
             "                                        </div>\n" +
             "                                        <div class=\"form-group col-2\">\n" +
             "                                            <label for=\"content\">用时（天）</label>\n" +
-            "                                            <input type=\"text\" class=\"time_consumed form-control\" required>\n" +
+            "                                            <input type=\"text\" class=\"time_consumed form-control\" placeholder=\"例：10\" required>\n" +
             "                                            <div id=\"time_consumed-valid\" class=\"valid-feedback\">\n" +
             "                                                OK\n" +
             "                                            </div>\n" +
@@ -103,7 +101,6 @@ $(document).ready(function () {
             "                                            </div>\n" +
             "                                        </div>\n" +
             "                                    </div>\n" +
-            "\n" +
             "                                    <div class=\"row\">\n" +
             "                                        <div class=\"form-group col-12\">\n" +
             "                                            <label for=\"content\">目标说明</label>\n" +
@@ -116,7 +113,7 @@ $(document).ready(function () {
             "                                            </div>\n" +
             "                                        </div>\n" +
             "                                    </div>\n" +
-            "                                    \n" +
+            "\n" +
             "                                    <div class=\"row\">\n" +
             "                                        <div class=\"form-group col-12\">\n" +
             "                                            <label for=\"end_of_term_summary\">期末总结</label>\n" +
@@ -184,7 +181,7 @@ $(document).ready(function () {
             "                                        </div>\n" +
             "                                        <div class=\"form-group col-2\">\n" +
             "                                            <label for=\"content\">用时（天）</label>\n" +
-            "                                            <input type=\"text\" class=\"time_consumed form-control\" required>\n" +
+            "                                            <input type=\"text\" class=\"time_consumed form-control\" placeholder=\"例：10\" required>\n" +
             "                                            <div id=\"time_consumed-valid\" class=\"valid-feedback\">\n" +
             "                                                OK\n" +
             "                                            </div>\n" +
@@ -193,7 +190,6 @@ $(document).ready(function () {
             "                                            </div>\n" +
             "                                        </div>\n" +
             "                                    </div>\n" +
-            "\n" +
             "                                    <div class=\"row\">\n" +
             "                                        <div class=\"form-group col-12\">\n" +
             "                                            <label for=\"content\">目标说明</label>\n" +
@@ -206,7 +202,7 @@ $(document).ready(function () {
             "                                            </div>\n" +
             "                                        </div>\n" +
             "                                    </div>\n" +
-            "                                    \n" +
+            "\n" +
             "                                    <div class=\"row\">\n" +
             "                                        <div class=\"form-group col-12\">\n" +
             "                                            <label for=\"end_of_term_summary\">期末总结</label>\n" +
@@ -291,19 +287,6 @@ $(document).ready(function () {
         $(this).addClass("table-active");
     });
 
-    /* 点击某一行自动填充表单，与数据库结构有关，不可直接复制 */
-    $("tr").click(function () {
-        $("#semester").val($(this).children("td").eq(0).text());
-        $("#date").val($(this).children("td").eq(1).text());
-        $("#expected_result").val($(this).children("td").eq(2).text());
-        $("#time_consumed").val($(this).children("td").eq(3).text());
-
-        $("#content").val($(this).children("td").eq(4).text());
-        $("#end_of_term_summary").val($(this).children("td").eq(5).text());
-
-        $("#target_id").val(this.title);
-    });
-
     /* 点击加号按钮，会自动增加并恢复表单的初始状态 */
     $("#add_target").click(function () {
         element_ = $(".target:first").clone(true);
@@ -311,7 +294,7 @@ $(document).ready(function () {
         $(element_).find("input").removeClass("is-valid");
         $(element_).find("input").removeClass("is-invalid");
         element_.appendTo(".all_target");
-        $("#submitForm").attr("disabled",true);
+        $("#submitForm").attr("disabled", true);
     });
 
 

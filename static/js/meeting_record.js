@@ -1,14 +1,16 @@
-/*
+$(document).ready(function () {
+    /*
 * 对json进行处理
-* 禁用修改和删除按钮
+* 禁用按钮
 * 删除按钮实现
 * 修改按钮实现
 * 添加按钮实现
 * 提交按钮实现
-* 点击某一行实现选中效果
+* 点击某一行实现选中效果,并启用删除和修改按钮
 * 点击加号增加表单
+* 表单验证（服务端验证和本地验证）
 * */
-$(document).ready(function () {
+
     /* 对json进行处理，分行显示本周和下周工作 */
     $("tr").each(function () {
         if ($(this).find("td").length != 0) {
@@ -45,6 +47,7 @@ $(document).ready(function () {
     /* 禁用修改和删除按钮 */
     $("#deleteForm").attr("disabled", true);
     $("#modifyForm").attr("disabled", true);
+    $("#submitForm").attr("disabled", true);
 
     /* 删除按钮相关功能实现 */
     $("#deleteForm").click(function () {
@@ -70,29 +73,47 @@ $(document).ready(function () {
 
     /* 修改按钮相关实现 */
     $("#modifyForm").click(function () {
-        $(".all_record").replaceWith("                            <div class=\"all_record\">\n" +
-            "                                <div class=\"record\">\n" +
-            "                                    <hr>\n" +
-            "                                    <div class=\"row\">\n" +
-            "                                        <div class=\"col-6\">\n" +
-            "                                            <div class=\"form-group\">\n" +
-            "                                                <label for=\"theme\">主题</label>\n" +
-            "                                                <input class=\"form-control theme\" required>\n" +
+        $(".all_record").replaceWith("                                <div class=\"all_record\">\n" +
+            "                                    <div class=\"record\">\n" +
+            "                                        <hr>\n" +
+            "                                        <div class=\"row\">\n" +
+            "                                            <div class=\"col-6\">\n" +
+            "                                                <div class=\"form-group\">\n" +
+            "                                                    <label for=\"theme\">主题</label>\n" +
+            "                                                    <input class=\"theme input form-control\" required>\n" +
+            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
+            "                                                        OK\n" +
+            "                                                    </div>\n" +
+            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                        ERROR\n" +
+            "                                                    </div>\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"form-group\">\n" +
+            "                                                    <label for=\"remark\">备注</label>\n" +
+            "                                                    <input class=\"remark input form-control\" rows=\"1\"></input>\n" +
+            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
+            "                                                        OK\n" +
+            "                                                    </div>\n" +
+            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                        ERROR\n" +
+            "                                                    </div>\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
-            "                                            <div class=\"form-group\">\n" +
-            "                                                <label for=\"remark\">备注</label>\n" +
-            "                                                <input class=\"form-control remark\" rows=\"1\"></input>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                        <div class=\" col-6\">\n" +
-            "                                            <div class=\"form-group\">\n" +
-            "                                                <label for=\"theme_content\">主题内容说明</label>\n" +
-            "                                                <textarea class=\"form-control theme_content\" rows=\"5\" required></textarea>\n" +
+            "                                            <div class=\" col-6\">\n" +
+            "                                                <div class=\"form-group\">\n" +
+            "                                                    <label for=\"theme_content\">主题内容说明</label>\n" +
+            "                                                    <textarea class=\"theme_content input form-control\" rows=\"5\" required></textarea>\n" +
+            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
+            "                                                        OK\n" +
+            "                                                    </div>\n" +
+            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                        ERROR\n" +
+            "                                                    </div>\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
             "                                        </div>\n" +
             "                                    </div>\n" +
-            "                                </div>\n" +
-            "                            </div>");
+            "                                </div>");
         var target_id = $("#target_id").val();
         var date = $("tr[title=" + target_id + "]").find("td").eq(0).text();
         var time = $("tr[title=" + target_id + "]").find("td").eq(1).text();
@@ -126,32 +147,59 @@ $(document).ready(function () {
         $("#form").find("input").val("");
         /* 设置日期时间 */
         var date = new Date();
-        $("#date").val(date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay());
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        $("#date").val(year + "-" + month + "-" + day);
         $("#time").val(date.getHours() + ":" + date.getMinutes());
+        $("#cost_time").val("");
+        $("#cost_time").removeClass("is-valid");
+        $("#cost_time").removeClass("is-invalid");
         $("#place").val("10#420");
-        $(".all_record").replaceWith("                            <div class=\"all_record\">\n" +
-            "                                <div class=\"record\">\n" +
-            "                                    <hr>\n" +
-            "                                    <div class=\"row\">\n" +
-            "                                        <div class=\"col-6\">\n" +
-            "                                            <div class=\"form-group\">\n" +
-            "                                                <label for=\"theme\">主题</label>\n" +
-            "                                                <input class=\"form-control theme\" required>\n" +
+        $("#date").addClass("is-valid");
+        $("#time").addClass("is-valid");
+        $("#place").addClass("is-valid");
+        $(".all_record").replaceWith("                                <div class=\"all_record\">\n" +
+            "                                    <div class=\"record\">\n" +
+            "                                        <hr>\n" +
+            "                                        <div class=\"row\">\n" +
+            "                                            <div class=\"col-6\">\n" +
+            "                                                <div class=\"form-group\">\n" +
+            "                                                    <label for=\"theme\">主题</label>\n" +
+            "                                                    <input class=\"theme input form-control\" required>\n" +
+            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
+            "                                                        OK\n" +
+            "                                                    </div>\n" +
+            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                        ERROR\n" +
+            "                                                    </div>\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"form-group\">\n" +
+            "                                                    <label for=\"remark\">备注</label>\n" +
+            "                                                    <input class=\"remark input form-control\" rows=\"1\"></input>\n" +
+            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
+            "                                                        OK\n" +
+            "                                                    </div>\n" +
+            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                        ERROR\n" +
+            "                                                    </div>\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
-            "                                            <div class=\"form-group\">\n" +
-            "                                                <label for=\"remark\">备注</label>\n" +
-            "                                                <input class=\"form-control remark\" rows=\"1\"></input>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                        <div class=\" col-6\">\n" +
-            "                                            <div class=\"form-group\">\n" +
-            "                                                <label for=\"theme_content\">主题内容说明</label>\n" +
-            "                                                <textarea class=\"form-control theme_content\" rows=\"5\" required></textarea>\n" +
+            "                                            <div class=\" col-6\">\n" +
+            "                                                <div class=\"form-group\">\n" +
+            "                                                    <label for=\"theme_content\">主题内容说明</label>\n" +
+            "                                                    <textarea class=\"theme_content input form-control\" rows=\"5\" required></textarea>\n" +
+            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
+            "                                                        OK\n" +
+            "                                                    </div>\n" +
+            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                        ERROR\n" +
+            "                                                    </div>\n" +
+            "                                                </div>\n" +
             "                                            </div>\n" +
             "                                        </div>\n" +
             "                                    </div>\n" +
-            "                                </div>\n" +
-            "                            </div>");
+            "                                </div>");
         if ($("tr").hasClass("table-active")) {
             $("tr").removeClass("table-active");
         }
@@ -220,8 +268,55 @@ $(document).ready(function () {
         element_ = $(".record:first").clone(true);
         $(element_).find("input").val("");
         $(element_).find("textarea").val("");
+        $(element_).find(".input").removeClass("is-valid");
         element_.appendTo(".all_record");
+        $("#submitForm").attr("disabled", true);
     });
 
+    /* 表单验证 */
+    $(document).on('change', '.input', function () {
+        /* 在线验证表单内容 */
+        text = $(this).val();
+        class_name = $(this).attr('class').split(" ")[0];
+        csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        parent = $(this);
+        data = {
+            class_name: class_name,
+            value: text,
+            'csrfmiddlewaretoken': csrftoken
+        }
+        $.post('/topic_manager/valid', data, function (result) {
+
+            if (result == "OK") {
+                parent.removeClass("is-invalid");
+                parent.addClass("is-valid");
+            }
+            else {
+                $("#" + class_name + "-invalid").text(result);
+                parent.removeClass("is-valid");
+                parent.addClass("is-invalid");
+            }
+        });
+
+        /* 客户端验证是否有缺失内容 */
+        var form_complete = 1;
+        $(".input").each(function () {
+
+            if (($(this).val() == "")) {
+                if ($(this).attr("id") != "target_id" && $(this).attr("class").split(" ")[0] != "remark") {
+                    form_complete = 0;
+                }
+            }
+            if ($(this).hasClass("is-invalid")) {
+                form_complete = 0;
+            }
+        });
+        if (form_complete) {
+            $("#submitForm").attr("disabled", false);
+        }
+        else {
+            $("#submitForm").attr("disabled", true);
+        }
+    });
 
 });
