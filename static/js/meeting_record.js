@@ -295,6 +295,7 @@ $(document).ready(function () {
                 $("#" + class_name + "-invalid").text(result);
                 parent.removeClass("is-valid");
                 parent.addClass("is-invalid");
+                $("#submitForm").attr("disabled", true);
             }
         });
 
@@ -306,9 +307,6 @@ $(document).ready(function () {
                 if ($(this).attr("id") != "target_id" && $(this).attr("class").split(" ")[0] != "remark") {
                     form_complete = 0;
                 }
-            }
-            if ($(this).hasClass("is-invalid")) {
-                form_complete = 0;
             }
         });
         if (form_complete) {

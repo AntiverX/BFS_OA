@@ -340,9 +340,6 @@ $(document).ready(function () {
                     form_complete = 0;
                 }
             }
-            if ($(this).hasClass("is-invalid")) {
-                form_complete = 0;
-            }
         });
         if (form_complete) {
             $("#submitForm").attr("disabled", false);
