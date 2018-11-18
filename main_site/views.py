@@ -6,6 +6,7 @@ import os, time, re, random
 from .models import FileRecord, BFS_OA_Config
 from user_info.models import User
 
+
 def index(request):
     if request.user.is_authenticated:
         context = {
@@ -106,7 +107,7 @@ def settings(request):
         context = {
             'menus': {
                 '/system/settings': "系统设置",
-                '/system/users_management':"用户管理",
+                '/system/users_management': "用户管理",
             },
             'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
             'user': request.user,
@@ -139,7 +140,7 @@ def users_management(request):
         context = {
             'menus': {
                 '/system/settings': "系统设置",
-                '/system/users_management':"用户管理",
+                '/system/users_management': "用户管理",
             },
             'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
             'user': request.user,
@@ -147,7 +148,20 @@ def users_management(request):
         if request.method == "GET":
             users = User.objects.all()
             context['results'] = users
-            return render(request,"index/users_management.html",context=context)
+            return render(request, "index/users_management.html", context=context)
+        else:
+            target_id = request.POST['target_id']
+            user = User.objects.get(id=target_id)
+            if request.POST['btn'] == "delete":
+                user.delete()
+            else:
+                user.username = request.POST['username']
+                user.real_name = request.POST['real_name']
+                user.is_admin = request.POST['is_admin']
+                user.is_student = request.POST['is_student']
+                user.is_teacher = request.POST['is_teacher']
+                user.save()
+            return HttpResponseRedirect("/system/users_management")
 
 
 def about(request):
