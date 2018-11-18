@@ -27,5 +27,6 @@ if [ -f db.sqlite3 ];then
 fi
 python manage.py makemigrations
 python manage.py migrate
+python manage.py install
 chmod 777 db.sqlite3
 sudo systemctl restart apache2

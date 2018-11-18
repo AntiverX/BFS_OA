@@ -3,39 +3,44 @@ from topic_manager.models import MeetingRecord, Target, Plan, WorkSummary, Weekl
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-import time
 from django.core.exceptions import *
 import re
 from main_site.models import BFS_OA_Config
-from datetime import datetime
-
-current_week = time.strftime("%W")
-start_week = BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]
-current_semester_week = int(current_week) - int(start_week)
-
-context = {
-    'menus': {
-        'target': "目标",
-        'plan': "计划",
-        'weekly_summary': "周报",
-        'meeting_record': "会议记录",
-        'work_summary': "工作总结",
-    },
-    'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-    'current_semester_week': current_semester_week,
-}
+import time
 
 
 @login_required
 def topic_manager(request):
-    context['user'] = request.user
+    context = {
+        'menus': {
+            'target': "目标",
+            'plan': "计划",
+            'weekly_summary': "周报",
+            'meeting_record': "会议记录",
+            'work_summary': "工作总结",
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     return render(request, 'index/index.html', context=context)
 
 
 # 目标
 @login_required
 def target(request):
-    context['username'] = request.user.username
+    context = {
+        'menus': {
+            'target': "目标",
+            'plan': "计划",
+            'weekly_summary': "周报",
+            'meeting_record': "会议记录",
+            'work_summary': "工作总结",
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     if request.method == "POST":
         expected_result = request.POST['expected_result']
         content = request.POST['content']
@@ -87,7 +92,18 @@ def target(request):
 # 计划
 @login_required
 def plan(request):
-    context['username'] = request.user.username
+    context = {
+        'menus': {
+            'target': "目标",
+            'plan': "计划",
+            'weekly_summary': "周报",
+            'meeting_record': "会议记录",
+            'work_summary': "工作总结",
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     if request.method == "POST":
         type = request.POST['type']
         plan_name = request.POST['plan_name']
@@ -161,7 +177,18 @@ def plan(request):
 # 周报
 @login_required
 def weekly_summary(request):
-    context['username'] = request.user.username
+    context = {
+        'menus': {
+            'target': "目标",
+            'plan': "计划",
+            'weekly_summary': "周报",
+            'meeting_record': "会议记录",
+            'work_summary': "工作总结",
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     if request.method == 'POST':
         average_work_hour = request.POST['average_work_hour']
         absent_hour = request.POST['absent_hour']
@@ -205,7 +232,18 @@ def weekly_summary(request):
 # 会议记录
 @login_required
 def record(request):
-    context['username'] = request.user.username
+    context = {
+        'menus': {
+            'target': "目标",
+            'plan': "计划",
+            'weekly_summary': "周报",
+            'meeting_record': "会议记录",
+            'work_summary': "工作总结",
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     if request.method == "POST":
         date = request.POST['date']
         time = request.POST['time']
@@ -252,7 +290,18 @@ def record(request):
 # 工作总结
 @login_required
 def work_summary(request):
-    context['username'] = request.user.username
+    context = {
+        'menus': {
+            'target': "目标",
+            'plan': "计划",
+            'weekly_summary': "周报",
+            'meeting_record': "会议记录",
+            'work_summary': "工作总结",
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     if request.method == "POST":
         type = request.POST['type']
         summary = request.POST['summary']

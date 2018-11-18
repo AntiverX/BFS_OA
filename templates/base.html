@@ -56,11 +56,11 @@
         </ul>
         <div class="navbar-right">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="">
-                        {% if config is not None %}{{ config.semester_start_time|date:"Y-m-d" }}{% endif %} 第{{ current_semester_week }}周</a>
-                </li>
-                {% if user.username %}
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="">
+                            第{{ current_semester_week }}周</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="settings/{{ user.username }}">Welcome {{ user.username }} !</a>
                     </li>

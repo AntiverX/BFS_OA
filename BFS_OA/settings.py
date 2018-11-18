@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['subject.isclab.org']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -126,3 +126,5 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'user_info.User'
 
 LOGIN_URL = '/login'
+
+START_DATE = "2018-11-11"

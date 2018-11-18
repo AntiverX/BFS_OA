@@ -22,11 +22,11 @@ class Competition(models.Model):
     # 比赛地址
     address = models.TextField()
     # 参与人员
-    partitipant = models.TextField()
+    participant = models.TextField()
     # 注意事项
-    attentation = models.TextField()
+    attention = models.TextField()
     # 比赛情况
-    condiditon = models.TextField()
+    condition = models.TextField()
 
 
 class FileRecord(models.Model):

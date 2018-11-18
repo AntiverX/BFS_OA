@@ -2,29 +2,23 @@ from django.shortcuts import render, HttpResponseRedirect
 from BFS_OA.settings import BASE_DIR
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
-import time
+import os, time, re, random
 from .models import FileRecord, BFS_OA_Config
-import os
-import random
-
-current_week = time.strftime("%W")
-start_week = BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]
-current_semester_week = int(current_week) - int(start_week)
-
-context = {
-    'menus': {'bulletin': "通知公告",
-              'news': "新闻",
-              'library': "图书室",
-              'competition': "近期比赛"
-              },
-    'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-    'current_semester_week': current_semester_week,
-}
-
+from user_info.models import User
 
 def index(request):
     if request.user.is_authenticated:
-        context['user'] = request.user
+        context = {
+            'menus': {
+                'bulletin': "通知公告",
+                'news': "新闻",
+                'library': "图书室",
+                'competition': "近期比赛"
+            },
+            'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+            'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+            'user': request.user,
+        }
         return render(request, 'index/index.html', context=context)
     else:
         return render(request, 'index/index.html')
@@ -34,7 +28,18 @@ def index(request):
 @login_required
 def bulletin(request):
     # TODO template及逻辑
-    context['username'] = request.user.username
+    context = {
+        'menus': {
+            'bulletin': "通知公告",
+            'news': "新闻",
+            'library': "图书室",
+            'competition': "近期比赛"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+
+        'user': request.user,
+    }
     return render(request, "index/bulletin.html", context=context)
 
 
@@ -42,7 +47,17 @@ def bulletin(request):
 @login_required
 def news(request):
     # TODO template及逻辑
-    context['username'] = request.user.username
+    context = {
+        'menus': {
+            'bulletin': "通知公告",
+            'news': "新闻",
+            'library': "图书室",
+            'competition': "近期比赛"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     return render(request, "index/news.html", context=context)
 
 
@@ -50,13 +65,34 @@ def news(request):
 @login_required
 def library(request):
     # TODO template及逻辑
-    context['username'] = request.user.username
+    context = {
+        'menus': {
+            'bulletin': "通知公告",
+            'news': "新闻",
+            'library': "图书室",
+            'competition': "近期比赛"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     return render(request, "index/library.html", context=context)
 
 
 # 竞赛
 @login_required
 def competition(request):
+    context = {
+        'menus': {
+            'bulletin': "通知公告",
+            'news': "新闻",
+            'library': "图书室",
+            'competition': "近期比赛"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     if request.method == "POST":
         pass
     else:
@@ -68,7 +104,12 @@ def settings(request):
     context = {}
     if request.user.id == 1 or request.user.is_admin:
         context = {
-            'menus': {'/system/settings': "系统设置"}
+            'menus': {
+                '/system/settings': "系统设置",
+                '/system/users_management':"用户管理",
+            },
+            'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+            'user': request.user,
         }
         if request.method == "POST":
             semester_start_time = request.POST['semester_start_time']
@@ -90,6 +131,23 @@ def settings(request):
     else:
         context["error"] = "你无权访问此页面！"
         return render(request, "error.html", context=context)
+
+
+@login_required
+def users_management(request):
+    if request.user.id == 1 or request.user.is_admin:
+        context = {
+            'menus': {
+                '/system/settings': "系统设置",
+                '/system/users_management':"用户管理",
+            },
+            'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+            'user': request.user,
+        }
+        if request.method == "GET":
+            users = User.objects.all()
+            context['results'] = users
+            return render(request,"index/users_management.html",context=context)
 
 
 def about(request):
@@ -138,3 +196,17 @@ def random_service(request):
     ]
     random_value = random.randint(0, len(users) - 1)
     return HttpResponse(users[random_value])
+
+
+def valid(request):
+    if request.method == "POST":
+        if 'time' in request.POST['class_name']:
+            if re.match(r"[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}", request.POST['value']) is not None:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确的时间")
+        else:
+            if len(request.POST['value']) != 0:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("不能为空")

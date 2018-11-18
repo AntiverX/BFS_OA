@@ -1,86 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <script>
-        $(document).ready(function () {
-            $("#username").change(function () {
-                text = $("#username").val();
-                csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-                $.post('/info/valid', {username: text, csrfmiddlewaretoken: csrftoken}, function (result) {
-                    if (result == "OK") {
-                        $("#username").removeClass("is-invalid");
-                        $("#username").addClass("is-valid");
-                        if (!$("input").hasClass("is-invalid")) {
-                            $("#submitForm").attr("disabled", false);
-                        }
-                    }
-                    else {
-                        $("#username-invalid").text(result);
-                        $("#username").removeClass("is-valid");
-                        $("#username").addClass("is-invalid");
-                        $("#submitForm").attr("disabled", true);
-                    }
-                });
-            });
-            $("#password").change(function () {
-                text = $("#password").val();
-                csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-                $.post('/info/valid', {password: text, csrfmiddlewaretoken: csrftoken}, function (result) {
-                    if (result == "OK") {
-                        $("#password").removeClass("is-invalid");
-                        $("#password").addClass("is-valid");
-                        if (!$("input").hasClass("is-invalid")) {
-                            $("#submitForm").attr("disabled", false);
-                        }
-                    }
-                    else {
-                        $("#password-invalid").text(result);
-                        $("#password").removeClass("is-valid");
-                        $("#password").addClass("is-invalid");
-                        $("#submitForm").attr("disabled", true);
-                    }
-                });
-            });
-            $("#real_name").change(function () {
-                text = $("#real_name").val();
-                csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-                $.post('/info/valid', {real_name: text, csrfmiddlewaretoken: csrftoken}, function (result) {
-                    if (result == "OK") {
-                        $("#real_name").removeClass("is-invalid");
-                        $("#real_name").addClass("is-valid");
-                        if (!$("input").hasClass("is-invalid")) {
-                            $("#submitForm").attr("disabled", false);
-                        }
-                    }
-                    else {
-                        $("#real_name-invalid").text(result);
-                        $("#real_name").removeClass("is-valid");
-                        $("#real_name").addClass("is-invalid");
-                        $("#submitForm").attr("disabled", true);
-                    }
-                });
-            });
-            $("#student_id").change(function () {
-                text = $("#student_id").val();
-                csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-                $.post('/info/valid', {student_id: text, csrfmiddlewaretoken: csrftoken}, function (result) {
-                    if (result == "OK") {
-                        $("#student_id").removeClass("is-invalid");
-                        $("#student_id").addClass("is-valid");
-                        if (!$("input").hasClass("is-invalid")) {
-                            $("#submitForm").attr("disabled", false);
-                        }
-                    }
-                    else {
-                        $("#student_id-invalid").text(result);
-                        $("#student_id").removeClass("is-valid");
-                        $("#student_id").addClass("is-invalid");
-                        $("#submitForm").attr("disabled", true);
-                    }
-                });
-            });
-        });
-    </script>
+    {% load static %}
+    <script src="{% static "js/register.js" %}"></script>
     <div class="container">
         <form class="align-items-end" style="margin-top: 5em;" action="/register" method="post">
             {% csrf_token %}
@@ -94,13 +16,10 @@
                 <div id="username-invalid" class="invalid-feedback">
                     请输入一个可用的用户名
                 </div>
-
             </div>
-
             <div class="form-group">
                 <label for="exampleInputPassword1">密码</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder=""
-                       required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="" required>
                 <div id="password-valid" class="valid-feedback">
                     密码可用
                 </div>

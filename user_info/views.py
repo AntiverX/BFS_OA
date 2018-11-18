@@ -7,25 +7,21 @@ import time
 from django.core.exceptions import *
 from main_site.models import BFS_OA_Config
 
-current_week = time.strftime("%W")
-start_week = BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]
-current_semester_week = int(current_week) - int(start_week)
-
-context = {
-    'menus': {'my_info': "我的信息",
-              'time_table': "课程表",
-              'attendance': "考勤",
-              'attendance': "新生培训",
-              'asset': "资产"
-              },
-    'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-    'current_semester_week': current_semester_week,
-}
-
-
 @login_required
 def info(request):
-    context['user'] = request.user
+    context = {
+        'menus': {
+            'my_info': "我的信息",
+            'time_table': "课程表",
+            'attendance': "考勤",
+            'attendance': "新生培训",
+            'asset': "资产"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(
+            BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     return render(request, 'index/index.html', context=context)
 
 
@@ -73,12 +69,37 @@ def register(request):
 @login_required
 def attendance(request):
     # TODO template及逻辑
-    context['username'] = request.user.username
+    context = {
+        'menus': {
+            'my_info': "我的信息",
+            'time_table': "课程表",
+            'attendance': "考勤",
+            'attendance': "新生培训",
+            'asset': "资产"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(
+            BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     return render(request, "under_construction.html", context=context)
 
 
 @login_required
 def time_table(request):
+    context = {
+        'menus': {
+            'my_info': "我的信息",
+            'time_table': "课程表",
+            'attendance': "考勤",
+            'attendance': "新生培训",
+            'asset': "资产"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(
+            BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     class_1, class_2, class_3, class_4, class_5 = [], [], [], [], []
     for i in range(7):
         class_1.append(TimeTable.objects.filter(class_number=1, day=i + 1, user_id=request.user.id)[0] if len(
@@ -91,7 +112,6 @@ def time_table(request):
             TimeTable.objects.filter(class_number=4, day=i + 1, user_id=request.user.id)) != 0 else None)
         class_5.append(TimeTable.objects.filter(class_number=5, day=i + 1, user_id=request.user.id)[0] if len(
             TimeTable.objects.filter(class_number=5, day=i + 1, user_id=request.user.id)) != 0 else None)
-    context['username'] = request.user.username
     context['classes_1'] = class_1
     context['classes_2'] = class_2
     context['classes_3'] = class_3
@@ -103,6 +123,19 @@ def time_table(request):
 # 课程列表
 @login_required
 def time_table_list(request):
+    context = {
+        'menus': {
+            'my_info': "我的信息",
+            'time_table': "课程表",
+            'attendance': "考勤",
+            'attendance': "新生培训",
+            'asset': "资产"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(
+            BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     if request.method == 'POST':
         class_name = request.POST['class_name']
         teacher_name = request.POST['teacher_name']
@@ -154,7 +187,19 @@ def time_table_list(request):
 
 @login_required
 def my_info(request):
-    context['user'] = request.user
+    context = {
+        'menus': {
+            'my_info': "我的信息",
+            'time_table': "课程表",
+            'attendance': "考勤",
+            'attendance': "新生培训",
+            'asset': "资产"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(
+            BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     if request.method == "POST":
         info = User.objects.get(id=request.user.id)
         info.gender = request.POST['gender']
@@ -190,6 +235,19 @@ def my_info(request):
 
 @login_required
 def asset(request):
+    context = {
+        'menus': {
+            'my_info': "我的信息",
+            'time_table': "课程表",
+            'attendance': "考勤",
+            'attendance': "新生培训",
+            'asset': "资产"
+        },
+        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
+        'current_semester_week': int(time.strftime("%W")) - int(
+            BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+        'user': request.user,
+    }
     if request.method == "POST":
         if request.POST['target_to_delete'] != "":
             target_to_delete = request.POST['target_to_delete']

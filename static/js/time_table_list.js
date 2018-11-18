@@ -31,7 +31,7 @@ $(document).ready(function () {
             csrfmiddlewaretoken: csrftoken,
             "btn": "delete"
         }
-        $.post("info/time_table_list", data, function (response, status) {
+        $.post("/info/time_table_list", data, function (response, status) {
             if (status == "success") {
                 window.location.reload(true);
             }
