@@ -29,10 +29,11 @@ urlpatterns = [
     path('bulletin', main_site_views.bulletin),
     path('news', main_site_views.news),
     path('library', main_site_views.library),
+    path('asset', main_site_views.asset),
     path('system/', include('main_site.urls')),
     path('about', main_site_views.about),
     path('competition', main_site_views.competition),
     path('upload', main_site_views.uploader),
     path('random', main_site_views.random_service),
-    path('valid',main_site_views.valid),
+    path('valid', main_site_views.valid),
 ]

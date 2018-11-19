@@ -1,6 +1,7 @@
 from django.db import models
 from user_info.models import User
 
+
 # Create your models here.
 
 class BFS_OA_Config(models.Model):
@@ -30,6 +31,19 @@ class Competition(models.Model):
 
 
 class FileRecord(models.Model):
-    time = models.DateTimeField(auto_now=True,null=True)
+    time = models.DateTimeField(auto_now=True, null=True)
     title = models.TextField()
     name = models.TextField()
+
+
+# 资产
+class Lab_Asset(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    type = models.TextField()
+    name = models.TextField()
+    model = models.TextField()
+    manufacturer = models.TextField()
+    number = models.TextField()
+    parameter = models.TextField()
+    buying_date = models.DateField()
+    storing_place = models.TextField()

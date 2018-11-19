@@ -5,21 +5,24 @@ from django.contrib.auth.decorators import login_required
 import os, time, re, random
 from .models import FileRecord, BFS_OA_Config
 from user_info.models import User
+from .models import Lab_Asset
+from django.core.exceptions import *
+
+context = {
+    'menus': {
+        'bulletin': "通知公告",
+        'news': "新闻",
+        'library': "图书室",
+        'competition': "近期比赛"
+    },
+}
 
 
 def index(request):
     if request.user.is_authenticated:
-        context = {
-            'menus': {
-                'bulletin': "通知公告",
-                'news': "新闻",
-                'library': "图书室",
-                'competition': "近期比赛"
-            },
-            'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-            'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
-            'user': request.user,
-        }
+        context['user'] = request.user
+        context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+        context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
         return render(request, 'index/index.html', context=context)
     else:
         return render(request, 'index/index.html')
@@ -29,18 +32,9 @@ def index(request):
 @login_required
 def bulletin(request):
     # TODO template及逻辑
-    context = {
-        'menus': {
-            'bulletin': "通知公告",
-            'news': "新闻",
-            'library': "图书室",
-            'competition': "近期比赛"
-        },
-        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
-
-        'user': request.user,
-    }
+    context['user'] = request.user
+    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, "index/bulletin.html", context=context)
 
 
@@ -48,17 +42,9 @@ def bulletin(request):
 @login_required
 def news(request):
     # TODO template及逻辑
-    context = {
-        'menus': {
-            'bulletin': "通知公告",
-            'news': "新闻",
-            'library': "图书室",
-            'competition': "近期比赛"
-        },
-        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
-        'user': request.user,
-    }
+    context['user'] = request.user
+    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, "index/news.html", context=context)
 
 
@@ -66,34 +52,18 @@ def news(request):
 @login_required
 def library(request):
     # TODO template及逻辑
-    context = {
-        'menus': {
-            'bulletin': "通知公告",
-            'news': "新闻",
-            'library': "图书室",
-            'competition': "近期比赛"
-        },
-        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
-        'user': request.user,
-    }
+    context['user'] = request.user
+    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, "index/library.html", context=context)
 
 
 # 竞赛
 @login_required
 def competition(request):
-    context = {
-        'menus': {
-            'bulletin': "通知公告",
-            'news': "新闻",
-            'library': "图书室",
-            'competition': "近期比赛"
-        },
-        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
-        'user': request.user,
-    }
+    context['user'] = request.user
+    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == "POST":
         pass
     else:
@@ -111,6 +81,7 @@ def settings(request):
             },
             'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
             'user': request.user,
+            'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
         }
         if request.method == "POST":
             semester_start_time = request.POST['semester_start_time']
@@ -144,6 +115,7 @@ def users_management(request):
             },
             'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
             'user': request.user,
+            'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
         }
         if request.method == "GET":
             users = User.objects.all()
@@ -162,6 +134,66 @@ def users_management(request):
                 user.is_teacher = request.POST['is_teacher']
                 user.save()
             return HttpResponseRedirect("/system/users_management")
+
+
+@login_required
+def asset(request):
+    context['user'] = request.user
+    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
+    if request.method == "POST":
+        if request.POST['target_to_delete'] != "":
+            target_to_delete = request.POST['target_to_delete']
+            existing_asset = Lab_Asset.objects.get(id=target_to_delete)
+            existing_asset.delete()
+            return HttpResponseRedirect('/info/asset')
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            type = request.POST['type']
+            name = request.POST['name']
+            model = request.POST['model']
+            manufacturer = request.POST['manufacturer']
+            number = request.POST['number']
+            parameter = request.POST['parameter']
+            buying_date = request.POST['buying_date']
+            storing_place = request.POST['storing_place']
+            existing_asset = Lab_Asset.objects.get(id=target_id)
+            existing_asset.type = type
+            existing_asset.name = name
+            existing_asset.model = model
+            existing_asset.manufacturer = manufacturer
+            existing_asset.number = number
+            existing_asset.parameter = parameter
+            existing_asset.buying_date = buying_date
+            existing_asset.storing_place = storing_place
+            try:
+                existing_asset.save()
+            except (ValueError, ValidationError) as err:
+                context['error'] = err
+                return render(request, 'error.html', context=context)
+        else:
+            type = request.POST['type']
+            name = request.POST['name']
+            model = request.POST['model']
+            manufacturer = request.POST['manufacturer']
+            number = request.POST['number']
+            parameter = request.POST['parameter']
+            buying_date = request.POST['buying_date']
+            storing_place = request.POST['storing_place']
+            new_asset = Lab_Asset(
+                user=request.user, type=type, name=name, model=model, manufacturer=manufacturer, number=number,
+                parameter=parameter, buying_date=buying_date, storing_place=storing_place
+            )
+            try:
+                new_asset.save()
+            except (ValueError, ValidationError) as err:
+                context['error'] = err
+                return render(request, 'error.html', context=context)
+        return HttpResponseRedirect('/info/asset')
+    else:
+        results = Lab_Asset.objects.all()
+        context['assets'] = results
+        return render(request, "info/asset.html", context=context)
 
 
 def about(request):

@@ -5,33 +5,26 @@ from topic_manager.models import WeeklySummary
 import time
 from main_site.models import BFS_OA_Config
 
+context = {
+    'menus': {
+        'summary_list': "周报列表",
+        'report_mode': "汇报模式"
+    },
+}
 
 @login_required
 def index(request):
-    context = {
-        'menus': {
-            'summary_list': "周报列表",
-            'report_mode': "汇报模式"
-        },
-        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-        'current_semester_week': int(time.strftime("%W")) - int(
-            BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
-        'user': request.user,
-    }
+    context['user'] = request.user
+    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, 'index/index.html', context=context)
 
 
 @login_required
 def summary_list(request):
-    context = {
-        'menus': {
-            'summary_list': "周报列表",
-            'report_mode': "汇报模式"
-        },
-        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
-        'user': request.user,
-    }
+    context['user'] = request.user
+    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     week = time.strftime("%W")
     context['username'] = request.user.username
     submitted_weekly_summary = WeeklySummary.objects.filter(week=week)
@@ -42,15 +35,9 @@ def summary_list(request):
 # 汇报模式
 @login_required
 def report_mode(request):
-    context = {
-        'menus': {
-            'summary_list': "周报列表",
-            'report_mode': "汇报模式"
-        },
-        'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
-        'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
-        'user': request.user,
-    }
+    context['user'] = request.user
+    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     week = time.strftime("%W")
     if request.method == "POST":
         status = request.POST['btn']
