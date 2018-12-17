@@ -27,7 +27,6 @@ context = {
 def topic_manager(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, 'index/index.html', context=context)
 
 
@@ -36,7 +35,6 @@ def topic_manager(request):
 def target(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == "POST":
         expected_result = request.POST['expected_result']
         content = request.POST['content']
@@ -90,7 +88,6 @@ def target(request):
 def plan(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == "POST":
         type = request.POST['type']
         plan_name = request.POST['plan_name']
@@ -166,7 +163,6 @@ def plan(request):
 def weekly_summary(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == 'POST':
         average_work_hour = request.POST['average_work_hour']
         absent_hour = request.POST['absent_hour']
@@ -210,7 +206,6 @@ def weekly_summary(request):
 # 会议记录
 @login_required
 def record(request):
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
 
@@ -262,7 +257,6 @@ def record(request):
 def work_summary(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == "POST":
         type = request.POST['type']
         summary = request.POST['summary']

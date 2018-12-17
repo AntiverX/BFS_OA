@@ -28,7 +28,6 @@ def index(request):
         else:
             context['user'] = request.user
             context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-            context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
             return render(request, 'index/index.html', context=context)
     else:
         return render(request, 'index/index.html')
@@ -40,7 +39,6 @@ def bulletin(request):
     # TODO template及逻辑
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, "index/bulletin.html", context=context)
 
 
@@ -50,7 +48,6 @@ def news(request):
     # TODO template及逻辑
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, "index/news.html", context=context)
 
 
@@ -60,7 +57,6 @@ def library(request):
     # TODO template及逻辑
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, "index/library.html", context=context)
 
 
@@ -69,7 +65,6 @@ def library(request):
 def competition(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == "POST":
         pass
     else:
@@ -107,8 +102,16 @@ def settings(request):
                 context['config'] = config[0]
             return render(request, "index/settings.html", context=context)
     else:
-        context["error"] = "你无权访问此页面！"
-        return render(request, "error.html", context=context)
+        context = {
+            'menus': {
+                '/system/settings': "界面设置",
+            }
+        }
+        return render(request, "index/settings.html", context=context)
+
+
+def user_settings(request):
+    return HttpResponse("/")
 
 
 @login_required
@@ -146,7 +149,6 @@ def users_management(request):
 def asset(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == "POST":
         if request.POST['target_to_delete'] != "":
             target_to_delete = request.POST['target_to_delete']

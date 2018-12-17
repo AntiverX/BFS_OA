@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+
+
+
     {% load static %}
     <script src="{% static "js/weekly_summary.js" %}"></script>
     <style>
@@ -10,8 +13,12 @@
     </style>
     <div class="container-fluid mt-3">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="addForm">添加</button>
-        <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm">修改</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="addForm">
+            添加
+        </button>
+        <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm">
+            修改
+        </button>
         <button type="button" class="btn btn-primary ml-4" id="deleteForm">删除</button>
 
         <!-- Modal -->

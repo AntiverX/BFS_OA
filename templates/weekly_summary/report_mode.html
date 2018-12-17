@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-        {% load static %}
+    <div class="nav-scroller bg-white shadow-sm">
+        <nav class="nav nav-underline">
+            <a class="nav-link" href="{% url "summary_list" %}">周报列表</a>
+            {% if user.is_admin %}
+                <a class="nav-link" href="{% url "report_mode" %}">汇报模式</a>
+            {% endif %}
+        </nav>
+    </div>
+
+    {% load static %}
     <script src="{% static "js/report_mode.js" %}"></script>
     <div class="container-fluid mt-3">
         <form method="POST">

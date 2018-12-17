@@ -22,7 +22,6 @@ context = {
 def info(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, 'index/index.html', context=context)
 
 
@@ -73,7 +72,6 @@ def attendance(request):
     # TODO template及逻辑
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     return render(request, "under_construction.html", context=context)
 
 
@@ -117,7 +115,6 @@ def time_table(request):
 def time_table_list(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == 'POST':
         class_name = request.POST['class_name']
         teacher_name = request.POST['teacher_name']
@@ -171,7 +168,6 @@ def time_table_list(request):
 def my_info(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == "POST":
         info = User.objects.get(id=request.user.id)
         info.gender = request.POST['gender']
@@ -209,7 +205,6 @@ def my_info(request):
 def asset(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
     if request.method == "POST":
         if request.POST['target_to_delete'] != "":
             target_to_delete = request.POST['target_to_delete']
