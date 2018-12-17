@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -44,19 +45,11 @@ class User(AbstractBaseUser):
     email = models.EmailField(_('email address'), blank=True)
     is_student = models.BooleanField(default=True)
     is_teacher = models.BooleanField(default=False)
-    is_admin = models.BooleanField(
-        _('permission'),
-        default=False,
-    )
-    is_active = models.BooleanField(
-        _('active'),
-        default=True,
-        help_text=_(
-            'Designates whether this user should be treated as active. '
-            'Unselect this instead of deleting accounts.'
-        ),
-    )
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    # 管理员是否显示所有的数据
+    is_display_all = models.BooleanField(default=False, blank=True)
+    date_joined = models.DateTimeField(default=timezone.now)
     # 性别
     gender = models.TextField(blank=True)
     # 民族
@@ -108,7 +101,6 @@ class User(AbstractBaseUser):
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
-
 
     # def email_user(self, subject, message, from_email=None, **kwargs):
     #     """Send an email to this user."""

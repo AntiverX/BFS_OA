@@ -168,6 +168,7 @@ $(document).ready(function () {
 
     /* 点击添加按钮 */
     $("#addForm").click(function () {
+        $("#target_id").val("");
         $("submitForm").attr("disabled", true);
         $("#single_form").replaceWith("   <div id=\"single_form\">\n" +
             "                                <div class=\"form-group\">\n" +

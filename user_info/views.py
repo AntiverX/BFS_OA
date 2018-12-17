@@ -57,7 +57,7 @@ def register(request):
         real_name = request.POST['real_name']
         student_id = request.POST['student_id']
         user = User.objects.create_user(username=username, password=password, real_name=real_name, current_user=current_user,
-                                        student_id=student_id)
+                                        student_id=student_id,is_display_all=False)
         user.save()
         context['success'] = "注册成功！"
         context['return_link'] = "/"
@@ -92,15 +92,15 @@ def time_table(request):
     }
     class_1, class_2, class_3, class_4, class_5 = [], [], [], [], []
     for i in range(7):
-        class_1.append(TimeTable.objects.filter(class_number=1, day=i + 1, user_id=request.user.id)[0] if len(
+        class_1.append(TimeTable.objects.filter(class_number=1, day=i + 1, user_id=request.user.id) if len(
             TimeTable.objects.filter(class_number=1, day=i + 1, user_id=request.user.id)) != 0 else None)
-        class_2.append(TimeTable.objects.filter(class_number=2, day=i + 1, user_id=request.user.id)[0] if len(
+        class_2.append(TimeTable.objects.filter(class_number=2, day=i + 1, user_id=request.user.id) if len(
             TimeTable.objects.filter(class_number=2, day=i + 1, user_id=request.user.id)) != 0 else None)
-        class_3.append(TimeTable.objects.filter(class_number=3, day=i + 1, user_id=request.user.id)[0] if len(
+        class_3.append(TimeTable.objects.filter(class_number=3, day=i + 1, user_id=request.user.id) if len(
             TimeTable.objects.filter(class_number=3, day=i + 1, user_id=request.user.id)) != 0 else None)
-        class_4.append(TimeTable.objects.filter(class_number=4, day=i + 1, user_id=request.user.id)[0] if len(
+        class_4.append(TimeTable.objects.filter(class_number=4, day=i + 1, user_id=request.user.id) if len(
             TimeTable.objects.filter(class_number=4, day=i + 1, user_id=request.user.id)) != 0 else None)
-        class_5.append(TimeTable.objects.filter(class_number=5, day=i + 1, user_id=request.user.id)[0] if len(
+        class_5.append(TimeTable.objects.filter(class_number=5, day=i + 1, user_id=request.user.id) if len(
             TimeTable.objects.filter(class_number=5, day=i + 1, user_id=request.user.id)) != 0 else None)
     context['classes_1'] = class_1
     context['classes_2'] = class_2
