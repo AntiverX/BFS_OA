@@ -269,17 +269,23 @@ def valid(request):
     if request.method == "POST":
         if request.POST['class_name'] == "username":
             if len(request.POST['value']) < 5:
-                return HttpResponse("太短辣，至少五个字符哦")
+                return HttpResponse("太短辣，至少5个字符哦")
+            if len(request.POST['value']) > 20:
+                return HttpResponse("太长辣，最多20个字符哦")
             else:
                 return HttpResponse("OK")
         elif request.POST['class_name'] == "password":
             if len(request.POST['value']) < 8:
-                return HttpResponse("太短辣，至少八个字符哦")
+                return HttpResponse("太短辣，至少8个字符哦")
+            if len(request.POST['value']) > 20:
+                return HttpResponse("太长辣，最多20个字符哦")
             else:
                 return HttpResponse("OK")
         elif request.POST['class_name'] == "real_name":
             if len(request.POST['value']) < 2:
                 return HttpResponse("你的名字只有姓？")
+            if len(request.POST['value']) > 20:
+                return HttpResponse("你的名字太长了，怕是有问题哦")
             else:
                 return HttpResponse("OK")
         elif request.POST['class_name'] == "student_id":

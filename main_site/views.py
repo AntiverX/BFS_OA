@@ -250,6 +250,11 @@ def random_service(request):
     return HttpResponse(users[random_value])
 
 
+@login_required
+def get_current_week(request):
+    return HttpResponse(int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]))
+
+
 def valid(request):
     if request.method == "POST":
         if 'time' in request.POST['class_name']:

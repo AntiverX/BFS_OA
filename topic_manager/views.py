@@ -310,6 +310,9 @@ def work_summary(request):
         return render(request, "topic_manager/work_summary.html", context=context)
 
 
+
+
+
 @login_required
 def valid(request):
     if request.method == "POST":
@@ -348,12 +351,12 @@ def valid(request):
             else:
                 return HttpResponse("请输入正确周平均日工作时间")
         elif class_name == "this_week_task":
-            if len(value) >0 :
+            if len(value) > 0:
                 return HttpResponse("OK")
             else:
                 return HttpResponse("请输入正确的本周工作")
         elif class_name == "next_week_task":
-            if len(value) >0 :
+            if len(value) > 0:
                 return HttpResponse("OK")
             else:
                 return HttpResponse("请输入正确的下周工作")

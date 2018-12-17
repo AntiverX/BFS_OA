@@ -22,7 +22,7 @@ urlpatterns = [
     path('login', user_views.auth),
     path('logout', user_views.deauth),
     path('register', user_views.register),
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('', main_site_views.index),
     path('info/', include('user_info.urls')),
     path('weekly_summary/', include('weekly_summary.urls')),
