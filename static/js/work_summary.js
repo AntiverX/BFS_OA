@@ -246,6 +246,7 @@ $(document).ready(function () {
     /* 点击添加按钮 */
     $("#addForm").click(function () {
         $("#form").find("input").val("");
+        $("average_time").val("8.0/7.0");
         /* 设置日期时间 */
         var date = new Date();
         var year = date.getFullYear();
