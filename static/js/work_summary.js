@@ -232,7 +232,7 @@ $(document).ready(function () {
         $(element_).find("input").removeClass("is-valid");
         $(element_).find("input").removeClass("is-invalid");
         element_.appendTo(".all_plan");
-        $("#submitForm").attr("disabled",true);
+        $("#submitForm").attr("disabled", true);
     });
 
     $(document).on('change', ".man_day", function () {
@@ -246,7 +246,8 @@ $(document).ready(function () {
     /* 点击添加按钮 */
     $("#addForm").click(function () {
         $("#form").find("input").val("");
-        $("average_time").val("8.0/7.0");
+        $("#average_time").val("8.0/7.0");
+        $("#average_time").addClass("is-valid");
         /* 设置日期时间 */
         var date = new Date();
         var year = date.getFullYear();
