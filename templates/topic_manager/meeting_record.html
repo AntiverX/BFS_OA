@@ -145,13 +145,13 @@
                 <tbody>
                 {% for result in results %}
                     <tr title="{{ result.id }}">
-                        <td style="white-space: pre-wrap">{{ result.date|date:"Y-m-d" }}</td>
-                        <td style="white-space: pre-wrap">{{ result.time|time:"G:i" }}</td>
-                        <td style="white-space: pre-wrap">{{ result.cost_time }}</td>
-                        <td style="white-space: pre-wrap">{{ result.place }}</td>
-                        <td style="white-space: pre-wrap">{{ result.theme }}</td>
-                        <td style="white-space: pre-wrap">{{ result.theme_content }}</td>
-                        <td style="white-space: pre-wrap">{{ result.remark }}</td>
+                        <td style="white-space: pre">{{ result.date|date:"Y-m-d" }}</td>
+                        <td style="white-space: pre">{{ result.time|time:"G:i" }}</td>
+                        <td style="white-space: pre">{{ result.cost_time }}</td>
+                        <td style="white-space: pre">{{ result.place }}</td>
+                        <td style="white-space: pre">{{ result.theme }}</td>
+                        <td style="white-space: pre">{{ result.theme_content }}</td>
+                        <td style="white-space: pre">{{ result.remark }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

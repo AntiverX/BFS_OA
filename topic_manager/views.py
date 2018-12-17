@@ -248,7 +248,10 @@ def record(request):
                 return render(request, 'error.html', context=context)
         return HttpResponseRedirect('/topic_manager/meeting_record')
     else:
-        results = MeetingRecord.objects.filter(user=request.user)
+        if (request.user.is_admin):
+            results = MeetingRecord.objects.all()
+        else:
+            results = MeetingRecord.objects.filter(user=request.user)
         context['results'] = results
         return render(request, "topic_manager/meeting_record.html", context=context)
 
@@ -305,16 +308,17 @@ def work_summary(request):
         return render(request, "topic_manager/work_summary.html", context=context)
 
 
-
-
-
 @login_required
 def valid(request):
     if request.method == "POST":
         class_name = request.POST['class_name']
         value = request.POST['value']
-
-        if class_name == "semester":
+        if class_name == "date":
+            if re.match(r'[0-9][0-9][0-9][0-9]-[0,1,2][0-9]-[0,1,2,3][0-9]', value) is not None:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确的日期")
+        elif class_name == "semester":
             if re.match(r'[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[1,2]', value) is not None:
                 return HttpResponse("OK")
             else:
@@ -341,7 +345,7 @@ def valid(request):
             else:
                 return HttpResponse("请输入正确工作周")
         elif class_name == "average_work_hour":
-            if value.isdigit():
+            if re.match(r'[0-9]{ 1, 2}.[0-9]', value) is not None:
                 return HttpResponse("OK")
             else:
                 return HttpResponse("请输入正确周平均日工作时间")

@@ -36,4 +36,5 @@ urlpatterns = [
     path('upload', main_site_views.uploader),
     path('random', main_site_views.random_service),
     path('get_current_week', main_site_views.get_current_week),
+    path('get_current_week_range', main_site_views.get_current_week_range),
 ]

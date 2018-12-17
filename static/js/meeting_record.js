@@ -17,7 +17,7 @@ $(document).ready(function () {
             var array_ = JSON.parse($(this).find("td").eq(-1).text());
             new_text = "";
             for (var i = 0; i < array_.length - 1; i++) {
-                new_text = new_text + array_[i] + "\n";
+                new_text = new_text + array_[i] + "\n\n";
             }
             new_text = new_text + array_[array_.length - 1];
             $(this).find("td").eq(-1).text(new_text);
@@ -27,7 +27,7 @@ $(document).ready(function () {
             var array_ = JSON.parse($(this).find("td").eq(-2).text());
             new_text = "";
             for (var i = 0; i < array_.length - 1; i++) {
-                new_text = new_text + array_[i] + "\n";
+                new_text = new_text + array_[i] + "\n\n";
             }
             new_text = new_text + array_[array_.length - 1];
             $(this).find("td").eq(-2).text(new_text);
@@ -37,7 +37,7 @@ $(document).ready(function () {
             var array_ = JSON.parse($(this).find("td").eq(-3).text());
             new_text = "";
             for (var i = 0; i < array_.length - 1; i++) {
-                new_text = new_text + array_[i] + "\n";
+                new_text = new_text + array_[i] + "\n\n";
             }
             new_text = new_text + array_[array_.length - 1];
             $(this).find("td").eq(-3).text(new_text);
@@ -122,9 +122,9 @@ $(document).ready(function () {
         var theme = $("tr[title=" + target_id + "]").find("td").eq(4).text();
         var theme_content = $("tr[title=" + target_id + "]").find("td").eq(5).text();
         var remark = $("tr[title=" + target_id + "]").find("td").eq(6).text();
-        var theme_split = theme.split("\n");
-        var theme_content_split = theme_content.split("\n");
-        var remark_split = remark.split("\n");
+        var theme_split = theme.split("\n\n");
+        var theme_content_split = theme_content.split("\n\n");
+        var remark_split = remark.split("\n\n");
         for (var i = 0; i < theme_split.length - 1; i++) {
             element_ = $(".record:first").clone(true);
             $(element_).find("input").val("");
@@ -144,6 +144,7 @@ $(document).ready(function () {
 
     /* 点击添加按钮 */
     $("#addForm").click(function () {
+        $("#target_id").val("");
         $("#form").find("input").val("");
         /* 设置日期时间 */
         var date = new Date();
