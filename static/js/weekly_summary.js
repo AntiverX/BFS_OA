@@ -60,14 +60,20 @@ $(document).ready(function () {
     });
     /* 修改按钮相关实现 */
     $("#modifyForm").click(function () {
-        $(".all_this_week_work").replaceWith("                            <div id=\"form\">\n" +
+        $("#form").replaceWith("                            <div id=\"form\">\n" +
             "                                <div class=\"row\" id=\"replace_form\">\n" +
             "                                    <div class=\"col-6\">\n" +
             "                                        <div class=\"all_this_week_work\">\n" +
             "                                            <div class=\"this_week_work\">\n" +
             "                                                <div class=\"form-group\">\n" +
             "                                                    <label for=\"this_week_task\">本周工作</label>\n" +
-            "                                                    <input class=\"this_week_task form-control\" required></input>\n" +
+            "                                                    <input class=\"this_week_task form-control\" value=\"无\" required></input>\n" +
+            "                                                    <div id=\"this_week_task-valid\" class=\"valid-feedback\">\n" +
+            "                                                        OK\n" +
+            "                                                    </div>\n" +
+            "                                                    <div id=\"this_week_task-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                        ERROR\n" +
+            "                                                    </div>\n" +
             "                                                </div>\n" +
             "                                            </div>\n" +
             "                                        </div>\n" +
@@ -76,8 +82,14 @@ $(document).ready(function () {
             "                                        <div class=\"all_next_week_work\">\n" +
             "                                            <div class=\"next_week_work\">\n" +
             "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"this_week_task\">下周工作</label>\n" +
-            "                                                    <input class=\"next_week_task form-control\" required></input>\n" +
+            "                                                    <label for=\"next_week_task\">下周工作</label>\n" +
+            "                                                    <input class=\"next_week_task form-control\" value=\"无\" required></input>\n" +
+            "                                                    <div id=\"next_week_task-valid\" class=\"valid-feedback\">\n" +
+            "                                                        OK\n" +
+            "                                                    </div>\n" +
+            "                                                    <div id=\"next_week_task-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                        ERROR\n" +
+            "                                                    </div>\n" +
             "                                                </div>\n" +
             "                                            </div>\n" +
             "                                        </div>\n" +
@@ -101,6 +113,7 @@ $(document).ready(function () {
             element_ = $(".next_week_work:first").clone(true);
             $(element_).find("input").val("");
             element_.appendTo(".all_next_week_work");
+            console.log("增加了一个下周工作");
         }
         $("#week").val(week);
         $("#average_work_hour").val(average_work_hour);
@@ -111,24 +124,31 @@ $(document).ready(function () {
         for (var i = 0; i < next_week_task_split.length; i++) {
             $(".next_week_task").eq(i).val(next_week_task_split[i]);
         }
+
+        /* 点击修改按钮后使得所有的内容都is-valid */
+        $("input").each(function () {
+            $(this).addClass("is-valid");
+        });
+        $("#submitForm").attr("disabled", false);
+
     });
 
     /* 点击添加按钮 */
     $("#addForm").click(function () {
         $("#week").addClass("is-valid");
         $("#absent_hour").addClass("is-valid");
-        $(".form").replaceWith("                            <div id=\"form\">\n" +
+        $("#form").replaceWith("                            <div id=\"form\">\n" +
             "                                <div class=\"row\" id=\"replace_form\">\n" +
             "                                    <div class=\"col-6\">\n" +
             "                                        <div class=\"all_this_week_work\">\n" +
             "                                            <div class=\"this_week_work\">\n" +
             "                                                <div class=\"form-group\">\n" +
             "                                                    <label for=\"this_week_task\">本周工作</label>\n" +
-            "                                                    <input class=\"this_week_task form-control\" required></input>\n" +
-            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
+            "                                                    <input class=\"this_week_task form-control\" value=\"无\" required></input>\n" +
+            "                                                    <div id=\"this_week_task-valid\" class=\"valid-feedback\">\n" +
             "                                                        OK\n" +
             "                                                    </div>\n" +
-            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                    <div id=\"this_week_task-invalid\" class=\"invalid-feedback\">\n" +
             "                                                        ERROR\n" +
             "                                                    </div>\n" +
             "                                                </div>\n" +
@@ -139,12 +159,12 @@ $(document).ready(function () {
             "                                        <div class=\"all_next_week_work\">\n" +
             "                                            <div class=\"next_week_work\">\n" +
             "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"this_week_task\">下周工作</label>\n" +
-            "                                                    <input class=\"next_week_task form-control\" required></input>\n" +
-            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
+            "                                                    <label for=\"next_week_task\">下周工作</label>\n" +
+            "                                                    <input class=\"next_week_task form-control\" value=\"无\" required></input>\n" +
+            "                                                    <div id=\"next_week_task-valid\" class=\"valid-feedback\">\n" +
             "                                                        OK\n" +
             "                                                    </div>\n" +
-            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
+            "                                                    <div id=\"next_week_task-invalid\" class=\"invalid-feedback\">\n" +
             "                                                        ERROR\n" +
             "                                                    </div>\n" +
             "                                                </div>\n" +
