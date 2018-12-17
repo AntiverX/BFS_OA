@@ -213,6 +213,7 @@ def record(request):
         date = request.POST['date']
         start_time = request.POST['time']
         cost_time = request.POST['cost_time']
+        time = request.POST['time']
         place = request.POST['place']
         theme = request.POST['theme']
         theme_content = request.POST['theme_content']
