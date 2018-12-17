@@ -336,6 +336,7 @@ def valid(request):
                 return HttpResponse("OK")
             else:
                 return HttpResponse("请输入正确内容")
+        # 周报相关的验证
         elif class_name == "week":
             if value.isdigit():
                 return HttpResponse("OK")
@@ -345,17 +346,17 @@ def valid(request):
             if value.isdigit():
                 return HttpResponse("OK")
             else:
-                return HttpResponse("请输入正确工作周")
+                return HttpResponse("请输入正确周平均日工作时间")
         elif class_name == "this_week_task":
-            if value.isdigit():
+            if len(value) >0 :
                 return HttpResponse("OK")
             else:
-                return HttpResponse("请输入正确工作周")
+                return HttpResponse("请输入正确的本周工作")
         elif class_name == "next_week_task":
-            if value.isdigit():
+            if len(value) >0 :
                 return HttpResponse("OK")
             else:
-                return HttpResponse("请输入正确工作周")
+                return HttpResponse("请输入正确的下周工作")
         elif class_name == "cost_time":
             if value.isdigit():
                 return HttpResponse("OK")

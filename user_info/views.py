@@ -17,6 +17,7 @@ context = {
     },
 }
 
+
 @login_required
 def info(request):
     context['user'] = request.user
@@ -52,10 +53,11 @@ def register(request):
     if request.method == "POST":
         context = {}
         username = request.POST['username']
+        current_user = username
         password = request.POST['password']
         real_name = request.POST['real_name']
         student_id = request.POST['student_id']
-        user = User.objects.create_user(username=username, password=password, real_name=real_name,
+        user = User.objects.create_user(username=username, password=password, real_name=real_name, current_user=current_user,
                                         student_id=student_id)
         user.save()
         context['success'] = "注册成功！"

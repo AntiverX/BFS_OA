@@ -37,6 +37,7 @@ class User(AbstractBaseUser):
             'unique': _("A user with that username already exists."),
         },
     )
+    current_user = models.CharField(max_length=150)
     password = models.CharField(max_length=128)
     # 姓名
     real_name = models.CharField(max_length=30, blank=True)
@@ -108,16 +109,6 @@ class User(AbstractBaseUser):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
 
-    def get_full_name(self):
-        """
-        Return the first_name plus the last_name, with a space in between.
-        """
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
-
-    def get_short_name(self):
-        """Return the short name for the user."""
-        return self.first_name
 
     # def email_user(self, subject, message, from_email=None, **kwargs):
     #     """Send an email to this user."""

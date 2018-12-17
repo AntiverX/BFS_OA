@@ -57,6 +57,6 @@ def report_mode(request):
         current_weekly_summary.save()
         return HttpResponseRedirect("/weekly_summary/report_mode")
     else:
-        submitted_weekly_summary = WeeklySummary.objects.all(week=week)
+        submitted_weekly_summary = WeeklySummary.objects.filter(week=week)
         context['results'] = submitted_weekly_summary
         return render(request, 'weekly_summary/report_mode.html', context=context)

@@ -7,10 +7,11 @@ class Command(BaseCommand):
     help = 'Closes the specified poll for voting'
     def handle(self, *args, **options):
         new_config = BFS_OA_Config(
-            semester_start_time="2018-09-20"
+            semester_start_time="2018-08-20"
         )
         admin = User.objects.create_user(
             username="Antiver",
+            current_user = "Antiver",
             password="wang@85#2",
             real_name="王帅鹏",
             student_id="3120180863"

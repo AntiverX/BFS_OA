@@ -20,10 +20,16 @@ context = {
 
 def index(request):
     if request.user.is_authenticated:
-        context['user'] = request.user
-        context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-        context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
-        return render(request, 'index/index.html', context=context)
+        if request.method == "POST":
+            new_current_user = request.POST['current_user']
+            request.user.current_user = new_current_user
+            request.user.save()
+            return HttpResponseRedirect("/")
+        else:
+            context['user'] = request.user
+            context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
+            context['current_semester_week'] = int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1])
+            return render(request, 'index/index.html', context=context)
     else:
         return render(request, 'index/index.html')
 
