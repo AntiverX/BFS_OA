@@ -186,7 +186,6 @@ def weekly_summary(request):
                     context['error'] = err
                     return render(request, 'error.html', context=context)
         else:
-            week = request.POST['week']
             submitted_weekly_summary = WeeklySummary(user=request.user, week=week, this_week_task=this_week_task,
                                                      next_week_task=next_week_task, real_name=request.user.real_name,
                                                      average_work_hour=average_work_hour, absent_hour=absent_hour)
@@ -345,10 +344,9 @@ def valid(request):
             else:
                 return HttpResponse("请输入正确工作周")
         elif class_name == "average_work_hour":
-            if re.match(r'[0-9]{ 1, 2}.[0-9]', value) is not None:
+            if re.match(r'^[0-9]{1,2}(.[0-9]){0,1}$', value) is not None:
                 return HttpResponse("OK")
-            else:
-                return HttpResponse("请输入正确周平均日工作时间")
+            return HttpResponse("请输入正确周平均日工作时间")
         elif class_name == "this_week_task":
             if len(value) > 0:
                 return HttpResponse("OK")
@@ -380,7 +378,7 @@ def valid(request):
             else:
                 return HttpResponse("请输入正确工作周")
         elif class_name == "average_time":
-            if re.match(r"[0-9]{1,2}.[0-9]/[0-9]{1,2}.[0-9]", value) is not None:
+            if re.match(r"^[0-9]{1,2}(.[0-9]){0,1}/[0-9]{1,2}(.[0-9]){0,1}$", value) is not None:
                 return HttpResponse("OK")
             else:
                 return HttpResponse("请输入正确平均工作小时")

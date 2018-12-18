@@ -89,15 +89,13 @@
                 </tr>
                 <tr>
                     <th scope="row" nowrap>5(18:30-20:55)</th>
-                    {% for class in classes_5 %}
+                  {% for class in classes_5 %}
                         {% if class is not None %}
-                            {% for result in class %}
-                                       <td nowrap>
+                                   <td nowrap>
                                 {% for result in class %}
                                     {{ result.class_name }}<br>{{ result.class_location }}<br>{{ result.week_start }}-{{ result.week_end }}周<br>{{ result.teacher_name }}<br><br>
                                 {% endfor %}
                             </td>
-                            {% endfor %}
                         {% else %}
                             <td></td>
                         {% endif %}
