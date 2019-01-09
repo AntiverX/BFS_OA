@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="nav-scroller bg-white shadow-sm">
+        <nav class="nav nav-underline">
+            <a class="nav-link" href="{% url "summary_list" %}">周报列表</a>
+            {% if user.is_admin %}
+                <a class="nav-link" href="{% url "report_mode" %}">汇报模式</a>
+            {% endif %}
+            <a class="nav-link" href="{% url "name_list" %}">名单</a>
+        </nav>
+    </div>
+    {% block content_2 %}
+    {% endblock %}
+    </div>
+{% endblock %}

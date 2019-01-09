@@ -60,5 +60,5 @@ def report_mode(request):
 @login_required
 def name_list(request):
     if request.method == "GET":
-        context = ""
+        context = {}
         return render(request,"weekly_summary/name_list.html",context=context)
