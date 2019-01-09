@@ -400,3 +400,8 @@ def valid(request):
                 return HttpResponse("OK")
             else:
                 return HttpResponse("请输入正确的自然日")
+        elif class_name == "end_of_term_summary":
+            if len(value) > 0:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确的期末总结")

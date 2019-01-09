@@ -110,6 +110,14 @@ $(document).ready(function () {
             }
             new_text = new_text + array_[array_.length - 1];
             $(this).find("td").eq(-4).text(new_text);
+
+            var array_ = JSON.parse($(this).find("td").eq(-5).text());
+            new_text = "";
+            for (var i = 0; i < array_.length - 1; i++) {
+                new_text = new_text + array_[i] + "\n";
+            }
+            new_text = new_text + array_[array_.length - 1];
+            $(this).find("td").eq(-5).text(new_text);
         }
     });
 
@@ -123,10 +131,12 @@ $(document).ready(function () {
         var all_days = $("tr[title=" + target_id + "]").find("td").eq(3).text();
         var summary = $("tr[title=" + target_id + "]").find("td").eq(4).text();
         var man_day = $("tr[title=" + target_id + "]").find("td").eq(5).text();
+        var total_man_day = $("tr[title=" + target_id + "]").find("td").eq(5).text();
         var natural_day = $("tr[title=" + target_id + "]").find("td").eq(6).text();
         var remark = $("tr[title=" + target_id + "]").find("td").eq(7).text();
         var summary_split = summary.split("\n");
         var man_day_split = man_day.split("\n");
+        var total_man_day_split = man_day.split("\n");
         var natural_day_split = natural_day.split("\n");
         var remark_split = remark.split("\n");
         console.log(summary_split.length);
@@ -143,6 +153,7 @@ $(document).ready(function () {
         for (var i = 0; i < summary_split.length; i++) {
             $(".summary").eq(i).val(summary_split[i]);
             $(".man_day").eq(i).val(man_day_split[i]);
+            $(".total_man_day").eq(i).val(total_man_day_split[i]);
             $(".natural_day").eq(i).val(natural_day_split[i]);
             $(".remark").eq(i).val(remark_split[i]);
         }
@@ -159,6 +170,7 @@ $(document).ready(function () {
             'all_days': "",
             "summary": "",
             "man_day": "",
+            "total_man_day": "",
             "natural_day": "",
             "remark": "",
             csrfmiddlewaretoken: csrftoken,
@@ -187,6 +199,13 @@ $(document).ready(function () {
             item['man_day'] = $(this).val();
             man_day.push($(this).val());
         });
+        /* 获取所有总人日数 */
+        var total_man_day = [];
+        $(".total_man_day").each(function () {
+            item = {};
+            item['total_man_day'] = $(this).val();
+            total_man_day.push($(this).val());
+        });
         /* 获取所有自然日日数 */
         var natural_day = [];
         $(".natural_day").each(function () {
@@ -203,6 +222,7 @@ $(document).ready(function () {
         });
         var jsonString_summary = JSON.stringify(summary);
         var jsonString_man_day = JSON.stringify(man_day);
+        var jsonString_total_man_day = JSON.stringify(total_man_day);
         var jsonString_natural_day = JSON.stringify(natural_day);
         var jsonString_remark = JSON.stringify(remark);
         csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
@@ -214,6 +234,7 @@ $(document).ready(function () {
             'all_days': $("#all_days").val(),
             "summary": jsonString_summary,
             "man_day": jsonString_man_day,
+            "total_man_day": jsonString_total_man_day,
             "natural_day": jsonString_natural_day,
             "remark": jsonString_remark,
             csrfmiddlewaretoken: csrftoken,
@@ -291,8 +312,7 @@ $(document).ready(function () {
             if (result == "OK") {
                 parent.removeClass("is-invalid");
                 parent.addClass("is-valid");
-            }
-            else {
+            } else {
                 $("#" + class_name + "-invalid").text(result);
                 parent.removeClass("is-valid");
                 parent.addClass("is-invalid");
@@ -311,8 +331,7 @@ $(document).ready(function () {
         });
         if (form_complete) {
             $("#submitForm").attr("disabled", false);
-        }
-        else {
+        } else {
             $("#submitForm").attr("disabled", true);
         }
     });

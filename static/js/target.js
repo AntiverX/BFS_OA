@@ -145,13 +145,25 @@ $(document).ready(function () {
             element_.appendTo(".all_target");
         }
         /* 赋值 */
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        $("#date").val(year + "-" + month + "-" + day);
+        $("#date").addClass("is-valid");
+
         $("#semester").val(semester);
+        $("#semester").addClass("is-valid");
         $("#time").val(time);
         for (var i = 0; i < expected_result_split.length; i++) {
             $(".expected_result").eq(i).val(expected_result_split[i]);
             $(".time_consumed").eq(i).val(time_consumed_split[i]);
             $(".content").eq(i).val(content_split[i]);
             $(".end_of_term_summary").eq(i).val(end_of_term_summary_split[i]);
+            $(".expected_result").eq(i).addClass("is-valid");
+            $(".time_consumed").eq(i).addClass("is-valid");
+            $(".content").eq(i).addClass("is-valid");
+            $(".end_of_term_summary").eq(i).addClass("is-valid");
         }
     });
 
@@ -315,8 +327,7 @@ $(document).ready(function () {
             if (result == "OK") {
                 parent.removeClass("is-invalid");
                 parent.addClass("is-valid");
-            }
-            else {
+            } else {
                 $("#" + class_name + "-invalid").text(result);
                 parent.removeClass("is-valid");
                 parent.addClass("is-invalid");
@@ -336,12 +347,11 @@ $(document).ready(function () {
         });
         if (form_complete) {
             $("#submitForm").attr("disabled", false);
-        }
-        else {
+        } else {
             $("#submitForm").attr("disabled", true);
         }
     });
-        /* 点击空白处失去选中，并清空id记录 */
+    /* 点击空白处失去选中，并清空id记录 */
     $(document).on("click", function (e) {
         if (e.target.tagName != "TH" && e.target.tagName !== "TD") {
             $("#target_id").val();

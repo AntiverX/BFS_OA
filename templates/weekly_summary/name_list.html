@@ -16,8 +16,9 @@
                 <tbody>
                 {% for result in results %}
                     <tr>
-                        <td>{{ result.name }}</td>
-                        <td>{{ result.affair }}</td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ result.real_name }}</td>
+                        <td>{{ result.reason }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
