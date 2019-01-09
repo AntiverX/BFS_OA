@@ -7,6 +7,8 @@ from .models import FileRecord, BFS_OA_Config
 from user_info.models import User
 from .models import Lab_Asset
 from django.core.exceptions import *
+import datetime
+import math
 
 context = {
     'menus': {
@@ -254,7 +256,9 @@ def random_service(request):
 
 @login_required
 def get_current_week(request):
-    return HttpResponse(int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]))
+    days = (datetime.date.today() - BFS_OA_Config.objects.filter()[0].semester_start_time).days
+    return HttpResponse(int(days / 7))
+    # return HttpResponse(int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]))
 
 
 @login_required

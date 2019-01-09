@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+<script src="{% static "js/svg.js" %}"></script>
 {% block content %}
     <div class="container ">
         {% load static %}
@@ -8,4 +10,51 @@
         <div class="text-center h5 mt-3">王沛冉</div>
         <div class="text-center h5 mt-3">陈传涛</div>
     </div>
+    <div id="drawing"></div>
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 50 50" onload="">
+        <rect x="0" y="0" width="30" height="20" fill="#fafafa" />
+        <rect x="18" y="5" width="8" height="10" fill="#888" />
+        <rect x="4" y="5" width="8" height="10" fill="#007bff" />
+    </svg>
+
+    <script>
+        svg = document.querySelector("svg");
+        svg.addEventListener('mousedown', startDrag);
+        svg.addEventListener('mousemove', drag);
+        svg.addEventListener('mouseup', endDrag);
+        svg.addEventListener('mouseleave', endDrag);
+        var selectedElement = false;
+
+        function startDrag(evt) {
+            selectedElement = evt.target;
+            offset = getMousePosition(evt);
+            offset.x -= parseFloat(selectedElement.getAttributeNS(null, "x"));
+            offset.y -= parseFloat(selectedElement.getAttributeNS(null, "y"));
+        }
+
+        function drag(evt) {
+            evt.preventDefault();
+            var coord = getMousePosition(evt);
+            selectedElement.setAttributeNS(null, "x", coord.x - offset.x);
+            selectedElement.setAttributeNS(null, "y", coord.y - offset.y);
+        }
+
+        function endDrag(evt) {
+            selectedElement = null;
+        }
+
+        function getMousePosition(evt) {
+            var CTM = svg.getScreenCTM();
+            return {
+                x: (evt.clientX - CTM.e) / CTM.a,
+                y: (evt.clientY - CTM.f) / CTM.d
+            };
+        }
+    </script>
+    <style>
+        rect {
+        }
+    </style>
 {% endblock %}

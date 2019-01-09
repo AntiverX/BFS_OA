@@ -263,6 +263,7 @@ def work_summary(request):
     if request.method == "POST":
         type = request.POST['type']
         summary = request.POST['summary']
+        total_man_day = request.POST['total_man_day']
         average_time = request.POST['average_time']
         man_day = request.POST['man_day']
         natural_day = request.POST['natural_day']
@@ -282,6 +283,7 @@ def work_summary(request):
                 existing_record.natural_day = natural_day
                 existing_record.remark = remark
                 existing_record.all_days = all_days
+                existing_record.total_man_day = total_man_day
                 existing_record.save()
         else:
             new_work_summary = WorkSummary(
@@ -293,7 +295,8 @@ def work_summary(request):
                 natural_day=natural_day,
                 remark=remark,
                 date=date,
-                all_days=all_days
+                all_days=all_days,
+                total_man_day=total_man_day,
             )
             try:
                 new_work_summary.save()

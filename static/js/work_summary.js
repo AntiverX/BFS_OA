@@ -11,6 +11,64 @@ $(document).ready(function () {
 * 表单验证（服务端验证和本地验证）
 * */
 
+    fresh_table = "                                <div class=\"all_plan\">\n" +
+        "                                    <div class=\"plan\">\n" +
+        "                                        <hr>\n" +
+        "                                        <div class=\"form-group\">\n" +
+        "                                            <label for=\"summary\">工作总结</label>\n" +
+        "                                            <input type=\"text\" class=\"summary form-control\" id=\"summary\" name=\"summary\" required>\n" +
+        "                                            <div id=\"summary-valid\" class=\"valid-feedback\">\n" +
+        "                                                OK\n" +
+        "                                            </div>\n" +
+        "                                            <div id=\"summary-invalid\" class=\"invalid-feedback\">\n" +
+        "                                                ERROR\n" +
+        "                                            </div>\n" +
+        "                                        </div>\n" +
+        "                                        <div class=\"row\">\n" +
+        "                                            <div class=\"form-group col-2\">\n" +
+        "                                                <label for=\"man_day\">人日数（天）</label>\n" +
+        "                                                <input type=\"text\" class=\"man_day form-control\" id=\"man_day\" required>\n" +
+        "                                                <div id=\"man_day-valid\" class=\"valid-feedback\">\n" +
+        "                                                    OK\n" +
+        "                                                </div>\n" +
+        "                                                <div id=\"man_day-invalid\" class=\"invalid-feedback\">\n" +
+        "                                                    ERROR\n" +
+        "                                                </div>\n" +
+        "                                            </div>\n" +
+        "                                            <div class=\"form-group col-2\">\n" +
+        "                                                <label for=\"total_man_day\">总人日数（天）</label>\n" +
+        "                                                <input type=\"text\" class=\"total_man_day form-control\" id=\"\" required>\n" +
+        "                                                <div id=\"man_day-valid\" class=\"valid-feedback\">\n" +
+        "                                                    OK\n" +
+        "                                                </div>\n" +
+        "                                                <div id=\"man_day-invalid\" class=\"invalid-feedback\">\n" +
+        "                                                    ERROR\n" +
+        "                                                </div>\n" +
+        "                                            </div>\n" +
+        "                                            <div class=\"form-group col-2\">\n" +
+        "                                                <label for=\"natural_day\">自然日（天）</label>\n" +
+        "                                                <input type=\"text\" class=\"natural_day form-control\" id=\"natural_day\" name=\"natural_day\" required>\n" +
+        "                                                <div id=\"natural_day-valid\" class=\"valid-feedback\">\n" +
+        "                                                    OK\n" +
+        "                                                </div>\n" +
+        "                                                <div id=\"natural_day-invalid\" class=\"invalid-feedback\">\n" +
+        "                                                    ERROR\n" +
+        "                                                </div>\n" +
+        "                                            </div>\n" +
+        "                                            <div class=\"form-group col-8\">\n" +
+        "                                                <label for=\"remark\">计划执行情况和工作效果说明</label>\n" +
+        "                                                <input type=\"text\" class=\"remark form-control\" id=\"remark\" name=\"remark\">\n" +
+        "                                                <div id=\"remark-valid\" class=\"valid-feedback\">\n" +
+        "                                                    OK\n" +
+        "                                                </div>\n" +
+        "                                                <div id=\"remark-invalid\" class=\"invalid-feedback\">\n" +
+        "                                                    ERROR\n" +
+        "                                                </div>\n" +
+        "                                            </div>\n" +
+        "                                        </div>\n" +
+        "                                    </div>\n" +
+        "                                </div>"
+
     /* 禁用修改和删除按钮 */
     $("#deleteForm").attr("disabled", true);
     $("#modifyForm").attr("disabled", true);
@@ -57,53 +115,7 @@ $(document).ready(function () {
 
     /* 修改按钮相关实现 */
     $("#modifyForm").click(function () {
-        $(".all_plan").replaceWith("                                <div class=\"all_plan\">\n" +
-            "                                    <div class=\"plan\">\n" +
-            "                                        <hr>\n" +
-            "                                        <div class=\"form-group\">\n" +
-            "                                            <label for=\"summary\">工作总结</label>\n" +
-            "                                            <input type=\"text\" class=\"summary form-control\" id=\"summary\" name=\"summary\" required>\n" +
-            "                                            <div id=\"summary-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"summary-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                        <div class=\"row\">\n" +
-            "                                            <div class=\"form-group col-2\">\n" +
-            "                                                <label for=\"man_day\">人日数（天）</label>\n" +
-            "                                                <input type=\"text\" class=\"man_day form-control\" id=\"\" required>\n" +
-            "                                                <div id=\"man_day-valid\" class=\"valid-feedback\">\n" +
-            "                                                    OK\n" +
-            "                                                </div>\n" +
-            "                                                <div id=\"man_day-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                    ERROR\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                            <div class=\"form-group col-2\">\n" +
-            "                                                <label for=\"natural_day\">自然日（天）</label>\n" +
-            "                                                <input type=\"text\" class=\"natural_day form-control\" id=\"natural_day\" name=\"natural_day\" required>\n" +
-            "                                                <div id=\"natural_day-valid\" class=\"valid-feedback\">\n" +
-            "                                                    OK\n" +
-            "                                                </div>\n" +
-            "                                                <div id=\"natural_day-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                    ERROR\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                            <div class=\"form-group col-8\">\n" +
-            "                                                <label for=\"remark\">计划执行情况和工作效果说明</label>\n" +
-            "                                                <input type=\"text\" class=\"remark form-control\" id=\"remark\" name=\"remark\">\n" +
-            "                                                <div id=\"remark-valid\" class=\"valid-feedback\">\n" +
-            "                                                    OK\n" +
-            "                                                </div>\n" +
-            "                                                <div id=\"remark-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                    ERROR\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                </div>");
+        $(".all_plan").replaceWith(fresh_table);
         var target_id = $("#target_id").val();
         var type = $("tr[title=" + target_id + "]").find("td").eq(0).text();
         var date = $("tr[title=" + target_id + "]").find("td").eq(1).text();
@@ -256,53 +268,7 @@ $(document).ready(function () {
         $("#date").val(year + "-" + month + "-" + day);
         $("#date").addClass("is-valid");
         $("#type").addClass("is-valid");
-        $(".all_plan").replaceWith("                                <div class=\"all_plan\">\n" +
-            "                                    <div class=\"plan\">\n" +
-            "                                        <hr>\n" +
-            "                                        <div class=\"form-group\">\n" +
-            "                                            <label for=\"summary\">工作总结</label>\n" +
-            "                                            <input type=\"text\" class=\"summary form-control\" id=\"summary\" name=\"summary\" required>\n" +
-            "                                            <div id=\"summary-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"summary-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                        <div class=\"row\">\n" +
-            "                                            <div class=\"form-group col-2\">\n" +
-            "                                                <label for=\"man_day\">人日数（天）</label>\n" +
-            "                                                <input type=\"text\" class=\"man_day form-control\" id=\"\" required>\n" +
-            "                                                <div id=\"man_day-valid\" class=\"valid-feedback\">\n" +
-            "                                                    OK\n" +
-            "                                                </div>\n" +
-            "                                                <div id=\"man_day-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                    ERROR\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                            <div class=\"form-group col-2\">\n" +
-            "                                                <label for=\"natural_day\">自然日（天）</label>\n" +
-            "                                                <input type=\"text\" class=\"natural_day form-control\" id=\"natural_day\" name=\"natural_day\" required>\n" +
-            "                                                <div id=\"natural_day-valid\" class=\"valid-feedback\">\n" +
-            "                                                    OK\n" +
-            "                                                </div>\n" +
-            "                                                <div id=\"natural_day-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                    ERROR\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                            <div class=\"form-group col-8\">\n" +
-            "                                                <label for=\"remark\">计划执行情况和工作效果说明</label>\n" +
-            "                                                <input type=\"text\" class=\"remark form-control\" id=\"remark\" name=\"remark\">\n" +
-            "                                                <div id=\"remark-valid\" class=\"valid-feedback\">\n" +
-            "                                                    OK\n" +
-            "                                                </div>\n" +
-            "                                                <div id=\"remark-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                    ERROR\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                </div>");
+        $(".all_plan").replaceWith(fresh_table);
         if ($("tr").hasClass("table-active")) {
             $("tr").removeClass("table-active");
         }

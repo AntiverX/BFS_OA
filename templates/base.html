@@ -18,10 +18,13 @@
         .navbar-dark .navbar-nav .nav-link {
             color: rgba(255, 255, 255, 1);
         }
+
+        td {
+            font-size: 0.8rem;
+        }
     </style>
     <script>
         $.get("/get_current_week", function (data) {
-            console.log(data);
             $("#current_week").text("第" + data + "周");
             $("#week").val(data);
         });

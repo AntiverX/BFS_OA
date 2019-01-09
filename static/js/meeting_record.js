@@ -11,26 +11,33 @@ $(document).ready(function () {
 * 表单验证（服务端验证和本地验证）
 * */
 
-    /* 对json进行处理，分行显示本周和下周工作 */
+    /* 对json进行处理，分行显示主题和主题内容说明 */
     $("tr").each(function () {
+
         if ($(this).find("td").length != 0) {
             var array_ = JSON.parse($(this).find("td").eq(-1).text());
-            new_text = "";
+            theme_content = "";
             for (var i = 0; i < array_.length - 1; i++) {
-                new_text = new_text + array_[i] + "\n\n";
+                theme_content = theme_content + array_[i] + "\n\n";
             }
-            new_text = new_text + array_[array_.length - 1];
-            $(this).find("td").eq(-1).text(new_text);
+            theme_content = theme_content + array_[array_.length - 1];
+            $(this).find("td").eq(-1).text(theme_content);
         }
 
+        /* 对主题内容说明进行处理 */
+        var theme_content_length = new Array();
         if ($(this).find("td").length != 0) {
             var array_ = JSON.parse($(this).find("td").eq(-2).text());
             new_text = "";
             for (var i = 0; i < array_.length - 1; i++) {
-                new_text = new_text + array_[i] + "\n\n";
+                new_text = new_text + array_[i].trim() + "\n\n";
+                console.log (array_[i].trim());
+                theme_content_length[i] = array_[i].trim().split("\n").length;
             }
-            new_text = new_text + array_[array_.length - 1];
+            new_text = new_text + array_[array_.length - 1].trim();
+            theme_content_length[array_.length - 1] = array_[array_.length - 1].trim().split("\n").length;
             $(this).find("td").eq(-2).text(new_text);
+            console.log(theme_content_length);
         }
 
         if ($(this).find("td").length != 0) {
@@ -38,6 +45,9 @@ $(document).ready(function () {
             new_text = "";
             for (var i = 0; i < array_.length - 1; i++) {
                 new_text = new_text + array_[i] + "\n\n";
+                for(var j =0;j < theme_content_length[i]-1;j++){
+                    new_text = new_text + "\n";
+                }
             }
             new_text = new_text + array_[array_.length - 1];
             $(this).find("td").eq(-3).text(new_text);
@@ -291,8 +301,7 @@ $(document).ready(function () {
             if (result == "OK") {
                 parent.removeClass("is-invalid");
                 parent.addClass("is-valid");
-            }
-            else {
+            } else {
                 $("#" + class_name + "-invalid").text(result);
                 parent.removeClass("is-valid");
                 parent.addClass("is-invalid");
@@ -312,8 +321,7 @@ $(document).ready(function () {
         });
         if (form_complete) {
             $("#submitForm").attr("disabled", false);
-        }
-        else {
+        } else {
             $("#submitForm").attr("disabled", true);
         }
     });

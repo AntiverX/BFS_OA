@@ -53,6 +53,7 @@ class WorkSummary(models.Model):
     average_time = models.CharField(max_length=32)
     all_days = models.IntegerField()
     man_day = models.TextField(null=True)
+    total_man_day = models.TextField(null=True)
     natural_day = models.TextField(null=True)
     remark = models.TextField(null=True)
 
