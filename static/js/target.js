@@ -1,15 +1,87 @@
+
 $(document).ready(function () {
-    /*
-* 对json进行处理
-* 禁用按钮
-* 删除按钮实现
-* 修改按钮实现
-* 添加按钮实现
-* 提交按钮实现
-* 点击某一行实现选中效果,并启用删除和修改按钮
-* 点击加号增加表单
-* 表单验证（服务端验证和本地验证）
-* */
+/*
+点击主界面左下角添加按钮
+表格项目被右击后，记录被右击的表格id
+右键菜单的相关实现
+对json进行处理
+删除按钮实现
+修改按钮实现
+添加按钮实现
+提交按钮实现
+点击某一行实现选中效果,并启用删除和修改按钮
+点击加号增加表单
+表单验证（服务端验证和本地验证）
+*/
+
+    /* 点击主界面左下角添加按钮 */
+    $("#add").click(function () {
+        $("#addForm").click();
+    });
+
+
+    /* 表格项目被右击后，记录被右击的表格id */
+    $('tr').mousedown(function (event) {
+        if (event.which == 3) {
+            active_table = this.title;
+        }
+    });
+
+    /* 右键菜单的相关实现 */
+    $.contextMenu({
+        // define which elements trigger this menu
+        selector: ".table_content",
+        // define the elements of the menu
+        items: {
+            add: {
+                name: "添加",
+                icon: "add",
+                callback: function (key, opt) {
+                    $("#addForm").click();
+                }
+            },
+            modify: {
+                name: "修改",
+                icon: "edit",
+                callback: function (key, opt) {
+                    $("#modifyForm").click();
+                }
+            },
+            separator1: "-----",
+            delete: {
+                name: "删除",
+                icon: "delete",
+                callback: function () {
+                    csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                    data = {
+                        "target_id": active_table,
+                        'date': "",
+                        'semester': "",
+                        "expected_result": "",
+                        "time_consumed": "",
+                        "content": "",
+                        "end_of_term_summary": "",
+                        csrfmiddlewaretoken: csrftoken,
+                        "btn": "delete"
+                    }
+                    $.post("/topic_manager/target", data, function (response, status) {
+                        if (status == "success") {
+                            window.location.reload(true);
+                        }
+                    });
+                }
+            }
+        },
+        events: {
+            show: function () {
+                $('tr[title=' + active_table + ']').addClass("table-active");
+            },
+            hide: function () {
+                $('tr[title=' + active_table + ']').removeClass("table-active");
+            }
+        }
+    });
+
 
     /* 对json进行处理 */
     $("tr").each(function () {
@@ -48,87 +120,10 @@ $(document).ready(function () {
         }
     });
 
-    /* 禁用按钮 */
-    $("#deleteForm").attr("disabled", true);
-    $("#modifyForm").attr("disabled", true);
-    $("#submitForm").attr("disabled", true);
-
-    /* 删除按钮相关功能实现 */
-    $("#deleteForm").click(function () {
-        csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-        data = {
-            "target_id": $("#target_id").val(),
-            'date': "",
-            'semester': "",
-            "expected_result": "",
-            "time_consumed": "",
-            "content": "",
-            "end_of_term_summary": "",
-            csrfmiddlewaretoken: csrftoken,
-            "btn": "delete"
-        }
-        $.post("/topic_manager/target", data, function (response, status) {
-            if (status == "success") {
-                window.location.reload(true);
-            }
-        });
-    });
-
     /* 修改按钮相关实现 */
     $("#modifyForm").click(function () {
-        $(".all_target").replaceWith("                            <div class=\"all_target\">\n" +
-            "                                <div class=\"target\">\n" +
-            "                                    <hr>\n" +
-            "                                    <div class=\"row\">\n" +
-            "                                        <div class=\"form-group col-10\">\n" +
-            "                                            <label for=\"expected_result\">预期有型成果</label>\n" +
-            "                                            <input type=\"text\" class=\"expected_result form-control\" required></input>\n" +
-            "                                            <div id=\"expected_result-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"expected_result-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                        <div class=\"form-group col-2\">\n" +
-            "                                            <label for=\"content\">用时（天）</label>\n" +
-            "                                            <input type=\"text\" class=\"time_consumed form-control\" placeholder=\"例：10\" required>\n" +
-            "                                            <div id=\"time_consumed-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"time_consumed-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                    <div class=\"row\">\n" +
-            "                                        <div class=\"form-group col-12\">\n" +
-            "                                            <label for=\"content\">目标说明</label>\n" +
-            "                                            <input type=\"text\" class=\"content form-control\" required></input>\n" +
-            "                                            <div id=\"content-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "\n" +
-            "                                    <div class=\"row\">\n" +
-            "                                        <div class=\"form-group col-12\">\n" +
-            "                                            <label for=\"end_of_term_summary\">期末总结</label>\n" +
-            "                                            <input type=\"text\" class=\"end_of_term_summary form-control\"></input>\n" +
-            "                                            <div id=\"end_of_term_summary-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"end_of_term_summary-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                </div>\n" +
-            "                            </div>");
-        var target_id = $("#target_id").val();
+        $(".all_target").replaceWith(empty_form);
+        var target_id = active_table;
         var semester = $("tr[title=" + target_id + "]").find("td").eq(0).text();
         var time = $("tr[title=" + target_id + "]").find("td").eq(1).text();
         var expected_result = $("tr[title=" + target_id + "]").find("td").eq(2).text();
@@ -177,58 +172,7 @@ $(document).ready(function () {
         var day = date.getDate();
         $("#date").val(year + "-" + month + "-" + day);
         $("#date").addClass("is-valid");
-        $(".all_target").replaceWith("                            <div class=\"all_target\">\n" +
-            "                                <div class=\"target\">\n" +
-            "                                    <hr>\n" +
-            "                                    <div class=\"row\">\n" +
-            "                                        <div class=\"form-group col-10\">\n" +
-            "                                            <label for=\"expected_result\">预期有型成果</label>\n" +
-            "                                            <input type=\"text\" class=\"expected_result form-control\" required></input>\n" +
-            "                                            <div id=\"expected_result-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"expected_result-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                        <div class=\"form-group col-2\">\n" +
-            "                                            <label for=\"content\">用时（天）</label>\n" +
-            "                                            <input type=\"text\" class=\"time_consumed form-control\" placeholder=\"例：10\" required>\n" +
-            "                                            <div id=\"time_consumed-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"time_consumed-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                    <div class=\"row\">\n" +
-            "                                        <div class=\"form-group col-12\">\n" +
-            "                                            <label for=\"content\">目标说明</label>\n" +
-            "                                            <input type=\"text\" class=\"content form-control\" required></input>\n" +
-            "                                            <div id=\"content-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "\n" +
-            "                                    <div class=\"row\">\n" +
-            "                                        <div class=\"form-group col-12\">\n" +
-            "                                            <label for=\"end_of_term_summary\">期末总结</label>\n" +
-            "                                            <input type=\"text\" class=\"end_of_term_summary form-control\"></input>\n" +
-            "                                            <div id=\"end_of_term_summary-valid\" class=\"valid-feedback\">\n" +
-            "                                                OK\n" +
-            "                                            </div>\n" +
-            "                                            <div id=\"end_of_term_summary-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                ERROR\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                </div>\n" +
-            "                            </div>");
+        $(".all_target").replaceWith(empty_form);
         if ($("tr").hasClass("table-active")) {
             $("tr").removeClass("table-active");
         }
@@ -240,29 +184,21 @@ $(document).ready(function () {
         /* 获取输入的预期有型成果 */
         var expected_result = [];
         $(".expected_result").each(function () {
-            item = {};
-            item['expected_result'] = $(this).val();
             expected_result.push($(this).val());
         });
         /* 获取输入的用时 */
         var time_consumed = [];
         $(".time_consumed").each(function () {
-            item = {};
-            item['time_consumed'] = $(this).val();
             time_consumed.push($(this).val());
         });
         /* 获取输入的目标说明 */
         var content = [];
         $(".content").each(function () {
-            item = {};
-            item['content'] = $(this).val();
             content.push($(this).val());
         });
         /* 获取输入的期末总结 */
         var end_of_term_summary = [];
         $(".end_of_term_summary").each(function () {
-            item = {};
-            item['end_of_term_summary'] = $(this).val();
             end_of_term_summary.push($(this).val());
         });
         var jsonString_expected_result = JSON.stringify(expected_result);
@@ -292,7 +228,7 @@ $(document).ready(function () {
     $("tbody tr").click(function () {
         $("#target_id").val(this.title);
         $("#deleteForm").attr("disabled", false);
-        $("#modifyForm").attr("disabled", false);
+        // $("#modifyForm").attr("disabled", false);
         if ($("tr").hasClass("table-active")) {
             $("tr").removeClass("table-active");
         }
@@ -356,10 +292,63 @@ $(document).ready(function () {
         if (e.target.tagName != "TH" && e.target.tagName !== "TD") {
             $("#target_id").val();
             $("#deleteForm").attr("disabled", true);
-            $("#modifyForm").attr("disabled", true);
+            // $("#modifyForm").attr("disabled", true);
             if ($("tr").hasClass("table-active")) {
                 $("tr").removeClass("table-active");
             }
         }
     });
 });
+
+empty_form = "                            <div class=\"all_target\">\n" +
+    "                                <div class=\"target\">\n" +
+    "                                    <hr>\n" +
+    "                                    <div class=\"row\">\n" +
+    "                                        <div class=\"form-group col-10\">\n" +
+    "                                            <label for=\"expected_result\">预期有型成果</label>\n" +
+    "                                            <input type=\"text\" class=\"expected_result form-control\" required></input>\n" +
+    "                                            <div id=\"expected_result-valid\" class=\"valid-feedback\">\n" +
+    "                                                OK\n" +
+    "                                            </div>\n" +
+    "                                            <div id=\"expected_result-invalid\" class=\"invalid-feedback\">\n" +
+    "                                                ERROR\n" +
+    "                                            </div>\n" +
+    "                                        </div>\n" +
+    "                                        <div class=\"form-group col-2\">\n" +
+    "                                            <label for=\"content\">用时（天）</label>\n" +
+    "                                            <input type=\"text\" class=\"time_consumed form-control\" placeholder=\"例：10\" required>\n" +
+    "                                            <div id=\"time_consumed-valid\" class=\"valid-feedback\">\n" +
+    "                                                OK\n" +
+    "                                            </div>\n" +
+    "                                            <div id=\"time_consumed-invalid\" class=\"invalid-feedback\">\n" +
+    "                                                ERROR\n" +
+    "                                            </div>\n" +
+    "                                        </div>\n" +
+    "                                    </div>\n" +
+    "                                    <div class=\"row\">\n" +
+    "                                        <div class=\"form-group col-12\">\n" +
+    "                                            <label for=\"content\">目标说明</label>\n" +
+    "                                            <input type=\"text\" class=\"content form-control\" required></input>\n" +
+    "                                            <div id=\"content-valid\" class=\"valid-feedback\">\n" +
+    "                                                OK\n" +
+    "                                            </div>\n" +
+    "                                            <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
+    "                                                ERROR\n" +
+    "                                            </div>\n" +
+    "                                        </div>\n" +
+    "                                    </div>\n" +
+    "\n" +
+    "                                    <div class=\"row\">\n" +
+    "                                        <div class=\"form-group col-12\">\n" +
+    "                                            <label for=\"end_of_term_summary\">期末总结</label>\n" +
+    "                                            <input type=\"text\" class=\"end_of_term_summary form-control\"></input>\n" +
+    "                                            <div id=\"end_of_term_summary-valid\" class=\"valid-feedback\">\n" +
+    "                                                OK\n" +
+    "                                            </div>\n" +
+    "                                            <div id=\"end_of_term_summary-invalid\" class=\"invalid-feedback\">\n" +
+    "                                                ERROR\n" +
+    "                                            </div>\n" +
+    "                                        </div>\n" +
+    "                                    </div>\n" +
+    "                                </div>\n" +
+    "                            </div>"

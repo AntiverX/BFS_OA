@@ -207,7 +207,6 @@ def weekly_summary(request):
 def record(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-
     if request.method == "POST":
         date = request.POST['date']
         start_time = request.POST['time']
@@ -247,10 +246,7 @@ def record(request):
                 return render(request, 'error.html', context=context)
         return HttpResponseRedirect('/topic_manager/meeting_record')
     else:
-        if (request.user.is_admin):
-            results = MeetingRecord.objects.all()
-        else:
-            results = MeetingRecord.objects.filter(user=request.user)
+        results = MeetingRecord.objects.filter(real_name=request.user.current_user)
         context['results'] = results
         return render(request, "topic_manager/meeting_record.html", context=context)
 

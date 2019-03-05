@@ -4,5 +4,6 @@ from . import views
 
 urlpatterns = [
     re_path('^settings$', views.settings, name="setting"),
-    path('users_management', views.users_management),
+    re_path('^users_management$', views.users_management),
+    re_path('^semester$', views.semester),
 ]

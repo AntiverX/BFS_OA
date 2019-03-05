@@ -3,6 +3,13 @@ from user_info.models import User
 
 
 # Create your models here.
+class Semester(models.Model):
+    # 学期名称，如：2018-2019-1
+    semester_name = models.TextField()
+    # 学期开始日期
+    start_date = models.DateField()
+    # 学期结束日期
+    end_date = models.DateField()
 
 class BFS_OA_Config(models.Model):
     semester_start_time = models.DateField()

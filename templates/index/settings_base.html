@@ -10,23 +10,16 @@
     <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
     <link rel="stylesheet" href="{% static "css/global.css" %}">
     <link rel="stylesheet" href="{% static "css/material-design-iconic-font.min.css" %}">
-    <link rel="stylesheet" href="{% static "js/contextMenu/jquery.contextMenu.css" %}">
     <script src="{% static "js/jquery-3.3.1.slim.min.js" %}"></script>
     <script src="{% static "js/popper.min.js" %}"></script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>
     <script src="{% static "js/jquery-1.10.2.js" %}"></script>
-    <script src="{% static "js/contextMenu/jquery.contextMenu.js" %}"></script>
-    <script src="{% static "js/contextMenu/jquery.ui.position.min.js" %}"></script>
     <style>
         .navbar-dark .navbar-nav .nav-link {
             color: rgba(255, 255, 255, 1);
         }
 
         td {
-            font-size: 0.8rem;
-        }
-
-        th {
             font-size: 0.8rem;
         }
     </style>
@@ -102,9 +95,9 @@
 </nav>
 <div class="nav-scroller bg-white shadow-sm">
     <nav class="nav nav-underline">
-        {% for link,value in menus.items %}
-            <a class="nav-link" href="{{ link }}">{{ value }}</a>
-        {% endfor %}
+        <a class="nav-link" href="/system/settings">系统设置</a>
+        <a class="nav-link" href="/system/semester">学期管理</a>
+        <a class="nav-link" href="/system/users_management">用户管理</a>
     </nav>
 </div>
 {% block content %}

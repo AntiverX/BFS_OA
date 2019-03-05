@@ -3,12 +3,10 @@ from BFS_OA.settings import BASE_DIR
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
 import os, time, re, random
-from .models import FileRecord, BFS_OA_Config
+from .models import FileRecord, BFS_OA_Config, Lab_Asset, Semester
 from user_info.models import User
-from .models import Lab_Asset
 from django.core.exceptions import *
 import datetime
-import math
 
 context = {
     'menus': {
@@ -78,11 +76,7 @@ def settings(request):
     context = {}
     if request.user.id == 1 or request.user.is_admin:
         context = {
-            'menus': {
-                '/system/settings': "系统设置",
-                '/system/users_management': "用户管理",
-            },
-            'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
+            # 'current_semester_week': int(time.strftime("%W")) - int(BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
             'user': request.user,
             'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
         }
@@ -111,6 +105,13 @@ def settings(request):
         }
         return render(request, "index/settings.html", context=context)
 
+@login_required
+def semester(request):
+    if request.user.id == 1 or request.user.is_admin:
+        context = {
+            "semesters" : Semester.objects.all(),
+        }
+        return render(request,"index/semester_settings.html",context=context)
 
 def user_settings(request):
     return HttpResponse("/")

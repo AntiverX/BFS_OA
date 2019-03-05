@@ -35,6 +35,7 @@ class Plan(models.Model):
 # 会议记录
 class MeetingRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    real_name = models.TextField(blank=True)
     date = models.DateField()
     time = models.TimeField()
     cost_time = models.IntegerField()
