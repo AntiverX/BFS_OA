@@ -14,16 +14,13 @@
 
     <div class="container-fluid mt-3">
         <!-- 三个按钮 -->
-        <button type="button" class="btn btn-primary" id="addForm" data-toggle="modal" data-target="#exampleModalCenter" hidden>
-            添加
-        </button>
         <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm" hidden>
             修改
         </button>
         <button type="button" class="btn btn-primary ml-4" id="deleteForm" hidden>删除</button>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -33,30 +30,27 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="target_form">
-                            <input type="hidden" id="target_id" class="target_id form-control" value="{{ target_id }}">
+                        <div id="form">
                             {% csrf_token %}
-                            <div class="form">
-                                <div class="row">
-                                    <div class="form-group col-3">
-                                        <label for="content">填表日期</label>
-                                        <input type="text" class="date form-control" id="date" required>
-                                        <div id="date-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="date-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
+                            <div class="row">
+                                <div class="form-group col-3">
+                                    <label for="content">填表日期</label>
+                                    <input type="text" class="date form-control" id="date" required>
+                                    <div id="date-valid" class="valid-feedback">
+                                        OK
                                     </div>
-                                    <div class="form-group col-3">
-                                        <label for="content">学期</label>
-                                        <input type="text" class="semester form-control" id="semester" placeholder="例：2018-2019-1" required>
-                                        <div id="semester-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="semester-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
+                                    <div id="date-invalid" class="invalid-feedback">
+                                        ERROR
+                                    </div>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label for="content">学期</label>
+                                    <input type="text" class="semester form-control" id="semester" placeholder="例：2018-2019-1" required>
+                                    <div id="semester-valid" class="valid-feedback">
+                                        OK
+                                    </div>
+                                    <div id="semester-invalid" class="invalid-feedback">
+                                        ERROR
                                     </div>
                                 </div>
                             </div>
@@ -112,14 +106,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <a class="deploy_floating" id="add_target" style="margin-left: 45%">
-                                <span class="fonticon_plus"></span>
-                            </a>
-                            <hr style="margin-top: 26px">
-                            <div class="row">
-                                <div class="col-12">
-                                    <button class="btn btn-primary" id="submitForm">提交</button>
-                                </div>
+                        </div>
+                        <a class="deploy_floating" id="add_target" style="margin-left: 45%">
+                            <span class="fonticon_plus"></span>
+                        </a>
+                        <hr style="margin-top: 26px">
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
                             </div>
                         </div>
                     </div>
@@ -131,30 +125,30 @@
             <table class="mt-1 table table-hover">
                 <thead>
                 <th scope="col" nowrap style="width: 5%">序号</th>
-                <th scope="col" nowrap style="width: 10%">学期</th>
-                <th scope="col" nowrap style="width: 10%">填表日期</th>
-                <th scope="col" nowrap>预期有型成果</th>
-                <th scope="col" nowrap style="width: 5%">用时（天）</th>
-                <th scope="col" nowrap>目标说明</th>
-                <th scope="col" nowrap>期末总结</th>
+                <th type="normal" class="semester" scope="col" nowrap style="width: 10%">学期</th>
+                <th type="normal" class="date" scope="col" nowrap style="width: 10%">填表日期</th>
+                <th type="json" class="expected_result" scope="col" nowrap>预期有型成果</th>
+                <th type="json" class="time_consumed" scope="col" nowrap style="width: 5%">用时（天）</th>
+                <th type="json" class="content" scope="col" nowrap>目标说明</th>
+                <th type="json" class="end_of_term_summary" scope="col" nowrap>期末总结</th>
                 </thead>
                 <tbody>
                 {% for result in results %}
                     <tr class="table_content" title="{{ result.id }}">
                         <th scope="row" nowrap>{{ forloop.counter }}</th>
-                        <td style="white-space: pre-wrap">{{ result.semester }}</td>
-                        <td style="white-space: pre-wrap">{{ result.time|date:"Y-m-d" }}</td>
-                        <td style="white-space: pre-wrap">{{ result.expected_result }}</td>
-                        <td style="white-space: pre-wrap">{{ result.time_consumed }}</td>
-                        <td style="white-space: pre-wrap">{{ result.content }}</td>
-                        <td style="white-space: pre-wrap">{{ result.end_of_term_summary }}</td>
+                        <td class="semester" style="white-space: pre-wrap">{{ result.semester }}</td>
+                        <td class="date" style="white-space: pre-wrap">{{ result.time|date:"Y-m-d" }}</td>
+                        <td class="json expected_result" style="white-space: pre-wrap">{{ result.expected_result }}</td>
+                        <td class="json time_consumed" style="white-space: pre-wrap">{{ result.time_consumed }}</td>
+                        <td class="json content" style="white-space: pre-wrap">{{ result.content }}</td>
+                        <td class="json end_of_term_summary" style="white-space: pre-wrap">{{ result.end_of_term_summary }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
 
-    <!-- 右下角添加按钮 -->
+        <!-- 右下角添加按钮 -->
         <style>
             #add {
                 bottom: 3rem;
@@ -167,4 +161,7 @@
         </a>
     </div>
     <!-- 右下角添加按钮结束 -->
+    <script>
+
+    </script>
 {% endblock %}

@@ -9,30 +9,20 @@
 修改按钮实现
 添加按钮实现
 提交按钮实现
-点击某一行实现选中效果,并启用删除和修改按钮
 点击加号增加表单
 表单验证（服务端验证和本地验证）
 */
 $(document).ready(function () {
-    /* 初始时保存一份空白的表 */
-    empty_form = $(".all_record").clone(true);
+    column_name = []
+    column_type = []
+    $("th").each(function () {
+        if ($(this).attr('class') == undefined) {
 
-    /* 初始时禁用提交按钮 */
-    $("#submitForm").attr("disabled", true);
-
-    /* 点击主界面左下角添加按钮 */
-    $("#add").click(function () {
-        $("#addForm").click();
-    });
-
-
-    /* 表格项目被右击后，记录被右击的表格id */
-    $('tr').mousedown(function (event) {
-        if (event.which == 3) {
-            active_table = this.title;
+        } else {
+            column_name.push($(this).attr('class'));
+            column_type.push($(this).attr('type'));
         }
     });
-
     /* 右键菜单的相关实现 */
     $.contextMenu({
         // define which elements trigger this menu
@@ -43,14 +33,38 @@ $(document).ready(function () {
                 name: "添加",
                 icon: "add",
                 callback: function (key, opt) {
-                    $("#addForm").click();
+                    $("#add").click();
                 }
             },
             modify: {
                 name: "修改",
                 icon: "edit",
                 callback: function (key, opt) {
-                    $("#modifyForm").click();
+                    $("#form").html(empty_form);
+                    var is_sub_form_constructed = 0;
+                    for (var i = 0; i < column_name.length; i++) {
+                        if (column_type[i] == "json") {
+                            var data = $("tr[title=" + active_table + "]").find("." + column_name[i]).text().split("\n");
+                            if (is_sub_form_constructed == 0) {
+                                element_ = $(".target:first").clone(true);
+                                for (var j = 0; j < data.length; j++) {
+                                    $(element_).find("input").val("");
+                                    element_.appendTo(".all_record");
+                                }
+                                is_sub_form_constructed = 1;
+                            }
+                            console.log(column_name[i]);
+                            for (var j = 0; j < data.length; j++) {
+                                console.log(column_name[i]);
+                                $("#form").find("." + column_name[i]).eq(j).val(data[j]);
+
+                            }
+                        } else {
+                            $("." + column_name[i]).val($("tr[title=" + active_table + "]").find("." + column_name[i]).text());
+                        }
+                    }
+                    $("input").addClass("is-valid");
+                    $("#modal").modal('show');
                 }
             },
             separator1: "-----",
@@ -61,16 +75,10 @@ $(document).ready(function () {
                     csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
                     data = {
                         "target_id": active_table,
-                        'date': "",
-                        'semester': "",
-                        "expected_result": "",
-                        "time_consumed": "",
-                        "content": "",
-                        "end_of_term_summary": "",
                         csrfmiddlewaretoken: csrftoken,
                         "btn": "delete"
                     }
-                    $.post("/topic_manager/target", data, function (response, status) {
+                    $.post("", data, function (response, status) {
                         if (status == "success") {
                             window.location.reload(true);
                         }
@@ -89,46 +97,9 @@ $(document).ready(function () {
     });
     /* 右键菜单的相关实现结束 */
 
-    /* 对json进行处理 */
-    $("tr").each(function () {
-        if ($(this).find("td").length != 0) {
-            var array_ = JSON.parse($(this).find("td").eq(-1).text());
-            new_text = "";
-            for (var i = 0; i < array_.length - 1; i++) {
-                new_text = new_text + array_[i] + "\n";
-            }
-            new_text = new_text + array_[array_.length - 1];
-            $(this).find("td").eq(-1).text(new_text);
-
-            var array_ = JSON.parse($(this).find("td").eq(-2).text());
-            new_text = "";
-            for (var i = 0; i < array_.length - 1; i++) {
-                new_text = new_text + array_[i] + "\n";
-            }
-            new_text = new_text + array_[array_.length - 1];
-            $(this).find("td").eq(-2).text(new_text);
-
-            var array_ = JSON.parse($(this).find("td").eq(-3).text());
-            new_text = "";
-            for (var i = 0; i < array_.length - 1; i++) {
-                new_text = new_text + array_[i] + "\n";
-            }
-            new_text = new_text + array_[array_.length - 1];
-            $(this).find("td").eq(-3).text(new_text);
-
-            var array_ = JSON.parse($(this).find("td").eq(-4).text());
-            new_text = "";
-            for (var i = 0; i < array_.length - 1; i++) {
-                new_text = new_text + array_[i] + "\n";
-            }
-            new_text = new_text + array_[array_.length - 1];
-            $(this).find("td").eq(-4).text(new_text);
-        }
-    });
-
     /* 修改按钮相关实现 */
-    $("#modifyForm").click(function () {
-        $(".all_record").replaceWith(empty_form);
+    function modifyForm() {
+        $("#form").html(empty_form);
         var target_id = active_table;
         var semester = $("tr[title=" + target_id + "]").find("td").eq(0).text();
         var time = $("tr[title=" + target_id + "]").find("td").eq(1).text();
@@ -166,46 +137,30 @@ $(document).ready(function () {
             $(".content").eq(i).addClass("is-valid");
             $(".end_of_term_summary").eq(i).addClass("is-valid");
         }
-    });
+        $("#modal").modal('show');
+    }
     /* 修改按钮相关实现结束 */
 
-    /* 点击添加按钮 */
-    $("#addForm").click(function () {
-        $("#form").find("input").val("");
-        /* 设置日期时间 */
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        $("#date").val(year + "-" + month + "-" + day);
-        $("#date").addClass("is-valid");
-        $(".all_record").replaceWith(empty_form);
-        if ($("tr").hasClass("table-active")) {
-            $("tr").removeClass("table-active");
-        }
-    });
-
-
     /* 提交按钮相关功能实现 */
-    $("#submitForm").click(function () {
+    $("#submit_form").click(function () {
         /* 获取输入的预期有型成果 */
         var expected_result = [];
-        $(".expected_result").each(function () {
+        $("#form").find(".expected_result").each(function () {
             expected_result.push($(this).val());
         });
         /* 获取输入的用时 */
         var time_consumed = [];
-        $(".time_consumed").each(function () {
+        $("#form").find(".time_consumed").each(function () {
             time_consumed.push($(this).val());
         });
         /* 获取输入的目标说明 */
         var content = [];
-        $(".content").each(function () {
+        $("#form").find(".content").each(function () {
             content.push($(this).val());
         });
         /* 获取输入的期末总结 */
         var end_of_term_summary = [];
-        $(".end_of_term_summary").each(function () {
+        $("#form").find(".end_of_term_summary").each(function () {
             end_of_term_summary.push($(this).val());
         });
         var jsonString_expected_result = JSON.stringify(expected_result);
@@ -214,7 +169,7 @@ $(document).ready(function () {
         var jsonString_end_of_term_summary = JSON.stringify(end_of_term_summary);
         csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         var data = {
-            "target_id": $("#target_id").val(),
+            "target_id": active_table,
             'date': $("#date").val(),
             'semester': $("#semester").val(),
             "expected_result": jsonString_expected_result,
@@ -231,80 +186,5 @@ $(document).ready(function () {
         });
     });
 
-    /* 点击某一行启用修改和删除按钮 */
-    $("tbody tr").click(function () {
-        $("#target_id").val(this.title);
-        $("#deleteForm").attr("disabled", false);
-        // $("#modifyForm").attr("disabled", false);
-        if ($("tr").hasClass("table-active")) {
-            $("tr").removeClass("table-active");
-        }
-        $(this).addClass("table-active");
-    });
 
-    /* 点击加号按钮，会自动增加并恢复表单的初始状态 */
-    $("#add_target").click(function () {
-        element_ = $(".target:first").clone(true);
-        $(element_).find("input").val("");
-        $(element_).find("input").removeClass("is-valid");
-        $(element_).find("input").removeClass("is-invalid");
-        element_.appendTo(".all_record");
-        $("#submitForm").attr("disabled", true);
-    });
-
-
-    /* 表单验证 */
-    $(document).on('change', 'input', function () {
-        /* 在线验证表单内容 */
-        text = $(this).val();
-        class_name = $(this).attr('class').split(" ")[0];
-        csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-        parent = $(this);
-        data = {
-            class_name: class_name,
-            value: text,
-            'csrfmiddlewaretoken': csrftoken
-        }
-        $.post('/topic_manager/valid', data, function (result) {
-
-            if (result == "OK") {
-                parent.removeClass("is-invalid");
-                parent.addClass("is-valid");
-            } else {
-                $("#" + class_name + "-invalid").text(result);
-                parent.removeClass("is-valid");
-                parent.addClass("is-invalid");
-                $("#submitForm").attr("disabled", true);
-            }
-        });
-
-        /* 客户端验证是否有缺失内容 */
-        var form_complete = 1;
-        $("input").each(function () {
-
-            if (($(this).val() == "")) {
-                if ($(this).attr("class").split(" ")[0] != "end_of_term_summary" && $(this).attr("id") != "target_id") {
-                    form_complete = 0;
-                }
-            }
-        });
-        if (form_complete) {
-            $("#submitForm").attr("disabled", false);
-        } else {
-            $("#submitForm").attr("disabled", true);
-        }
-    });
-    /* 表单验证结束 */
-
-    /* 点击空白处失去选中，并清空id记录 */
-    $(document).on("click", function (e) {
-        if (e.target.tagName != "TH" && e.target.tagName !== "TD") {
-            $("#target_id").val();
-            $("#deleteForm").attr("disabled", true);
-            // $("#modifyForm").attr("disabled", true);
-            if ($("tr").hasClass("table-active")) {
-                $("tr").removeClass("table-active");
-            }
-        }
-    });
 });

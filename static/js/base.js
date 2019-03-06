@@ -9,5 +9,8 @@ $(document).ready(function () {
         });
     });
 
-
+    $.get("/get_current_week", function (data) {
+        $("#current_week").text("第" + data + "周");
+        $("#week").val(data);
+    });
 });

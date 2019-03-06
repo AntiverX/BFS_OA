@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block menu %}
+    {% load static %}
+    <script src="{% static "js/topic_manager/base.js" %}"></script>
     <div class="nav-scroller bg-white shadow-sm">
         <nav class="nav nav-underline">
             {% for link,value in menus.items %}

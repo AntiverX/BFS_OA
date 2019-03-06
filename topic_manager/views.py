@@ -32,28 +32,19 @@ def topic_manager(request):
 # 目标
 @login_required
 def target(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == "POST":
-        expected_result = request.POST['expected_result']
-        content = request.POST['content']
-        time_consumed = request.POST['time_consumed']
-        end_of_term_summary = request.POST['end_of_term_summary']
-        semester = request.POST['semester']
-        fill_time = request.POST['date']
         if request.POST['target_id'] != "":
             target_id = request.POST['target_id']
+            submitted_target = Target.objects.get(id=target_id)
             if request.POST['btn'] == "delete":
-                submitted_target = Target.objects.get(id=target_id)
                 submitted_target.delete()
             else:
-                submitted_target = Target.objects.get(id=target_id)
-                submitted_target.expected_result = expected_result
-                submitted_target.content = content
-                submitted_target.time_consumed = time_consumed
-                submitted_target.end_of_term_summary = end_of_term_summary
-                submitted_target.time = fill_time
-                submitted_target.semester = semester
+                submitted_target.expected_result = request.POST['expected_result']
+                submitted_target.content = request.POST['content']
+                submitted_target.time_consumed = request.POST['time_consumed']
+                submitted_target.end_of_term_summary = request.POST['end_of_term_summary']
+                submitted_target.time = request.POST['date']
+                submitted_target.semester = request.POST['semester']
                 try:
                     submitted_target.save()
                 except (ValueError, ValidationError) as err:
@@ -63,12 +54,12 @@ def target(request):
         else:
             submitted_target = Target(
                 user=request.user,
-                expected_result=expected_result,
-                content=content,
-                time_consumed=time_consumed,
-                end_of_term_summary=end_of_term_summary,
-                time=fill_time,
-                semester=semester
+                expected_result=request.POST['expected_result'],
+                content=request.POST['content'],
+                time_consumed=request.POST['time_consumed'],
+                end_of_term_summary=request.POST['end_of_term_summary'],
+                time=request.POST['date'],
+                semester=request.POST['semester'],
             )
             try:
                 submitted_target.save()
