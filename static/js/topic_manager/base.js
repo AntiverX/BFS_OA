@@ -1,15 +1,102 @@
 /*
 右键菜单的相关实现
+获得列名和列类型
 对json进行处理
 初始时保存一份空白的表
 初始时禁用提交按钮
 添加按钮
 加号按钮
-表单验证
 表格项目被右击后，记录被右击的表格id
+提交表单
+表单验证
 */
 
 $(document).ready(function () {
+    /* 右键菜单的相关实现 */
+    $.contextMenu({
+        // define which elements trigger this menu
+        selector: ".table_content",
+        // define the elements of the menu
+        items: {
+            add: {
+                name: "添加",
+                icon: "add",
+                callback: function (key, opt) {
+                    $("#add").click();
+                }
+            },
+            modify: {
+                name: "修改",
+                icon: "edit",
+                callback: function (key, opt) {
+                    $("#form").html(empty_form);
+                    var is_sub_form_constructed = 0;
+                    for (var i = 0; i < column_name.length; i++) {
+                        if (column_type[i] == "json") {
+                            var data = $("tr[title=" + active_table + "]").find("." + column_name[i]).text().split("\n");
+                            if (is_sub_form_constructed == 0) {
+                                element_ = $(".target:first").clone(true);
+                                for (var j = 0; j < data.length; j++) {
+                                    $(element_).find("input").val("");
+                                    element_.appendTo(".all_record");
+                                }
+                                is_sub_form_constructed = 1;
+                            }
+                            for (var j = 0; j < data.length; j++) {
+                                $("#form").find("." + column_name[i]).eq(j).val(data[j]);
+
+                            }
+                        } else {
+                            $("." + column_name[i]).val($("tr[title=" + active_table + "]").find("." + column_name[i]).text());
+                        }
+                    }
+                    $("input").addClass("is-valid");
+                    $("#modal").modal('show');
+                }
+            },
+            separator1: "-----",
+            delete: {
+                name: "删除",
+                icon: "delete",
+                callback: function () {
+                    csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                    data = {
+                        "target_id": active_table,
+                        csrfmiddlewaretoken: csrftoken,
+                        "btn": "delete"
+                    }
+                    $.post("", data, function (response, status) {
+                        if (status == "success") {
+                            window.location.reload(true);
+                        }
+                    });
+                }
+            }
+        },
+        events: {
+            show: function () {
+                $('tr[title=' + active_table + ']').addClass("table-active");
+            },
+            hide: function () {
+                $('tr[title=' + active_table + ']').removeClass("table-active");
+            }
+        }
+    });
+    /* 右键菜单的相关实现结束 */
+
+    /* 获得列名和列类型 */
+    column_name = []
+    column_type = []
+    $("th").each(function () {
+        if ($(this).attr('class') == undefined) {
+
+        } else {
+            column_name.push($(this).attr('class'));
+            column_type.push($(this).attr('type'));
+        }
+    });
+    /* 获得列名和列类型结束 */
+
     /* 对json进行处理 */
     $(".table_content").each(function () {
         for (i = 0; i <= $(this).find("td").length; i++) {
@@ -27,13 +114,13 @@ $(document).ready(function () {
     /* 对json进行处理结束 */
 
 
-
     /* 初始时保存一份空白的表 */
     empty_form = $("#form").html();
+
     /* 初始时禁用提交按钮 */
     $("#submit_form").attr("disabled", true);
 
-    /* 点击主界面左下角添加按钮 */
+    /* 添加按钮 */
     $("#add").click(function () {
         active_table = "";
         $('#form').html(empty_form);
@@ -47,9 +134,9 @@ $(document).ready(function () {
         $("#modal").modal('show');
     });
 
-    /* 点击加号按钮，会自动增加并恢复表单的初始状态 */
+    /* 加号按钮 */
     $(document).on('click', '#add_target', function () {
-        element_ = $(".target:first").clone(true);
+        element_ = $(".record:first").clone(true);
         $(element_).find("input").val("");
         $(element_).find("input").removeClass("is-valid");
         $(element_).find("input").removeClass("is-invalid");
@@ -63,6 +150,33 @@ $(document).ready(function () {
             active_table = this.title;
         }
     });
+
+    /* 提交表单 */
+    $("#submit_form").click(function () {
+        var data_test = {};
+        data_test['target_id'] = active_table;
+        data_test['btn'] = "";
+        data_test['csrfmiddlewaretoken'] = jQuery("[name=csrfmiddlewaretoken]").val();
+        for (var i = 0; i < column_name.length; i++) {
+            if (column_type[i] == "json") {
+                var array = [];
+                $("#form").find("." + column_name[i]).each(function () {
+                    array.push($(this).val());
+                });
+                var json_array = JSON.stringify(array);
+                data_test[column_name[i]] = json_array;
+            } else {
+                data_test[column_name[i]] = $("#form").find("." + column_name[i]).val();
+            }
+        }
+        /* 提交表单内容 */
+        $.post("", data_test, function (response, status) {
+            if (status == "success") {
+                window.location.reload(true);
+            }
+        });
+    });
+    /* 提交表单结束 */
 
     /* 表单验证 */
     $(document).on('change', 'input', function () {

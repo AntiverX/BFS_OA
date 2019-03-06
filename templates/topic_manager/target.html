@@ -13,12 +13,6 @@
     </style>
 
     <div class="container-fluid mt-3">
-        <!-- 三个按钮 -->
-        <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm" hidden>
-            修改
-        </button>
-        <button type="button" class="btn btn-primary ml-4" id="deleteForm" hidden>删除</button>
-
         <!-- Modal -->
         <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
@@ -36,59 +30,39 @@
                                 <div class="form-group col-3">
                                     <label for="content">填表日期</label>
                                     <input type="text" class="date form-control" id="date" required>
-                                    <div id="date-valid" class="valid-feedback">
-                                        OK
-                                    </div>
-                                    <div id="date-invalid" class="invalid-feedback">
-                                        ERROR
-                                    </div>
+                                    <div id="date-valid" class="valid-feedback">OK</div>
+                                    <div id="date-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-3">
                                     <label for="content">学期</label>
                                     <input type="text" class="semester form-control" id="semester" placeholder="例：2018-2019-1" required>
-                                    <div id="semester-valid" class="valid-feedback">
-                                        OK
-                                    </div>
-                                    <div id="semester-invalid" class="invalid-feedback">
-                                        ERROR
-                                    </div>
+                                    <div id="date-valid" class="valid-feedback">OK</div>
+                                    <div id="date-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                             </div>
                             <div class="all_record">
-                                <div class="target">
+                                <div class="record">
                                     <hr>
                                     <div class="row">
                                         <div class="form-group col-10">
                                             <label for="expected_result">预期有型成果</label>
                                             <input type="text" class="expected_result form-control" required></input>
-                                            <div id="expected_result-valid" class="valid-feedback">
-                                                OK
-                                            </div>
-                                            <div id="expected_result-invalid" class="invalid-feedback">
-                                                ERROR
-                                            </div>
+                                            <div id="date-valid" class="valid-feedback">OK</div>
+                                            <div id="date-invalid" class="invalid-feedback">ERROR</div>
                                         </div>
                                         <div class="form-group col-2">
                                             <label for="content">用时（天）</label>
                                             <input type="text" class="time_consumed form-control" placeholder="例：10" required>
-                                            <div id="time_consumed-valid" class="valid-feedback">
-                                                OK
-                                            </div>
-                                            <div id="time_consumed-invalid" class="invalid-feedback">
-                                                ERROR
-                                            </div>
+                                            <div id="date-valid" class="valid-feedback">OK</div>
+                                            <div id="date-invalid" class="invalid-feedback">ERROR</div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-12">
                                             <label for="content">目标说明</label>
                                             <input type="text" class="content form-control" required></input>
-                                            <div id="content-valid" class="valid-feedback">
-                                                OK
-                                            </div>
-                                            <div id="content-invalid" class="invalid-feedback">
-                                                ERROR
-                                            </div>
+                                            <div id="date-valid" class="valid-feedback">OK</div>
+                                            <div id="date-invalid" class="invalid-feedback">ERROR</div>
                                         </div>
                                     </div>
 
@@ -96,12 +70,8 @@
                                         <div class="form-group col-12">
                                             <label for="end_of_term_summary">期末总结</label>
                                             <input type="text" class="end_of_term_summary form-control"></input>
-                                            <div id="end_of_term_summary-valid" class="valid-feedback">
-                                                OK
-                                            </div>
-                                            <div id="end_of_term_summary-invalid" class="invalid-feedback">
-                                                ERROR
-                                            </div>
+                                            <div id="date-valid" class="valid-feedback">OK</div>
+                                            <div id="date-invalid" class="invalid-feedback">ERROR</div>
                                         </div>
                                     </div>
                                 </div>
