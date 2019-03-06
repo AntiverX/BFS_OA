@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-
-
-
     {% load static %}
     <script src="{% static "js/weekly_summary.js" %}"></script>
     <style>
@@ -12,14 +9,10 @@
         }
     </style>
     <div class="container-fluid mt-3">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="addForm">
-            添加
-        </button>
-        <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm">
-            修改
-        </button>
-        <button type="button" class="btn btn-primary ml-4" id="deleteForm">删除</button>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="addForm" hidden>添加</button>
+        <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm" hidden>修改</button>
+        <button type="button" class="btn btn-primary ml-4" id="deleteForm" hidden>删除</button>
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -33,56 +26,40 @@
                     </div>
                     <div class="modal-body">
 
-                        <form class="mt-3" method="post" id="weekly_summary_form">
+                        <form class="mt-1" method="post" id="weekly_summary_form">
                             <input type="hidden" id="target_id" name="target_id" value="">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="form-group col-4">
                                     <label for="this_week_task">工作周</label>
                                     <input class="week form-control" id="week" value="" required>
-                                    <div id="content-valid" class="valid-feedback">
-                                        OK
-                                    </div>
-                                    <div id="content-invalid" class="invalid-feedback">
-                                        ERROR
-                                    </div>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-4">
                                     <label for="this_week_task">周平均日工作时间</label>
                                     <input class="average_work_hour form-control" id="average_work_hour" placeholder="例：9.9" required>
-                                    <div id="content-valid" class="valid-feedback">
-                                        OK
-                                    </div>
-                                    <div id="content-invalid" class="invalid-feedback">
-                                        ERROR
-                                    </div>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-4">
                                     <label for="this_week_task">周请假(×0.5 天)</label>
                                     <input class="absent_hour form-control" id="absent_hour" name="absent_hour" value="0" required>
-                                    <div id="content-valid" class="valid-feedback">
-                                        OK
-                                    </div>
-                                    <div id="content-invalid" class="invalid-feedback">
-                                        ERROR
-                                    </div>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                             </div>
                             <hr>
-                            <div id="form">
+                            <div id="form" class="all_record">
                                 <div class="row" id="replace_form">
                                     <div class="col-6">
                                         <div class="all_this_week_work">
                                             <div class="this_week_work">
                                                 <div class="form-group">
                                                     <label for="this_week_task">本周工作</label>
-                                                    <input class="this_week_task form-control" value="无" required></input>
-                                                    <div id="this_week_task-valid" class="valid-feedback">
-                                                        OK
-                                                    </div>
-                                                    <div id="this_week_task-invalid" class="invalid-feedback">
-                                                        ERROR
-                                                    </div>
+                                                    <input class="this_week_task form-control" value="" required></input>
+                                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -92,13 +69,9 @@
                                             <div class="next_week_work">
                                                 <div class="form-group">
                                                     <label for="next_week_task">下周工作</label>
-                                                    <input class="next_week_task form-control" value="无" required></input>
-                                                    <div id="next_week_task-valid" class="valid-feedback">
-                                                        OK
-                                                    </div>
-                                                    <div id="next_week_task-invalid" class="invalid-feedback">
-                                                        ERROR
-                                                    </div>
+                                                    <input class="next_week_task form-control" value="" required></input>
+                                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,7 +112,7 @@
                 </thead>
                 <tbody>
                 {% for weekly_summary in weekly_summarys %}
-                    <tr title="{{ weekly_summary.id }}">
+                    <tr class="table_content" title="{{ weekly_summary.id }}">
                         <th scope="row">{{ forloop.counter }}</th>
                         <td nowrap>{{ weekly_summary.week }}</td>
                         <td nowrap>{{ weekly_summary.submit_time|date:"Y-m-d" }}</td>
@@ -151,7 +124,20 @@
                 {% endfor %}
                 </tbody>
             </table>
-
         </div>
+
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+    </div>
+    <!-- 右下角添加按钮结束 -->
     </div>
 {% endblock %}

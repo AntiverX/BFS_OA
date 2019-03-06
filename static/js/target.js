@@ -1,6 +1,6 @@
-
-$(document).ready(function () {
 /*
+初始时保存一份空白的表
+初始时禁用提交按钮
 点击主界面左下角添加按钮
 表格项目被右击后，记录被右击的表格id
 右键菜单的相关实现
@@ -13,6 +13,12 @@ $(document).ready(function () {
 点击加号增加表单
 表单验证（服务端验证和本地验证）
 */
+$(document).ready(function () {
+    /* 初始时保存一份空白的表 */
+    empty_form = $(".all_record").clone(true);
+
+    /* 初始时禁用提交按钮 */
+    $("#submitForm").attr("disabled", true);
 
     /* 点击主界面左下角添加按钮 */
     $("#add").click(function () {
@@ -81,7 +87,7 @@ $(document).ready(function () {
             }
         }
     });
-
+    /* 右键菜单的相关实现结束 */
 
     /* 对json进行处理 */
     $("tr").each(function () {
@@ -122,7 +128,7 @@ $(document).ready(function () {
 
     /* 修改按钮相关实现 */
     $("#modifyForm").click(function () {
-        $(".all_target").replaceWith(empty_form);
+        $(".all_record").replaceWith(empty_form);
         var target_id = active_table;
         var semester = $("tr[title=" + target_id + "]").find("td").eq(0).text();
         var time = $("tr[title=" + target_id + "]").find("td").eq(1).text();
@@ -137,7 +143,7 @@ $(document).ready(function () {
         for (var i = 0; i < expected_result_split.length - 1; i++) {
             element_ = $(".target:first").clone(true);
             $(element_).find("input").val("");
-            element_.appendTo(".all_target");
+            element_.appendTo(".all_record");
         }
         /* 赋值 */
         var date = new Date();
@@ -161,6 +167,7 @@ $(document).ready(function () {
             $(".end_of_term_summary").eq(i).addClass("is-valid");
         }
     });
+    /* 修改按钮相关实现结束 */
 
     /* 点击添加按钮 */
     $("#addForm").click(function () {
@@ -172,7 +179,7 @@ $(document).ready(function () {
         var day = date.getDate();
         $("#date").val(year + "-" + month + "-" + day);
         $("#date").addClass("is-valid");
-        $(".all_target").replaceWith(empty_form);
+        $(".all_record").replaceWith(empty_form);
         if ($("tr").hasClass("table-active")) {
             $("tr").removeClass("table-active");
         }
@@ -241,7 +248,7 @@ $(document).ready(function () {
         $(element_).find("input").val("");
         $(element_).find("input").removeClass("is-valid");
         $(element_).find("input").removeClass("is-invalid");
-        element_.appendTo(".all_target");
+        element_.appendTo(".all_record");
         $("#submitForm").attr("disabled", true);
     });
 
@@ -287,6 +294,8 @@ $(document).ready(function () {
             $("#submitForm").attr("disabled", true);
         }
     });
+    /* 表单验证结束 */
+
     /* 点击空白处失去选中，并清空id记录 */
     $(document).on("click", function (e) {
         if (e.target.tagName != "TH" && e.target.tagName !== "TD") {
@@ -299,56 +308,3 @@ $(document).ready(function () {
         }
     });
 });
-
-empty_form = "                            <div class=\"all_target\">\n" +
-    "                                <div class=\"target\">\n" +
-    "                                    <hr>\n" +
-    "                                    <div class=\"row\">\n" +
-    "                                        <div class=\"form-group col-10\">\n" +
-    "                                            <label for=\"expected_result\">预期有型成果</label>\n" +
-    "                                            <input type=\"text\" class=\"expected_result form-control\" required></input>\n" +
-    "                                            <div id=\"expected_result-valid\" class=\"valid-feedback\">\n" +
-    "                                                OK\n" +
-    "                                            </div>\n" +
-    "                                            <div id=\"expected_result-invalid\" class=\"invalid-feedback\">\n" +
-    "                                                ERROR\n" +
-    "                                            </div>\n" +
-    "                                        </div>\n" +
-    "                                        <div class=\"form-group col-2\">\n" +
-    "                                            <label for=\"content\">用时（天）</label>\n" +
-    "                                            <input type=\"text\" class=\"time_consumed form-control\" placeholder=\"例：10\" required>\n" +
-    "                                            <div id=\"time_consumed-valid\" class=\"valid-feedback\">\n" +
-    "                                                OK\n" +
-    "                                            </div>\n" +
-    "                                            <div id=\"time_consumed-invalid\" class=\"invalid-feedback\">\n" +
-    "                                                ERROR\n" +
-    "                                            </div>\n" +
-    "                                        </div>\n" +
-    "                                    </div>\n" +
-    "                                    <div class=\"row\">\n" +
-    "                                        <div class=\"form-group col-12\">\n" +
-    "                                            <label for=\"content\">目标说明</label>\n" +
-    "                                            <input type=\"text\" class=\"content form-control\" required></input>\n" +
-    "                                            <div id=\"content-valid\" class=\"valid-feedback\">\n" +
-    "                                                OK\n" +
-    "                                            </div>\n" +
-    "                                            <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
-    "                                                ERROR\n" +
-    "                                            </div>\n" +
-    "                                        </div>\n" +
-    "                                    </div>\n" +
-    "\n" +
-    "                                    <div class=\"row\">\n" +
-    "                                        <div class=\"form-group col-12\">\n" +
-    "                                            <label for=\"end_of_term_summary\">期末总结</label>\n" +
-    "                                            <input type=\"text\" class=\"end_of_term_summary form-control\"></input>\n" +
-    "                                            <div id=\"end_of_term_summary-valid\" class=\"valid-feedback\">\n" +
-    "                                                OK\n" +
-    "                                            </div>\n" +
-    "                                            <div id=\"end_of_term_summary-invalid\" class=\"invalid-feedback\">\n" +
-    "                                                ERROR\n" +
-    "                                            </div>\n" +
-    "                                        </div>\n" +
-    "                                    </div>\n" +
-    "                                </div>\n" +
-    "                            </div>"

@@ -1,80 +1,84 @@
-$(document).ready(function () {
-    /*
-* 对json进行处理
-* 禁用按钮
-* 删除按钮实现
-* 修改按钮实现
-* 添加按钮实现
-* 提交按钮实现
-* 点击某一行实现选中效果,并启用删除和修改按钮
-* 点击加号增加表单
-* 表单验证（服务端验证和本地验证）
+/*
+初始时保存一份空白的表
+初始时禁用提交按钮
+点击主界面左下角添加按钮
+对json进行处理
+删除按钮实现
+修改按钮实现
+添加按钮实现
+提交按钮实现
+点击某一行实现选中效果,并启用删除和修改按钮
+点击加号增加表单
+表单验证（服务端验证和本地验证）
 * */
+$(document).ready(function () {
+    /* 初始时保存一份空白的表 */
+    empty_form = $(".all_record").clone(true);
 
-    fresh_table = "                                <div class=\"all_plan\">\n" +
-        "                                    <div class=\"plan\">\n" +
-        "                                        <hr>\n" +
-        "                                        <div class=\"form-group\">\n" +
-        "                                            <label for=\"summary\">工作总结</label>\n" +
-        "                                            <input type=\"text\" class=\"summary form-control\" id=\"summary\" name=\"summary\" required>\n" +
-        "                                            <div id=\"summary-valid\" class=\"valid-feedback\">\n" +
-        "                                                OK\n" +
-        "                                            </div>\n" +
-        "                                            <div id=\"summary-invalid\" class=\"invalid-feedback\">\n" +
-        "                                                ERROR\n" +
-        "                                            </div>\n" +
-        "                                        </div>\n" +
-        "                                        <div class=\"row\">\n" +
-        "                                            <div class=\"form-group col-2\">\n" +
-        "                                                <label for=\"man_day\">人日数（天）</label>\n" +
-        "                                                <input type=\"text\" class=\"man_day form-control\" id=\"man_day\" required>\n" +
-        "                                                <div id=\"man_day-valid\" class=\"valid-feedback\">\n" +
-        "                                                    OK\n" +
-        "                                                </div>\n" +
-        "                                                <div id=\"man_day-invalid\" class=\"invalid-feedback\">\n" +
-        "                                                    ERROR\n" +
-        "                                                </div>\n" +
-        "                                            </div>\n" +
-        "                                            <div class=\"form-group col-2\">\n" +
-        "                                                <label for=\"total_man_day\">总人日数（天）</label>\n" +
-        "                                                <input type=\"text\" class=\"total_man_day form-control\" id=\"\" required>\n" +
-        "                                                <div id=\"man_day-valid\" class=\"valid-feedback\">\n" +
-        "                                                    OK\n" +
-        "                                                </div>\n" +
-        "                                                <div id=\"man_day-invalid\" class=\"invalid-feedback\">\n" +
-        "                                                    ERROR\n" +
-        "                                                </div>\n" +
-        "                                            </div>\n" +
-        "                                            <div class=\"form-group col-2\">\n" +
-        "                                                <label for=\"natural_day\">自然日（天）</label>\n" +
-        "                                                <input type=\"text\" class=\"natural_day form-control\" id=\"natural_day\" name=\"natural_day\" required>\n" +
-        "                                                <div id=\"natural_day-valid\" class=\"valid-feedback\">\n" +
-        "                                                    OK\n" +
-        "                                                </div>\n" +
-        "                                                <div id=\"natural_day-invalid\" class=\"invalid-feedback\">\n" +
-        "                                                    ERROR\n" +
-        "                                                </div>\n" +
-        "                                            </div>\n" +
-        "                                            <div class=\"form-group col-8\">\n" +
-        "                                                <label for=\"remark\">计划执行情况和工作效果说明</label>\n" +
-        "                                                <input type=\"text\" class=\"remark form-control\" id=\"remark\" name=\"remark\">\n" +
-        "                                                <div id=\"remark-valid\" class=\"valid-feedback\">\n" +
-        "                                                    OK\n" +
-        "                                                </div>\n" +
-        "                                                <div id=\"remark-invalid\" class=\"invalid-feedback\">\n" +
-        "                                                    ERROR\n" +
-        "                                                </div>\n" +
-        "                                            </div>\n" +
-        "                                        </div>\n" +
-        "                                    </div>\n" +
-        "                                </div>"
-
-    /* 禁用修改和删除按钮 */
-    $("#deleteForm").attr("disabled", true);
-    $("#modifyForm").attr("disabled", true);
+    /* 初始时禁用提交按钮 */
     $("#submitForm").attr("disabled", true);
-    /* 保存一份未经修改过的表单 */
-    var originalForm = $("form").clone(true);
+
+    /* 点击主界面左下角添加按钮 */
+    $("#add").click(function () {
+        $("#addForm").click();
+    });
+
+    /* 表格项目被右击后，记录被右击的表格id */
+    $('tr').mousedown(function (event) {
+        if (event.which == 3) {
+            active_table = this.title;
+        }
+    });
+
+    /* 右键菜单的相关实现 */
+    $.contextMenu({
+        // define which elements trigger this menu
+        selector: ".table_content",
+        // define the elements of the menu
+        items: {
+            add: {
+                name: "添加",
+                icon: "add",
+                callback: function (key, opt) {
+                    $("#addForm").click();
+                }
+            },
+            modify: {
+                name: "修改",
+                icon: "edit",
+                callback: function (key, opt) {
+                    $("#modifyForm").click();
+                }
+            },
+            separator1: "-----",
+            delete: {
+                name: "删除",
+                icon: "delete",
+                callback: function () {
+                    csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                    data = {
+                        "target_id": active_table,
+                        csrfmiddlewaretoken: csrftoken,
+                        "btn": "delete"
+                    }
+                    $.post("", data, function (response, status) {
+                        if (status == "success") {
+                            window.location.reload(true);
+                        }
+                    });
+                }
+            }
+        },
+        events: {
+            show: function () {
+                $('tr[title=' + active_table + ']').addClass("table-active");
+            },
+            hide: function () {
+                $('tr[title=' + active_table + ']').removeClass("table-active");
+            }
+        }
+    });
+    /* 右键菜单的相关实现结束 */
 
     /* 对json进行处理，分行显示本周和下周工作 */
     $("tr").each(function () {
@@ -121,10 +125,31 @@ $(document).ready(function () {
         }
     });
 
+    /* 添加按钮实现 */
+    $("#addForm").click(function () {
+        active_table = "";
+        $("#form").find("input").val("");
+        $("#average_time").val("8.0/7.0");
+        $("#average_time").addClass("is-valid");
+        /* 设置日期时间 */
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        $("#date").val(year + "-" + month + "-" + day);
+        $("#date").addClass("is-valid");
+        $("#type").addClass("is-valid");
+        $(".all_plan").replaceWith(empty_form);
+        if ($("tr").hasClass("table-active")) {
+            $("tr").removeClass("table-active");
+        }
+    });
+    /* 添加按钮实现结束 */
+
     /* 修改按钮相关实现 */
     $("#modifyForm").click(function () {
-        $(".all_plan").replaceWith(fresh_table);
-        var target_id = $("#target_id").val();
+        $(".all_plan").replaceWith(empty_form);
+        var target_id = active_table;
         var type = $("tr[title=" + target_id + "]").find("td").eq(0).text();
         var date = $("tr[title=" + target_id + "]").find("td").eq(1).text();
         var average_time = $("tr[title=" + target_id + "]").find("td").eq(2).text();
@@ -157,13 +182,15 @@ $(document).ready(function () {
             $(".natural_day").eq(i).val(natural_day_split[i]);
             $(".remark").eq(i).val(remark_split[i]);
         }
+        $("#form").find("input,select").addClass("is-valid");
     });
+    /* 修改按钮相关实现结束 */
 
-    /* 删除按钮相关功能实现 */
+    /* 删除按钮实现 */
     $("#deleteForm").click(function () {
         csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         data = {
-            "target_id": $("#target_id").val(),
+            "target_id": active_table,
             'type': "",
             'date': "",
             'average_time': "",
@@ -182,8 +209,9 @@ $(document).ready(function () {
             }
         });
     });
+    /* 删除按钮实现结束 */
 
-    /* 提交按钮相关功能实现 */
+    /* 提交按钮实现 */
     $("#submitForm").click(function () {
         /* 获取所有工作总结 */
         var summary = [];
@@ -227,7 +255,7 @@ $(document).ready(function () {
         var jsonString_remark = JSON.stringify(remark);
         csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         var data = {
-            "target_id": $("#target_id").val(),
+            "target_id": active_table,
             'type': $("#type").val(),
             'date': $("#date").val(),
             'average_time': $("#average_time").val(),
@@ -246,12 +274,10 @@ $(document).ready(function () {
             }
         });
     });
+    /* 提交按钮实现结束 */
 
     /* 点击某一行启用修改和删除按钮并增加选中效果 */
     $("tbody tr").click(function () {
-        $("#target_id").val(this.title);
-        $("#deleteForm").attr("disabled", false);
-        $("#modifyForm").attr("disabled", false);
         if ($("tr").hasClass("table-active")) {
             $("tr").removeClass("table-active");
         }
@@ -276,24 +302,6 @@ $(document).ready(function () {
         $("#all_days").val(all_days);
     });
 
-    /* 点击添加按钮 */
-    $("#addForm").click(function () {
-        $("#form").find("input").val("");
-        $("#average_time").val("8.0/7.0");
-        $("#average_time").addClass("is-valid");
-        /* 设置日期时间 */
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        $("#date").val(year + "-" + month + "-" + day);
-        $("#date").addClass("is-valid");
-        $("#type").addClass("is-valid");
-        $(".all_plan").replaceWith(fresh_table);
-        if ($("tr").hasClass("table-active")) {
-            $("tr").removeClass("table-active");
-        }
-    });
 
     /* 表单验证 */
     $(document).on('change', 'input', function () {
@@ -338,9 +346,6 @@ $(document).ready(function () {
     /* 点击空白处失去选中，并清空id记录 */
     $(document).on("click", function (e) {
         if (e.target.tagName != "TH" && e.target.tagName !== "TD") {
-            $("#target_id").val();
-            $("#deleteForm").attr("disabled", true);
-            $("#modifyForm").attr("disabled", true);
             if ($("tr").hasClass("table-active")) {
                 $("tr").removeClass("table-active");
             }

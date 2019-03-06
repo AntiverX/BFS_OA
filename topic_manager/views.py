@@ -10,7 +10,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import *
 import re
 from main_site.models import BFS_OA_Config
-import time
 
 context = {
     'menus': {
@@ -89,6 +88,12 @@ def plan(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == "POST":
+        if request.POST['target_id'] != "" and request.POST['btn'] == "delete":
+            target_id = request.POST['target_id']
+            existing_target = Plan.objects.get(id=target_id)
+            existing_target.delete()
+            return HttpResponseRedirect('/topic_manager/plan')
+
         type = request.POST['type']
         plan_name = request.POST['plan_name']
         plan_result = request.POST['plan_result']
@@ -164,6 +169,12 @@ def weekly_summary(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == 'POST':
+        if request.POST['target_id'] != "" and request.POST['btn'] == "delete":
+            target_id = request.POST['target_id']
+            existing_target = WeeklySummary.objects.get(id=target_id)
+            existing_target.delete()
+            return HttpResponseRedirect('/topic_manager/weekly_summary')
+
         average_work_hour = request.POST['average_work_hour']
         absent_hour = request.POST['absent_hour']
         this_week_task = request.POST['this_week_task']
@@ -208,27 +219,19 @@ def record(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == "POST":
-        date = request.POST['date']
-        start_time = request.POST['time']
-        cost_time = request.POST['cost_time']
-        time = request.POST['time']
-        place = request.POST['place']
-        theme = request.POST['theme']
-        theme_content = request.POST['theme_content']
-        remark = request.POST['remark']
         if request.POST['target_id'] != "":
             target_id = request.POST['target_id']
             existing_record = MeetingRecord.objects.get(id=target_id)
             if request.POST['btn'] == "delete":
                 existing_record.delete()
             else:
-                existing_record.date = date
-                existing_record.time = start_time
-                existing_record.cost_time = cost_time
-                existing_record.place = place
-                existing_record.theme = theme
-                existing_record.theme_content = theme_content
-                existing_record.remark = remark
+                existing_record.date = request.POST['date']
+                existing_record.time = request.POST['time']
+                existing_record.cost_time = request.POST['cost_time']
+                existing_record.place = request.POST['place']
+                existing_record.theme = request.POST['theme']
+                existing_record.theme_content = request.POST['theme_content']
+                existing_record.remark = request.POST['remark']
                 try:
                     existing_record.save()
                 except (ValueError, ValidationError) as err:
@@ -236,8 +239,15 @@ def record(request):
                     return render(request, 'error.html', context=context)
         else:
             new_record = MeetingRecord(
-                user=request.user, date=date, time=time, cost_time=cost_time, place=place,
-                theme=theme, theme_content=theme_content, remark=remark
+                user=request.user,
+                date=request.POST['date'],
+                time=request.POST['time'],
+                cost_time=request.POST['cost_time'],
+                place=request.POST['place'],
+                theme=request.POST['theme'],
+                theme_content=request.POST['theme_content'],
+                remark=request.POST['remark'],
+                real_name=request.user.real_name,
             )
             try:
                 new_record.save()
@@ -257,42 +267,34 @@ def work_summary(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == "POST":
-        type = request.POST['type']
-        summary = request.POST['summary']
-        total_man_day = request.POST['total_man_day']
-        average_time = request.POST['average_time']
-        man_day = request.POST['man_day']
-        natural_day = request.POST['natural_day']
-        remark = request.POST['remark']
-        date = request.POST['date']
-        all_days = request.POST['all_days']
         if request.POST['target_id'] != "":
             target_id = request.POST['target_id']
             existing_record = WorkSummary.objects.get(id=target_id)
             if request.POST['btn'] == "delete":
                 existing_record.delete()
             else:
-                existing_record.type = type
-                existing_record.summary = summary
-                existing_record.average_time = average_time
-                existing_record.man_day = man_day
-                existing_record.natural_day = natural_day
-                existing_record.remark = remark
-                existing_record.all_days = all_days
-                existing_record.total_man_day = total_man_day
+                date = request.POST['date']
+                existing_record.type = request.POST['type']
+                existing_record.summary = request.POST['summary']
+                existing_record.average_time = request.POST['average_time']
+                existing_record.man_day = request.POST['man_day']
+                existing_record.natural_day = request.POST['natural_day']
+                existing_record.remark = request.POST['remark']
+                existing_record.all_days = request.POST['all_days']
+                existing_record.total_man_day = request.POST['total_man_day']
                 existing_record.save()
         else:
             new_work_summary = WorkSummary(
                 user=request.user,
-                type=type,
-                summary=summary,
-                average_time=average_time,
-                man_day=man_day,
-                natural_day=natural_day,
-                remark=remark,
-                date=date,
-                all_days=all_days,
-                total_man_day=total_man_day,
+                type=request.POST['type'],
+                summary=request.POST['summary'],
+                average_time=request.POST['average_time'],
+                man_day=request.POST['man_day'],
+                natural_day=request.POST['natural_day'],
+                remark=request.POST['remark'],
+                date=request.POST['date'],
+                all_days=request.POST['all_days'],
+                total_man_day=request.POST['total_man_day'],
             )
             try:
                 new_work_summary.save()
@@ -311,11 +313,18 @@ def valid(request):
     if request.method == "POST":
         class_name = request.POST['class_name']
         value = request.POST['value']
+        # 验证日期
         if class_name == "date":
             if re.match(r'[0-9][0-9][0-9][0-9]-[0,1,2][0-9]-[0,1,2,3][0-9]', value) is not None:
                 return HttpResponse("OK")
             else:
                 return HttpResponse("请输入正确的日期")
+        elif class_name == "day":
+            if value.isdigit():
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("请输入正确的天数")
+        # 验证学期
         elif class_name == "semester":
             if re.match(r'[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[1,2]', value) is not None:
                 return HttpResponse("OK")
@@ -401,3 +410,9 @@ def valid(request):
                 return HttpResponse("OK")
             else:
                 return HttpResponse("请输入正确的期末总结")
+        # 计划相关的验证
+        else:
+            if len(value) > 0:
+                return HttpResponse("OK")
+            else:
+                return HttpResponse("输入内容不能为空")

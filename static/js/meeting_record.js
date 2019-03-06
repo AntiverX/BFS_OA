@@ -1,15 +1,93 @@
-$(document).ready(function () {
-    /*
-* 对json进行处理
-* 禁用按钮
+/*
+初始时保存一份空白的表
+初始时禁用提交按钮
+点击主界面左下角添加按钮
+表格项目被右击后，记录被右击的表格id
+右键菜单的相关实现
+对json进行处理，分行显示主题和主题内容说明
 * 删除按钮实现
 * 修改按钮实现
 * 添加按钮实现
 * 提交按钮实现
-* 点击某一行实现选中效果,并启用删除和修改按钮
 * 点击加号增加表单
 * 表单验证（服务端验证和本地验证）
+
 * */
+
+$(document).ready(function () {
+    /* 初始时保存一份空白的表 */
+    empty_form = $(".all_record").clone(true);
+
+    /* 初始时禁用提交按钮 */
+    $("#submitForm").attr("disabled", true);
+
+    /* 点击主界面左下角添加按钮 */
+    $("#add").click(function () {
+        $("#addForm").click();
+    });
+
+    /* 表格项目被右击后，记录被右击的表格id */
+    $('tr').mousedown(function (event) {
+        if (event.which == 3) {
+            active_table = this.title;
+        }
+    });
+
+    /* 右键菜单的相关实现 */
+    $.contextMenu({
+        // define which elements trigger this menu
+        selector: ".table_content",
+        // define the elements of the menu
+        items: {
+            add: {
+                name: "添加",
+                icon: "add",
+                callback: function (key, opt) {
+                    $("#addForm").click();
+                }
+            },
+            modify: {
+                name: "修改",
+                icon: "edit",
+                callback: function (key, opt) {
+                    $("#modifyForm").click();
+                }
+            },
+            separator1: "-----",
+            delete: {
+                name: "删除",
+                icon: "delete",
+                callback: function () {
+                    csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                    data = {
+                        "target_id": active_table,
+                        'date': "",
+                        'semester': "",
+                        "expected_result": "",
+                        "time_consumed": "",
+                        "content": "",
+                        "end_of_term_summary": "",
+                        csrfmiddlewaretoken: csrftoken,
+                        "btn": "delete"
+                    }
+                    $.post("/topic_manager/meeting_record", data, function (response, status) {
+                        if (status == "success") {
+                            window.location.reload(true);
+                        }
+                    });
+                }
+            }
+        },
+        events: {
+            show: function () {
+                $('tr[title=' + active_table + ']').addClass("table-active");
+            },
+            hide: function () {
+                $('tr[title=' + active_table + ']').removeClass("table-active");
+            }
+        }
+    });
+    /* 右键菜单的相关实现结束 */
 
     /* 对json进行处理，分行显示主题和主题内容说明 */
     $("tr").each(function () {
@@ -31,7 +109,7 @@ $(document).ready(function () {
             new_text = "";
             for (var i = 0; i < array_.length - 1; i++) {
                 new_text = new_text + array_[i].trim() + "\n\n";
-                console.log (array_[i].trim());
+                console.log(array_[i].trim());
                 theme_content_length[i] = array_[i].trim().split("\n").length;
             }
             new_text = new_text + array_[array_.length - 1].trim();
@@ -45,7 +123,7 @@ $(document).ready(function () {
             new_text = "";
             for (var i = 0; i < array_.length - 1; i++) {
                 new_text = new_text + array_[i] + "\n\n";
-                for(var j =0;j < theme_content_length[i]-1;j++){
+                for (var j = 0; j < theme_content_length[i] - 1; j++) {
                     new_text = new_text + "\n";
                 }
             }
@@ -53,25 +131,13 @@ $(document).ready(function () {
             $(this).find("td").eq(-3).text(new_text);
         }
     });
-
-    /* 禁用修改和删除按钮 */
-    $("#deleteForm").attr("disabled", true);
-    $("#modifyForm").attr("disabled", true);
-    $("#submitForm").attr("disabled", true);
+    /* 对json进行处理，分行显示主题和主题内容说明结束 */
 
     /* 删除按钮相关功能实现 */
     $("#deleteForm").click(function () {
-        csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         data = {
-            "target_id": $("#target_id").val(),
-            'date': "",
-            'time': "",
-            'cost_time': "",
-            'place': "",
-            "theme": "",
-            "theme_content": "",
-            "remark": "",
-            csrfmiddlewaretoken: csrftoken,
+            "target_id": active_table,
+            csrfmiddlewaretoken: jQuery("[name=csrfmiddlewaretoken]").val(),
             "btn": "delete"
         }
         $.post("/topic_manager/meeting_record", data, function (response, status) {
@@ -83,48 +149,12 @@ $(document).ready(function () {
 
     /* 修改按钮相关实现 */
     $("#modifyForm").click(function () {
-        $(".all_record").replaceWith("                                <div class=\"all_record\">\n" +
-            "                                    <div class=\"record\">\n" +
-            "                                        <hr>\n" +
-            "                                        <div class=\"row\">\n" +
-            "                                            <div class=\"col-6\">\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"theme\">主题</label>\n" +
-            "                                                    <input class=\"theme input form-control\" required>\n" +
-            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"remark\">备注</label>\n" +
-            "                                                    <input class=\"remark input form-control\" rows=\"1\"></input>\n" +
-            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                            <div class=\" col-6\">\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"theme_content\">主题内容说明</label>\n" +
-            "                                                    <textarea class=\"theme_content input form-control\" rows=\"5\" required></textarea>\n" +
-            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                </div>");
-        var target_id = $("#target_id").val();
+        console.log("修改按钮触发");
+        /*清空原有记录*/
+        $(".all_record").replaceWith(empty_form);
+
+        /* 获得要修改记录的值 */
+        var target_id = active_table;
         var date = $("tr[title=" + target_id + "]").find("td").eq(0).text();
         var time = $("tr[title=" + target_id + "]").find("td").eq(1).text();
         var cost_time = $("tr[title=" + target_id + "]").find("td").eq(2).text();
@@ -140,6 +170,7 @@ $(document).ready(function () {
             $(element_).find("input").val("");
             element_.appendTo(".all_record");
         }
+
         /* 赋值 */
         $("#date").val(date);
         $("#time").val(time);
@@ -150,11 +181,15 @@ $(document).ready(function () {
             $(".theme_content").eq(i).val(theme_content_split[i]);
             $(".remark").eq(i).val(remark_split[i]);
         }
+
+        /* 所有的内容都是OK的 */
+        $(".form").find("input").addClass("is-valid");
+        $(".form").find("textarea").addClass("is-valid");
     });
 
     /* 点击添加按钮 */
     $("#addForm").click(function () {
-        $("#target_id").val("");
+        active_table = "";
         $("#form").find("input").val("");
         /* 设置日期时间 */
         var date = new Date();
@@ -170,47 +205,8 @@ $(document).ready(function () {
         $("#date").addClass("is-valid");
         $("#time").addClass("is-valid");
         $("#place").addClass("is-valid");
-        $(".all_record").replaceWith("                                <div class=\"all_record\">\n" +
-            "                                    <div class=\"record\">\n" +
-            "                                        <hr>\n" +
-            "                                        <div class=\"row\">\n" +
-            "                                            <div class=\"col-6\">\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"theme\">主题</label>\n" +
-            "                                                    <input class=\"theme input form-control\" required>\n" +
-            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"remark\">备注</label>\n" +
-            "                                                    <input class=\"remark input form-control\" rows=\"1\"></input>\n" +
-            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                            <div class=\" col-6\">\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"theme_content\">主题内容说明</label>\n" +
-            "                                                    <textarea class=\"theme_content input form-control\" rows=\"5\" required></textarea>\n" +
-            "                                                    <div id=\"content-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"content-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                </div>");
+        /* 除表头外，其他内容清空 */
+        $(".all_record").replaceWith(empty_form);
         if ($("tr").hasClass("table-active")) {
             $("tr").removeClass("table-active");
         }
@@ -244,7 +240,7 @@ $(document).ready(function () {
         var jsonString_remark = JSON.stringify(remark);
         csrftoken = $("[name=csrfmiddlewaretoken]").val();
         var data = {
-            "target_id": $("#target_id").val(),
+            "target_id": active_table,
             'date': $("#date").val(),
             'time': $("#time").val(),
             'cost_time': $("#cost_time").val(),
@@ -261,17 +257,6 @@ $(document).ready(function () {
             }
         });
 
-    });
-
-    /* 点击某一行启用修改和删除按钮并增加选中效果 */
-    $("tbody tr").click(function () {
-        $("#target_id").val(this.title);
-        $("#deleteForm").attr("disabled", false);
-        $("#modifyForm").attr("disabled", false);
-        if ($("tr").hasClass("table-active")) {
-            $("tr").removeClass("table-active");
-        }
-        $(this).addClass("table-active");
     });
 
     /* 点击加号按钮，会自动增加 */
@@ -323,17 +308,6 @@ $(document).ready(function () {
             $("#submitForm").attr("disabled", false);
         } else {
             $("#submitForm").attr("disabled", true);
-        }
-    });
-    /* 点击空白处失去选中，并清空id记录 */
-    $(document).on("click", function (e) {
-        if (e.target.tagName != "TH" && e.target.tagName !== "TD") {
-            $("#target_id").val();
-            $("#deleteForm").attr("disabled", true);
-            $("#modifyForm").attr("disabled", true);
-            if ($("tr").hasClass("table-active")) {
-                $("tr").removeClass("table-active");
-            }
         }
     });
 });

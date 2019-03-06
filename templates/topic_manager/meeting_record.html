@@ -14,13 +14,9 @@
     <div class="container-fluid mt-3">
         <!-- Button trigger modal -->
         <div class="mt-3">
-            <button type="button" class="btn btn-primary" data-toggle="modal" id="addForm" data-target="#exampleModalCenter">
-                添加
-            </button>
-            <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm">
-                修改
-            </button>
-            <button type="button" class="btn btn-primary ml-4" id="deleteForm">删除</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" id="addForm" data-target="#exampleModalCenter" hidden>添加</button>
+            <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm" hidden>修改</button>
+            <button type="button" class="btn btn-primary ml-4" id="deleteForm" hidden>删除</button>
         </div>
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -34,49 +30,32 @@
                     </div>
                     <div class="modal-body">
                         <div id="metting_record_Form">
-                            <input type="hidden" id="target_id" name="target_id" value="">
                             {% csrf_token %}
                             <div class="form">
                                 <div class="row">
                                     <div class="form-group col-3">
                                         <label for="time">日期</label>
                                         <input type="text" class="date input form-control" placeholder="" id="date" required>
-                                        <div id="content-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="content-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
+                                        <div id="content-valid" class="valid-feedback">OK</div>
+                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                     </div>
                                     <div class="form-group col-3">
                                         <label for="time">时间</label>
                                         <input type="text" class="time input form-control" placeholder="" id="time" required>
-                                        <div id="content-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="content-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
+                                        <div id="content-valid" class="valid-feedback">OK</div>
+                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                     </div>
                                     <div class="form-group col-3">
                                         <label for="cost_time">用时(分)</label>
                                         <input type="text" class="cost_time input form-control" placeholder="" id="cost_time" required>
-                                        <div id="content-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="content-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
+                                        <div id="content-valid" class="valid-feedback">OK</div>
+                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                     </div>
                                     <div class="form-group col-3">
                                         <label for="place">地点</label>
                                         <input type="text" class="place input form-control" placeholder="" id="place" value="10#420" required>
-                                        <div id="content-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="content-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
+                                        <div id="content-valid" class="valid-feedback">OK</div>
+                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                     </div>
                                 </div>
                                 <div class="all_record">
@@ -87,34 +66,22 @@
                                                 <div class="form-group">
                                                     <label for="theme">主题</label>
                                                     <input class="theme input form-control" required>
-                                                    <div id="content-valid" class="valid-feedback">
-                                                        OK
-                                                    </div>
-                                                    <div id="content-invalid" class="invalid-feedback">
-                                                        ERROR
-                                                    </div>
+                                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="remark">备注</label>
                                                     <input class="remark input form-control" rows="1"></input>
-                                                    <div id="content-valid" class="valid-feedback">
-                                                        OK
-                                                    </div>
-                                                    <div id="content-invalid" class="invalid-feedback">
-                                                        ERROR
-                                                    </div>
+                                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                                 </div>
                                             </div>
                                             <div class=" col-6">
                                                 <div class="form-group">
                                                     <label for="theme_content">主题内容说明</label>
                                                     <textarea class="theme_content input form-control" rows="5" required></textarea>
-                                                    <div id="content-valid" class="valid-feedback">
-                                                        OK
-                                                    </div>
-                                                    <div id="content-invalid" class="invalid-feedback">
-                                                        ERROR
-                                                    </div>
+                                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -135,8 +102,9 @@
                 </div>
             </div>
         </div>
-        <div class="mt-3">
-            <table class="table table-hover">
+        <!--内容展示表格-->
+        <div class="table-responsive">
+            <table class="mt-1 table table-hover">
                 <thead>
                 <tr>
                     <th nowrap>日期</th>
@@ -150,18 +118,33 @@
                 </thead>
                 <tbody>
                 {% for result in results %}
-                    <tr title="{{ result.id }}">
-                        <td style="white-space: pre">{{ result.date|date:"Y-m-d" }}</td>
-                        <td style="white-space: pre">{{ result.time|time:"G:i" }}</td>
-                        <td style="white-space: pre">{{ result.cost_time }}</td>
-                        <td style="white-space: pre">{{ result.place }}</td>
+                    <tr class="table_content" title="{{ result.id }}">
+                        <td style="white-space: pre;width:5vw">{{ result.date|date:"Y-m-d" }}</td>
+                        <td style="white-space: pre;width:5vw">{{ result.time|time:"G:i" }}</td>
+                        <td style="white-space: pre;width:5vw">{{ result.cost_time }}</td>
+                        <td style="white-space: pre;width:5vw">{{ result.place }}</td>
                         <td style="white-space: pre">{{ result.theme }}</td>
-                        <td style="white-space: pre-wrap;width: 80vw">{{ result.theme_content }}</td>
-                        <td style="white-space: pre">{{ result.remark }}</td>
+                        <td style="white-space: pre-wrap">{{ result.theme_content }}</td>
+                        <td style="white-space: pre;width:10vw">{{ result.remark }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
+        <!--内容展示表格结束-->
+
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+    </div>
+    <!-- 右下角添加按钮结束 -->
     </div>
 {% endblock %}

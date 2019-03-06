@@ -105,13 +105,40 @@ def settings(request):
         }
         return render(request, "index/settings.html", context=context)
 
+# 设置学期相关的内容
 @login_required
 def semester(request):
     if request.user.id == 1 or request.user.is_admin:
-        context = {
-            "semesters" : Semester.objects.all(),
-        }
-        return render(request,"index/semester_settings.html",context=context)
+        if request.method == "POST":
+            if request.POST['target_id'] != "":
+                target_id = request.POST['target_id']
+                existing_record = Semester.objects.get(id=target_id)
+                if request.POST['btn'] == "delete":
+                    existing_record.delete()
+                else:
+                    existing_record.semester_name = request.POST['semester_name']
+                    existing_record.start_date = request.POST['start_date']
+                    existing_record.end_date = request.POST['end_date']
+            else:
+                new_record = Semester(
+                    semester_name=request.POST['semester_name'],
+                    start_date=request.POST['start_date'],
+                    end_date=request.POST['end_date'],
+                )
+                try:
+                    new_record.save()
+                except (ValueError, ValidationError) as err:
+                    context = {
+                        'error': err,
+                    }
+                    return render(request, 'error.html', context=context)
+            return HttpResponse("success")
+        else:
+            context = {
+                "results": Semester.objects.all(),
+            }
+            return render(request, "index/semester_settings.html", context=context)
+
 
 def user_settings(request):
     return HttpResponse("/")

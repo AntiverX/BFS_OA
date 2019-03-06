@@ -17,6 +17,7 @@
     <script src="{% static "js/jquery-1.10.2.js" %}"></script>
     <script src="{% static "js/contextMenu/jquery.contextMenu.js" %}"></script>
     <script src="{% static "js/contextMenu/jquery.ui.position.min.js" %}"></script>
+    <script src="{% static "js/base.js" %}"></script>
     <style>
         .navbar-dark .navbar-nav .nav-link {
             color: rgba(255, 255, 255, 1);
@@ -74,11 +75,11 @@
         <div class="navbar-right">
             <ul class="navbar-nav mr-auto">
                 {% if user.is_admin or user.id == 1 %}
-                    <form class="form-inline my-2 my-lg-0" method="POST" target="/">
+                    <div class="form-inline my-2 my-lg-0">
                         {% csrf_token %}
                         <input class="form-control mr-sm-2" name="current_user" value="{{ user.current_user }}">
-                        <button class="btn my-2 my-sm-0" type="submit">选择</button>
-                    </form>
+                        <button class="btn my-2 my-sm-0" id="change_current_user">选择</button>
+                    </div>
                 {% endif %}
                 {% if user.is_authenticated %}
                     <li class="nav-item">

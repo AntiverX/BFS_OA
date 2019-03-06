@@ -10,3 +10,4 @@
 # TODO 逐步添加课题管理表其他内容
 # TODO 各个表格的td style修改成和meeting_record一样
 # TODO table不要用title了，太难看
+# TODO 把其他表格的user改成current_user

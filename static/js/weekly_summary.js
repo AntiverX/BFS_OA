@@ -1,20 +1,82 @@
+/*
+初始时保存一份空白的表
+初始时禁用提交按钮
+点击主界面左下角添加按钮
+对json进行处理
+添加按钮实现
+修改按钮实现
+提交按钮实现
+点击加号增加表单
+表单验证（服务端验证和本地验证）
+*/
 $(document).ready(function () {
-    /*
-* 对json进行处理
-* 禁用按钮
-* 删除按钮实现
-* 修改按钮实现
-* 添加按钮实现
-* 提交按钮实现
-* 点击某一行实现选中效果,并启用删除和修改按钮
-* 点击加号增加表单
-* 表单验证（服务端验证和本地验证）
-* */
+    /* 初始时保存一份空白的表 */
+    empty_form = $(".all_record").clone(true);
 
-    /* 禁用修改和删除按钮 */
-    $("#deleteForm").attr("disabled", true);
-    $("#modifyForm").attr("disabled", true);
+    /* 初始时禁用提交按钮 */
     $("#submitForm").attr("disabled", true);
+
+    /* 点击主界面左下角添加按钮 */
+    $("#add").click(function () {
+        $("#addForm").click();
+    });
+
+    /* 表格项目被右击后，记录被右击的表格id */
+    $('tr').mousedown(function (event) {
+        if (event.which == 3) {
+            active_table = this.title;
+        }
+    });
+
+    /* 右键菜单的相关实现 */
+    $.contextMenu({
+        // define which elements trigger this menu
+        selector: ".table_content",
+        // define the elements of the menu
+        items: {
+            add: {
+                name: "添加",
+                icon: "add",
+                callback: function (key, opt) {
+                    $("#addForm").click();
+                }
+            },
+            modify: {
+                name: "修改",
+                icon: "edit",
+                callback: function (key, opt) {
+                    $("#modifyForm").click();
+                }
+            },
+            separator1: "-----",
+            delete: {
+                name: "删除",
+                icon: "delete",
+                callback: function () {
+                    csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                    data = {
+                        "target_id": active_table,
+                        csrfmiddlewaretoken: csrftoken,
+                        "btn": "delete"
+                    }
+                    $.post("/topic_manager/weekly_summary", data, function (response, status) {
+                        if (status == "success") {
+                            window.location.reload(true);
+                        }
+                    });
+                }
+            }
+        },
+        events: {
+            show: function () {
+                $('tr[title=' + active_table + ']').addClass("table-active");
+            },
+            hide: function () {
+                $('tr[title=' + active_table + ']').removeClass("table-active");
+            }
+        }
+    });
+    /* 右键菜单的相关实现结束 */
 
     /* 对json进行处理，分行显示本周和下周工作 */
     $("tr").each(function () {
@@ -39,64 +101,27 @@ $(document).ready(function () {
             $(this).find("td").eq(-2).text(new_text);
         }
     });
-    /* 删除按钮相关功能实现 */
-    $("#deleteForm").click(function () {
-        csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-        data = {
-            "target_id": $("#target_id").val(),
-            "btn": "delete",
-            "average_work_hour": "",
-            "absent_hour": "",
-            "this_week_task": "",
-            "next_week_task": "",
-            "week": "",
-            csrfmiddlewaretoken: csrftoken
-        }
-        $.post("/topic_manager/weekly_summary", data, function (response, status) {
-            if (status == "success") {
-                window.location.reload(true);
-            }
+
+
+    /* 点击添加按钮 */
+    $("#addForm").click(function () {
+        $.get("/get_current_week", function (data) {
+            $("#week").val(data);
         });
+        $("#week").addClass("is-valid");
+        $("#absent_hour").addClass("is-valid");
+        $("#form").replaceWith(empty_form);
+        if ($("tr").hasClass("table-active")) {
+            $("tr").removeClass("table-active");
+        }
+        active_table = "";
     });
+
     /* 修改按钮相关实现 */
     $("#modifyForm").click(function () {
-        $("#form").replaceWith("                            <div id=\"form\">\n" +
-            "                                <div class=\"row\" id=\"replace_form\">\n" +
-            "                                    <div class=\"col-6\">\n" +
-            "                                        <div class=\"all_this_week_work\">\n" +
-            "                                            <div class=\"this_week_work\">\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"this_week_task\">本周工作</label>\n" +
-            "                                                    <input class=\"this_week_task form-control\" value=\"无\" required></input>\n" +
-            "                                                    <div id=\"this_week_task-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"this_week_task-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                    <div class=\"col-6\">\n" +
-            "                                        <div class=\"all_next_week_work\">\n" +
-            "                                            <div class=\"next_week_work\">\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"next_week_task\">下周工作</label>\n" +
-            "                                                    <input class=\"next_week_task form-control\" value=\"无\" required></input>\n" +
-            "                                                    <div id=\"next_week_task-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"next_week_task-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                </div>\n" +
-            "                            </div>");
-        var target_id = $("#target_id").val();
+        console.log("修改按钮触发");
+        $("#form").replaceWith(empty_form);
+        var target_id = active_table;
         var week = $("tr[title=" + target_id + "]").find("td").eq(0).text();
         var average_work_hour = $("tr[title=" + target_id + "]").find("td").eq(2).text();
         var absent_hour = $("tr[title=" + target_id + "]").find("td").eq(3).text();
@@ -124,58 +149,11 @@ $(document).ready(function () {
         for (var i = 0; i < next_week_task_split.length; i++) {
             $(".next_week_task").eq(i).val(next_week_task_split[i]);
         }
-
         /* 点击修改按钮后使得所有的内容都is-valid */
         $("input").each(function () {
             $(this).addClass("is-valid");
         });
-        $("#submitForm").attr("disabled", false);
 
-    });
-
-    /* 点击添加按钮 */
-    $("#addForm").click(function () {
-        $("#week").addClass("is-valid");
-        $("#absent_hour").addClass("is-valid");
-        $("#form").replaceWith("                            <div id=\"form\">\n" +
-            "                                <div class=\"row\" id=\"replace_form\">\n" +
-            "                                    <div class=\"col-6\">\n" +
-            "                                        <div class=\"all_this_week_work\">\n" +
-            "                                            <div class=\"this_week_work\">\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"this_week_task\">本周工作</label>\n" +
-            "                                                    <input class=\"this_week_task form-control\" value=\"无\" required></input>\n" +
-            "                                                    <div id=\"this_week_task-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"this_week_task-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                    <div class=\"col-6\">\n" +
-            "                                        <div class=\"all_next_week_work\">\n" +
-            "                                            <div class=\"next_week_work\">\n" +
-            "                                                <div class=\"form-group\">\n" +
-            "                                                    <label for=\"next_week_task\">下周工作</label>\n" +
-            "                                                    <input class=\"next_week_task form-control\" value=\"无\" required></input>\n" +
-            "                                                    <div id=\"next_week_task-valid\" class=\"valid-feedback\">\n" +
-            "                                                        OK\n" +
-            "                                                    </div>\n" +
-            "                                                    <div id=\"next_week_task-invalid\" class=\"invalid-feedback\">\n" +
-            "                                                        ERROR\n" +
-            "                                                    </div>\n" +
-            "                                                </div>\n" +
-            "                                            </div>\n" +
-            "                                        </div>\n" +
-            "                                    </div>\n" +
-            "                                </div>\n" +
-            "                            </div>");
-        if ($("tr").hasClass("table-active")) {
-            $("tr").removeClass("table-active");
-        }
     });
 
     /* 提交按钮相关功能实现 */
@@ -198,7 +176,7 @@ $(document).ready(function () {
         var jsonString_next_week_task = JSON.stringify(next_week_task);
         csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         var data = {
-            "target_id": $("#target_id").val(),
+            "target_id": active_table,
             "this_week_task": jsonString_this_week_task,
             "next_week_task": jsonString_next_week_task,
             'week': $("#week").val(),
@@ -213,18 +191,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    /* 点击某一行启用修改和删除按钮并增加选中效果 */
-    $("tbody tr").click(function () {
-        $("#target_id").val(this.title);
-        $("#deleteForm").attr("disabled", false);
-        $("#modifyForm").attr("disabled", false);
-        if ($("tr").hasClass("table-active")) {
-            $("tr").removeClass("table-active");
-        }
-        $(this).addClass("table-active");
-    });
-
 
     /* 点击加号按钮，会自动增加 */
     $("#add_this_week_work").click(function () {
@@ -261,8 +227,7 @@ $(document).ready(function () {
             if (result == "OK") {
                 parent.removeClass("is-invalid");
                 parent.addClass("is-valid");
-            }
-            else {
+            } else {
                 $("#" + class_name + "-invalid").text(result);
                 parent.removeClass("is-valid");
                 parent.addClass("is-invalid");
@@ -282,21 +247,8 @@ $(document).ready(function () {
         });
         if (form_complete) {
             $("#submitForm").attr("disabled", false);
-        }
-        else {
+        } else {
             $("#submitForm").attr("disabled", true);
         }
     });
-    /* 点击空白处失去选中，并清空id记录 */
-    $(document).on("click", function (e) {
-        if (e.target.tagName != "TH" && e.target.tagName !== "TD") {
-            $("#target_id").val();
-            $("#deleteForm").attr("disabled", true);
-            $("#modifyForm").attr("disabled", true);
-            if ($("tr").hasClass("table-active")) {
-                $("tr").removeClass("table-active");
-            }
-        }
-    });
-
 });
