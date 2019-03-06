@@ -7,22 +7,10 @@ import time
 from django.core.exceptions import *
 from main_site.models import BFS_OA_Config
 
-context = {
-    'menus': {
-        'my_info': "我的信息",
-        'time_table': "课程表",
-        'attendance': "考勤",
-        'attendance': "新生培训",
-        'asset': "资产"
-    },
-}
-
 
 @login_required
 def info(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    return render(request, 'index/index.html', context=context)
+    return render(request, 'info/index.html')
 
 
 def auth(request):
@@ -57,7 +45,7 @@ def register(request):
         real_name = request.POST['real_name']
         student_id = request.POST['student_id']
         user = User.objects.create_user(username=username, password=password, real_name=real_name, current_user=current_user,
-                                        student_id=student_id,is_display_all=False)
+                                        student_id=student_id, is_display_all=False)
         user.save()
         context['success'] = "注册成功！"
         context['return_link'] = "/"
@@ -66,25 +54,18 @@ def register(request):
         return render(request, 'auth/register.html')
 
 
-# 签到
+# 新生培训
 @login_required
-def attendance(request):
+def train(request):
     # TODO template及逻辑
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    return render(request, "under_construction.html", context=context)
+
+    return render(request, "info/train.html")
 
 
+# 课程表
 @login_required
 def time_table(request):
     context = {
-        'menus': {
-            'my_info': "我的信息",
-            'time_table': "课程表",
-            'attendance': "考勤",
-            'attendance': "新生培训",
-            'asset': "资产"
-        },
         'config': BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None,
         'current_semester_week': int(time.strftime("%W")) - int(
             BFS_OA_Config.objects.filter()[0].semester_start_time.isocalendar()[1]),
@@ -113,8 +94,6 @@ def time_table(request):
 # 课程列表
 @login_required
 def time_table_list(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == 'POST':
         class_name = request.POST['class_name']
         teacher_name = request.POST['teacher_name']
@@ -139,7 +118,9 @@ def time_table_list(request):
                 try:
                     existing_class.save()
                 except (ValueError, ValidationError) as err:
-                    context['error'] = err
+                    context = {
+                        'error': err,
+                    }
                     return render(request, 'error.html', context=context)
         else:
             new_class = TimeTable.objects.create(
@@ -155,19 +136,22 @@ def time_table_list(request):
             try:
                 new_class.save()
             except (ValueError, ValidationError) as err:
-                context['error'] = err
+                context = {
+                    'error': err,
+                }
                 return render(request, 'error.html', context=context)
         return HttpResponseRedirect('time_table_list')
     else:
+        context = {
+
+        }
         context['username'] = request.user.username
         context['results'] = TimeTable.objects.filter(user=request.user)
         return render(request, "info/time_table_list.html", context=context)
 
-
+# 个人信息
 @login_required
 def my_info(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == "POST":
         info = User.objects.get(id=request.user.id)
         info.gender = request.POST['gender']
@@ -191,20 +175,23 @@ def my_info(request):
         try:
             info.save()
         except (ValueError, ValidationError) as err:
-            context['error'] = err
+            context = {
+                'error': err,
+            }
             return render(request, 'error.html', context=context)
 
         return HttpResponseRedirect('/info/my_info')
     else:
         info = User.objects.get(id=request.user.id)
-        context['info'] = info
+        context = {
+            'info': info,
+        }
         return render(request, "info/my_info.html", context=context)
 
 
+# 资产管理
 @login_required
 def asset(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == "POST":
         if request.POST['target_to_delete'] != "":
             target_to_delete = request.POST['target_to_delete']
@@ -233,7 +220,9 @@ def asset(request):
             try:
                 existing_asset.save()
             except (ValueError, ValidationError) as err:
-                context['error'] = err
+                context = {
+                    'error': err,
+                }
                 return render(request, 'error.html', context=context)
         else:
             type = request.POST['type']
@@ -251,15 +240,19 @@ def asset(request):
             try:
                 new_asset.save()
             except (ValueError, ValidationError) as err:
-                context['error'] = err
+                context = {
+                    'error': err,
+                }
                 return render(request, 'error.html', context=context)
         return HttpResponseRedirect('/info/asset')
     else:
         results = Asset.objects.all()
+        context = {
+        }
         context['assets'] = results
         return render(request, "info/asset.html", context=context)
 
-
+# 表单验证
 def valid(request):
     if request.method == "POST":
         if request.POST['class_name'] == "username":

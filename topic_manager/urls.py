@@ -9,5 +9,5 @@ urlpatterns = [
     path('plan', views.plan),
     path('work_summary', views.work_summary),
     path('weekly_summary', views.weekly_summary),
-path('valid', views.valid),
+    path('valid', views.valid),
 ]

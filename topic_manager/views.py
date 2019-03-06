@@ -26,7 +26,7 @@ context = {
 def topic_manager(request):
     context['user'] = request.user
     context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    return render(request, 'index/index.html', context=context)
+    return render(request, 'topic_manager/index.html', context=context)
 
 
 # 目标

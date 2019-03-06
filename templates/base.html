@@ -101,14 +101,10 @@
         </div>
     </div>
 </nav>
-<div class="nav-scroller bg-white shadow-sm">
-    <nav class="nav nav-underline">
-        {% for link,value in menus.items %}
-            <a class="nav-link" href="{{ link }}">{{ value }}</a>
-        {% endfor %}
-    </nav>
-</div>
+
+{% block menu %}
+{% endblock menu %}
 {% block content %}
-{% endblock %}
+{% endblock content %}
 </body>
 </html>
