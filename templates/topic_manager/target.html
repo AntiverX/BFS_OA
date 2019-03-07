@@ -108,10 +108,10 @@
                         <th scope="row" nowrap>{{ forloop.counter }}</th>
                         <td class="semester" style="white-space: pre-wrap">{{ result.semester }}</td>
                         <td class="date" style="white-space: pre-wrap">{{ result.time|date:"Y-m-d" }}</td>
-                        <td class="json expected_result" style="white-space: pre-wrap">{{ result.expected_result }}</td>
-                        <td class="json time_consumed" style="white-space: pre-wrap">{{ result.time_consumed }}</td>
-                        <td class="json content" style="white-space: pre-wrap">{{ result.content }}</td>
-                        <td class="json end_of_term_summary" style="white-space: pre-wrap">{{ result.end_of_term_summary }}</td>
+                        <td type="json" class="expected_result" style="white-space: pre-wrap">{{ result.expected_result }}</td>
+                        <td type="json" class="time_consumed" style="white-space: pre-wrap">{{ result.time_consumed }}</td>
+                        <td type="json" class="content" style="white-space: pre-wrap">{{ result.content }}</td>
+                        <td type="json" class="end_of_term_summary" style="white-space: pre-wrap">{{ result.end_of_term_summary }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

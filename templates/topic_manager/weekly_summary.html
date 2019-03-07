@@ -1,7 +1,5 @@
 {% extends "topic_manager/base.html" %}
 {% block content %}
-    {% load static %}
-    <script src="{% static "js/weekly_summary.js" %}"></script>
     <style>
         .modal-dialog.modal-800 {
             width: 1000px;
@@ -9,13 +7,8 @@
         }
     </style>
     <div class="container-fluid mt-3">
-
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="addForm" hidden>添加</button>
-        <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm" hidden>修改</button>
-        <button type="button" class="btn btn-primary ml-4" id="deleteForm" hidden>删除</button>
-
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -26,10 +19,9 @@
                     </div>
                     <div class="modal-body">
 
-                        <form class="mt-1" method="post" id="weekly_summary_form">
-                            <input type="hidden" id="target_id" name="target_id" value="">
-                            {% csrf_token %}
+                        <div id="form">
                             <div class="row">
+                                {% csrf_token %}
                                 <div class="form-group col-4">
                                     <label for="this_week_task">工作周</label>
                                     <input class="week form-control" id="week" value="" required>
@@ -50,35 +42,37 @@
                                 </div>
                             </div>
                             <hr>
-                            <div id="form" class="all_record">
-                                <div class="row" id="replace_form">
-                                    <div class="col-6">
-                                        <div class="all_this_week_work">
-                                            <div class="this_week_work">
-                                                <div class="form-group">
-                                                    <label for="this_week_task">本周工作</label>
-                                                    <input class="this_week_task form-control" value="" required></input>
-                                                    <div id="content-valid" class="valid-feedback">OK</div>
-                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                            <div id="all_record">
+                                <div id="record">
+                                    <div class="row" id="replace_form">
+                                        <div class="col-6">
+                                            <div class="all_this_week_work">
+                                                <div class="this_week_work">
+                                                    <div class="form-group">
+                                                        <label for="this_week_task">本周工作</label>
+                                                        <input class="this_week_task form-control" value="" required></input>
+                                                        <div id="content-valid" class="valid-feedback">OK</div>
+                                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="all_next_week_work">
-                                            <div class="next_week_work">
-                                                <div class="form-group">
-                                                    <label for="next_week_task">下周工作</label>
-                                                    <input class="next_week_task form-control" value="" required></input>
-                                                    <div id="content-valid" class="valid-feedback">OK</div>
-                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        <div class="col-6">
+                                            <div class="all_next_week_work">
+                                                <div class="next_week_work">
+                                                    <div class="form-group">
+                                                        <label for="next_week_task">下周工作</label>
+                                                        <input class="next_week_task form-control" value="" required></input>
+                                                        <div id="content-valid" class="valid-feedback">OK</div>
+                                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                         <a class="deploy_floating" id="add_this_week_work" style="margin-left: 20%">
                             <span class="fonticon_plus"></span>
                         </a>
@@ -88,7 +82,7 @@
                         <hr style="margin-top: 26px">
                         <div class="row">
                             <div class="col-1">
-                                <button class="btn btn-primary" id="submitForm" name="btn" value="submit">提交</button>
+                                <button class="btn btn-primary" id="submit_form" name="btn" value="submit">提交</button>
                             </div>
                         </div>
                     </div>
@@ -101,25 +95,24 @@
                 <thead>
                 <tr>
                     <th scope="col" nowrap>序号</th>
-                    <th scope="col" nowrap>工作周</th>
-                    <th scope="col" nowrap>提交日期</th>
-                    <th scope="col" nowrap>周平均日工作时间</th>
-                    <th scope="col" nowrap>周请假（X0.5天）</th>
-                    {#                    <th scope="col" nowrap>学术报告问题数</th>#}
-                    <th scope="col" nowrap>本周主要工作成果</th>
-                    <th scope="col" nowrap>下周的工作计划</th>
+                    <th type="normal" class="week" scope="col" nowrap>工作周</th>
+                    <th type="normal" class="submit_time" scope="col" nowrap>提交日期</th>
+                    <th type="normal" class="average_work_hour" scope="col" nowrap>周平均日工作时间</th>
+                    <th type="normal" class="absent_hour" scope="col" nowrap>周请假（X0.5天）</th>
+                    <th type="json" class="this_week_task" scope="col" nowrap>本周主要工作成果</th>
+                    <th type="json" class="next_week_task" scope="col" nowrap>下周的工作计划</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for weekly_summary in weekly_summarys %}
                     <tr class="table_content" title="{{ weekly_summary.id }}">
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td nowrap>{{ weekly_summary.week }}</td>
-                        <td nowrap>{{ weekly_summary.submit_time|date:"Y-m-d" }}</td>
-                        <td nowrap>{{ weekly_summary.average_work_hour }}</td>
-                        <td nowrap>{{ weekly_summary.absent_hour }}</td>
-                        <td style="white-space: pre-wrap">{{ weekly_summary.this_week_task }}</td>
-                        <td style="white-space: pre-wrap">{{ weekly_summary.next_week_task }}</td>
+                        <td type="normal" class="week" nowrap>{{ weekly_summary.week }}</td>
+                        <td type="normal" class="submit_time" nowrap>{{ weekly_summary.submit_time|date:"Y-m-d" }}</td>
+                        <td type="normal" class="average_work_hour" nowrap>{{ weekly_summary.average_work_hour }}</td>
+                        <td type="normal" class="absent_hour" nowrap>{{ weekly_summary.absent_hour }}</td>
+                        <td type="json" class="this_week_task" style="white-space: pre-wrap">{{ weekly_summary.this_week_task }}</td>
+                        <td type="json" class="next_week_task" style="white-space: pre-wrap">{{ weekly_summary.next_week_task }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

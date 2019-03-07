@@ -1,16 +1,8 @@
 {% extends "topic_manager/base.html" %}
 {% block content %}
-    {% load static %}
-    <script src="{% static "js/work_summary.js" %}"></script>
     <div class="container-fluid ">
-        <!-- Button trigger modal -->
-        <div class="mt-3">
-            <button type="button" class="btn btn-primary" data-toggle="modal" id="addForm" data-target="#exampleModalCenter" hidden>添加</button>
-            <button type="button" class="btn btn-primary ml-4" id="modifyForm" data-toggle="modal" data-target="#exampleModalCenter" hidden>修改</button>
-            <button type="button" class="btn btn-primary ml-4" id="deleteForm" hidden>删除</button>
-        </div>
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -20,124 +12,80 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div>
+                        <div id="form">
                             {% csrf_token %}
-                            <div id="form">
-                                <div class="row">
-                                    <div class="form-group col-2">
-                                        <label for="type">类型（月/学期）</label>
-                                        <select class="type form-control" id="type" name="type" required>
-                                            <option value="月总结">月总结</option>
-                                            <option value="学期总结">学期总结</option>
-                                            <div id="content-valid" class="valid-feedback">
-                                                OK
-                                            </div>
-                                            <div id="content-invalid" class="invalid-feedback">
-                                                ERROR
-                                            </div>
-                                        </select>
-                                        <div id="type-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="type-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-2">
-                                        <label for="average_time">填表日期</label>
-                                        <input type="text" class="date form-control" id="date" name="date" required>
-                                        <div id="date-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="date-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-3">
-                                        <label for="average_time">平均工作小时（实际/有效）</label>
-                                        <input type="text" class="average_time form-control" id="average_time" name="average_time" value="8.0/7.0" required>
-                                        <div id="average_time-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="average_time-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-3" hidden="true">
-                                        <label for="all_days">总人日数（日）</label>
-                                        <input type="text" class="all_days form-control" id="all_days" name="all_days" required>
-                                        <div id="all_days-valid" class="valid-feedback">
-                                            OK
-                                        </div>
-                                        <div id="all_days-invalid" class="invalid-feedback">
-                                            ERROR
-                                        </div>
-                                    </div>
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label for="type">类型（月/学期）</label>
+                                    <select class="type form-control" id="type" name="type" required>
+                                        <option value="月总结">月总结</option>
+                                        <option value="学期总结">学期总结</option>
+                                        <div id="content-valid" class="valid-feedback">OK</div>
+                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
-                                <div class="all_plan all_record">
-                                    <div class="plan">
-                                        <hr>
-                                        <div class="form-group">
-                                            <label for="summary">工作总结</label>
-                                            <input type="text" class="summary form-control" id="summary" name="summary" required>
-                                            <div id="summary-valid" class="valid-feedback">
-                                                OK
-                                            </div>
-                                            <div id="summary-invalid" class="invalid-feedback">
-                                                ERROR
-                                            </div>
+                                <div class="form-group col-2">
+                                    <label for="average_time">填表日期</label>
+                                    <input type="text" class="date form-control" id="date" name="date" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label for="average_time">平均工作小时（实际/有效）</label>
+                                    <input type="text" class="average_time form-control" id="average_time" name="average_time" placeholder="例：8.0/7.0" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                            </div>
+                            <div class="all_record">
+                                <div class="record">
+                                    <hr>
+                                    <div class="form-group">
+                                        <label for="summary">工作总结</label>
+                                        <input type="text" class="summary form-control" id="summary" name="summary" required>
+                                        <div id="content-valid" class="valid-feedback">OK</div>
+                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-2">
+                                            <label for="man_day">人日数（天）</label>
+                                            <input type="text" class="man_day form-control" id="man_day" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                         </div>
-                                        <div class="row">
-                                            <div class="form-group col-2">
-                                                <label for="man_day">人日数（天）</label>
-                                                <input type="text" class="man_day form-control" id="man_day" required>
-                                                <div id="man_day-valid" class="valid-feedback">
-                                                    OK
-                                                </div>
-                                                <div id="man_day-invalid" class="invalid-feedback">
-                                                    ERROR
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-2">
-                                                <label for="total_man_day">总人日数（天）</label>
-                                                <input type="text" class="total_man_day form-control" id="" required>
-                                                <div id="man_day-valid" class="valid-feedback">
-                                                    OK
-                                                </div>
-                                                <div id="man_day-invalid" class="invalid-feedback">
-                                                    ERROR
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-2">
-                                                <label for="natural_day">自然日（天）</label>
-                                                <input type="text" class="natural_day form-control" id="natural_day" name="natural_day" required>
-                                                <div id="natural_day-valid" class="valid-feedback">
-                                                    OK
-                                                </div>
-                                                <div id="natural_day-invalid" class="invalid-feedback">
-                                                    ERROR
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-8">
-                                                <label for="remark">计划执行情况和工作效果说明</label>
-                                                <input type="text" class="remark form-control" id="remark" name="remark">
-                                                <div id="remark-valid" class="valid-feedback">
-                                                    OK
-                                                </div>
-                                                <div id="remark-invalid" class="invalid-feedback">
-                                                    ERROR
-                                                </div>
-                                            </div>
+                                        <div class="form-group col-2">
+                                            <label for="total_man_day">总人日数（天）</label>
+                                            <input type="text" class="total_man_day form-control" id="" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="natural_day">自然日（天）</label>
+                                            <input type="text" class="natural_day form-control" id="natural_day" name="natural_day" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-8">
+                                            <label for="remark">计划执行情况和工作效果说明</label>
+                                            <input type="text" class="remark form-control" id="remark" name="remark">
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <a class="deploy_floating" id="add_plan">
+                        <a class="deploy_floating" id="add_target" style="margin-left: 45%">
                             <span class="fonticon_plus"></span>
                         </a>
                         <hr style="margin-top: 26px">
-                        <button class="btn btn-primary" id="submitForm">提交</button>
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -146,29 +94,31 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col" nowrap>类型（月、学期）</th>
-                    <th scope="col" nowrap>填表日期</th>
-                    <th scope="col" nowrap>平均工作小时数（实际/有效）</th>
-                    <th scope="col" nowrap>总人日数（天）</th>
-                    <th scope="col" nowrap>工作总结</th>
-                    <th scope="col" nowrap>人日数（天）</th>
-                    <th scope="col" nowrap>总人日数（天）</th>
-                    <th scope="col" nowrap>自然日（天）</th>
-                    <th scope="col" nowrap>计划执行情况和工作效果说明</th>
+                    <th scope="col" nowrap>序号</th>
+                    <th type="normal" class="type" scope="col" nowrap>类型（月、学期）</th>
+                    <th type="normal" class="date" scope="col" nowrap>填表日期</th>
+                    <th type="normal" class="average_time" scope="col" nowrap>平均工作小时数（实际/有效）</th>
+                    <th type="normal" class="all_days" scope="col" nowrap>总人日数（天）</th>
+                    <th type="json" class="summary" scope="col" nowrap>工作总结</th>
+                    <th type="json" class="man_day" scope="col" nowrap>人日数（天）</th>
+                    <th type="json" class="total_man_day" scope="col" nowrap>总人日数（天）</th>
+                    <th type="json" class="natural_day" scope="col" nowrap>自然日（天）</th>
+                    <th type="json" class="remark" scope="col" nowrap>计划执行情况和工作效果说明</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for result in results %}
                     <tr class="table_content" title="{{ result.id }}">
-                        <td nowrap>{{ result.type }}</td>
-                        <td nowrap>{{ result.date|date:"Y-m-d" }}</td>
-                        <td nowrap>{{ result.average_time }}</td>
-                        <td style="white-space: pre-wrap">{{ result.all_days }}</td>
-                        <td style="white-space: pre-wrap">{{ result.summary }}</td>
-                        <td style="white-space: pre-wrap">{{ result.man_day }}</td>
-                        <td style="white-space: pre-wrap">{{ result.total_man_day }}</td>
-                        <td style="white-space: pre-wrap">{{ result.natural_day }}</td>
-                        <td style="white-space: pre-wrap">{{ result.remark }}</td>
+                        <td nowrap style="width:3vw;">{{ forloop.counter }}</td>
+                        <td type="normal" class="type" nowrap style="width:3vw;">{{ result.type }}</td>
+                        <td type="normal" class="date" nowrap style="width:5vw;">{{ result.date|date:"Y-m-d" }}</td>
+                        <td type="normal" class="average_time" nowrap style="width:6vw;">{{ result.average_time }}</td>
+                        <td type="normal" class="all_days" style="white-space: pre-wrap;width:3vw;">{{ result.all_days }}</td>
+                        <td type="json" class="summary" style="white-space: pre-wrap">{{ result.summary }}</td>
+                        <td type="json" class="man_day" style="white-space: pre-wrap;width:3vw;">{{ result.man_day }}</td>
+                        <td type="json" class="total_man_day" style="white-space: pre-wrap;width:3vw;">{{ result.total_man_day }}</td>
+                        <td type="json" class="natural_day" style="white-space: pre-wrap;width:3vw;">{{ result.natural_day }}</td>
+                        <td type="json" class="remark" style="white-space: pre-wrap">{{ result.remark }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

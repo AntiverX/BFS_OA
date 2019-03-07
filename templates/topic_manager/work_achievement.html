@@ -1,0 +1,262 @@
+{% extends "topic_manager/base.html" %}
+{% block content %}
+    <div class="container-fluid ">
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">工作总结</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label for="date">填表日期</label>
+                                    <input class="date form-control" id="date" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="semester">学期</label>
+                                    <input class="semester form-control" id="semester" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-4">
+                                    <label for="achievement_name">名称</label>
+                                    <input class="achievement_name form-control" id="achievement_name" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="man_day">用时</label>
+                                    <input class="man_day form-control" id="man_day" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="major_contributor">是否本人工作</label>
+                                    <select class="major_contributor form-control" id="major_contributor" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="is_finished">是否完成</label>
+                                    <select class="is_finished form-control" id="is_finished" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="paper_published">发表学术论文</label>
+                                    <select class="paper_published form-control" id="paper_published" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="paper_contributed">投稿学术论文</label>
+                                    <select class="paper_contributed form-control" id="paper_contributed" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="patent_published">获批专利</label>
+                                    <select class="patent_published form-control" id="patent_published" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="patent_contributed">申请专利</label>
+                                    <select class="patent_contributed form-control" id="patent_contributed" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="software_published">获批软件著作权</label>
+                                    <select class="software_published form-control" id="software_published" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="software_contributed">申请软件著作权</label>
+                                    <select class="software_contributed form-control" id="software_contributed" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="application_composed">撰写申请书</label>
+                                    <select class="application_composed form-control" id="application_composed" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="document_composed">撰写项目验收文档</label>
+                                    <select class="document_composed form-control" id="document_composed" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="software_finished">完成原型或应用系统</label>
+                                    <select class="software_finished form-control" id="software_finished" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="document_summary">资料整理和提交</label>
+                                    <select class="document_summary form-control" id="document_summary" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="help_freshmen">传帮带师弟师妹</label>
+                                    <select class="help_freshmen form-control" id="help_freshmen" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="departure">完成毕业离校手续</label>
+                                    <select class="departure form-control" id="departure" required>
+                                        <option value="是">是</option>
+                                        <option value="否" selected>否</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-12">
+                                    <label for="comment">对实验室的批评与建议</label>
+                                    <input class="comment form-control" id="comment">
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="all_record">
+                                    <div class="record">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="deploy_floating" id="add_target" style="margin-left: 45%">
+                            <span class="fonticon_plus"></span>
+                        </a>
+                        <hr style="margin-top: 26px">
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap style="width:3rem;">序号</th>
+                    <th type="normal" class="date" scope="col" nowrap style="width:6rem;">填表日期</th>
+                    <th type="normal" class="semester" scope="col" nowrap style="width:6rem;">学期</th>
+                    <th type="normal" class="achievement_name" scope="col" nowrap style="width:18rem;text-align: left;">名称</th>
+                    <th type="normal" class="man_day" scope="col" nowrap style="width:4rem;">用时（天）</th>
+                    <th type="normal" class="major_contributor" scope="col" nowrap style="width:4rem;">是否本人工作</th>
+                    <th type="normal" class="is_finished" scope="col" nowrap style="width:3.5rem;">是否完成</th>
+                    <th type="normal" class="paper_published" scope="col" nowrap style="width:4rem;">发表学术论文</th>
+                    <th type="normal" class="paper_contributed" scope="col" nowrap style="width:4rem;">投稿学术论文</th>
+                    <th type="normal" class="patent_published" scope="col" nowrap style="width:3.5rem;">获批专利</th>
+                    <th type="normal" class="patent_contributed" scope="col" nowrap style="width:3.5rem;">申请专利</th>
+                    <th type="normal" class="software_published" scope="col" nowrap style="width:5rem;">获批软件著作权</th>
+                    <th type="normal" class="software_contributed" scope="col" nowrap style="width:5rem;">申请软件著作权</th>
+                    <th type="normal" class="application_composed" scope="col" nowrap style="width:4rem;">撰写申请书</th>
+                    <th type="normal" class="document_composed" scope="col" nowrap style="width:5rem;">撰写项目验收文档</th>
+                    <th type="normal" class="software_finished" scope="col" nowrap style="width:6rem;">完成原型或应用系统</th>
+                    <th type="normal" class="document_summary" scope="col" nowrap style="width:5rem;">资料整理和提交</th>
+                    <th type="normal" class="help_freshmen" scope="col" nowrap style="width:5rem;">传帮带师弟师妹</th>
+                    <th type="normal" class="departure" scope="col" nowrap style="width:5rem;">完成毕业手续</th>
+                    <th type="normal" class="comment" scope="col" nowrap style="width:7rem;">对实验室的批评与建议</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr class="table_content" title="{{ result.id }}">
+                        <td nowrap>{{ forloop.counter }}</td>
+                        <td type="normal" class="date" nowrap>{{ result.date|date:"Y-m-d" }}</td>
+                        <td type="normal" class="semester" nowrap>{{ result.semester }}</td>
+                        <td type="normal" class="achievement_name" nowrap style="text-align: left!important;">{{ result.achievement_name }}</td>
+                        <td type="normal" class="man_day" style="white-space: pre-wrap;">{{ result.man_day }}</td>
+                        <td type="normal" class="major_contributor" style="white-space: pre-wrap">{{ result.major_contributor }}</td>
+                        <td type="normal" class="is_finished" style="white-space: pre-wrap;width:3vw;">{{ result.is_finished }}</td>
+                        <td type="normal" class="paper_published" style="white-space: pre-wrap;width:3vw;">{{ result.paper_published }}</td>
+                        <td type="normal" class="paper_contributed" style="white-space: pre-wrap;width:3vw;">{{ result.paper_contributed }}</td>
+                        <td type="normal" class="patent_published" style="white-space: pre-wrap">{{ result.patent_published }}</td>
+                        <td type="normal" class="patent_contributed" style="white-space: pre-wrap">{{ result.patent_contributed }}</td>
+                        <td type="normal" class="software_published" style="white-space: pre-wrap">{{ result.software_published }}</td>
+                        <td type="normal" class="software_contributed" style="white-space: pre-wrap">{{ result.software_contributed }}</td>
+                        <td type="normal" class="application_composed" style="white-space: pre-wrap">{{ result.application_composed }}</td>
+                        <td type="normal" class="document_composed" style="white-space: pre-wrap">{{ result.document_composed }}</td>
+                        <td type="normal" class="software_finished" style="white-space: pre-wrap">{{ result.software_finished }}</td>
+                        <td type="normal" class="document_summary" style="white-space: pre-wrap">{{ result.document_summary }}</td>
+                        <td type="normal" class="help_freshmen" style="white-space: pre-wrap">{{ result.help_freshmen }}</td>
+                        <td type="normal" class="departure" style="white-space: pre-wrap">{{ result.departure }}</td>
+                        <td type="normal" class="comment" style="white-space: pre-wrap">{{ result.comment }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+        <!-- 右下角添加按钮结束 -->
+    </div>
+
+{% endblock %}

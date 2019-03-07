@@ -1,0 +1,142 @@
+{% extends "topic_manager/base.html" %}
+{% block content %}
+    <div class="container-fluid ">
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">工作量认定</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label for="start_time">开始时间</label>
+                                    <input class="start_time form-control" id="start_time" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="duration">持续时间</label>
+                                    <input class="duration form-control" id="duration" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="grade">分数</label>
+                                    <input class="grade form-control" id="grade" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+
+                                <div class="form-group col-4">
+                                    <label for="is_archived">是否归档</label>
+                                    <input class="is_archived form-control" id="is_archived" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="report_title">报告名称</label>
+                                    <input class="report_title form-control" id="report_title" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="all_record">
+                                    <div class="record">
+                                        <div class="form-group col-2">
+                                            <label for="questioner">提问人</label>
+                                            <input class="questioner form-control" id="questioner" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="question">问题描述</label>
+                                            <input class="question form-control" id="question" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="reply_status">回答情况</label>
+                                            <input class="reply_status form-control" id="reply_status" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="remark">问题相关的建议</label>
+                                            <input class="remark form-control" id="remark" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="deploy_floating" id="add_target" style="margin-left: 45%">
+                            <span class="fonticon_plus"></span>
+                        </a>
+                        <hr style="margin-top: 26px">
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap style="width:1rem!important;">序号</th>
+                    <th type="normal" class="start_time" scope="col" nowrap style="width:5.5rem;">开始时间</th>
+                    <th type="normal" class="duration" scope="col" nowrap style="width:6rem;">持续时间</th>
+                    <th type="normal" class="grade" scope="col" nowrap style="width:4rem;">分数</th>
+                    <th type="normal" class="is_archived" scope="col" nowrap style="width:10rem;">是否归档</th>
+                    <th type="normal" class="report_title" scope="col" nowrap style="width:3.5rem;">报告名称</th>
+                    <th type="json" class="questioner" scope="col" nowrap style="width:3.5rem;">提问人</th>
+                    <th type="json" class="question" scope="col" nowrap style="width:5rem;">问题描述</th>
+                    <th type="json" class="reply_status" scope="col" nowrap style="width:5rem;">回答情况</th>
+                    <th type="json" class="remark" scope="col" nowrap style="width:4rem;">问题相关的建议</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr class="table_content" title="{{ result.id }}">
+                        <td nowrap>{{ forloop.counter }}</td>
+                        <td type="normal" class="start_time" nowrap>{{ result.start_time|date:"Y-m-d H:i" }}</td>
+                        <td type="normal" class="duration" nowrap>{{ result.duration }}</td>
+                        <td type="normal" class="grade" nowrap>{{ result.grade }}</td>
+                        <td type="normal" class="is_archived" style="white-space: pre-wrap;width:3vw;">{{ result.is_archived }}</td>
+                        <td type="normal" class="report_title" style="white-space: pre-wrap">{{ result.report_title }}</td>
+                        <td type="json" class="questioner" style="white-space: pre-wrap">{{ result.questioner }}</td>
+                        <td type="json" class="question" style="white-space: pre-wrap">{{ result.question }}</td>
+                        <td type="json" class="reply_status" style="white-space: pre-wrap">{{ result.reply_status }}</td>
+                        <td type="json" class="remark" style="white-space: pre-wrap">{{ result.remark }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+    </div>
+    <!-- 右下角添加按钮结束 -->
+    </div>
+
+{% endblock %}

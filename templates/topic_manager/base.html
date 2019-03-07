@@ -4,9 +4,15 @@
     <script src="{% static "js/topic_manager/base.js" %}"></script>
     <div class="nav-scroller bg-white shadow-sm">
         <nav class="nav nav-underline">
-            {% for link,value in menus.items %}
-                <a class="nav-link" href="{{ link }}">{{ value }}</a>
-            {% endfor %}
+            <a class="nav-link" href="target">目标</a>
+            <a class="nav-link" href="plan">计划</a>
+            <a class="nav-link" href="weekly_summary">周报</a>
+            <a class="nav-link" href="meeting_record">会议记录</a>
+            <a class="nav-link" href="work_summary">工作总结</a>
+            <a class="nav-link" href="work_achievement">工作成果</a>
+            <a class="nav-link" href="achievement_quantization">业绩量化</a>
+            <a class="nav-link" href="achievement_quantization_confirmation">工作量认定</a>
+            <a class="nav-link" href="scholar_report">学术报告</a>
         </nav>
     </div>
 {% endblock menu %}

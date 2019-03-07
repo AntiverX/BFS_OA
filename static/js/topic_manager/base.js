@@ -46,11 +46,13 @@ $(document).ready(function () {
                                 $("#form").find("." + column_name[i]).eq(j).val(data[j]);
 
                             }
+                        } else if (column_type[i] == "select") {
+                            $("." + column_name[i]).val($("tr[title=" + active_table + "]").find("." + column_name[i]).text() == "是" ? 1 : 0);
                         } else {
                             $("." + column_name[i]).val($("tr[title=" + active_table + "]").find("." + column_name[i]).text());
                         }
                     }
-                    $("input").addClass("is-valid");
+                    $("input,select,textarea").addClass("is-valid");
                     $("#modal").modal('show');
                 }
             },
@@ -100,11 +102,11 @@ $(document).ready(function () {
     /* 对json进行处理 */
     $(".table_content").each(function () {
         for (i = 0; i <= $(this).find("td").length; i++) {
-            if ($(this).find("td").eq(i).hasClass("json")) {
+            if ($(this).find("td").eq(i).attr('type') == "json") {
                 var array_ = JSON.parse($(this).find("td").eq(i).text());
                 new_text = "";
                 for (j = 0; j < array_.length - 1; j++) {
-                    new_text = new_text + array_[j] + "\n";
+                    new_text = new_text + array_[j] + "\n\n";
                 }
                 new_text = new_text + array_[array_.length - 1];
                 $(this).find("td").eq(i).text(new_text);
@@ -130,7 +132,7 @@ $(document).ready(function () {
         var month = date.getMonth() + 1;
         var day = date.getDate();
         $("#date").val(year + "-" + month + "-" + day);
-        $("#date").addClass("is-valid");
+        $("#date,select").addClass("is-valid");
         $("#modal").modal('show');
     });
 
@@ -153,6 +155,7 @@ $(document).ready(function () {
 
     /* 提交表单 */
     $("#submit_form").click(function () {
+        console.log("submit form.");
         var data_test = {};
         data_test['target_id'] = active_table;
         data_test['btn'] = "";
@@ -169,9 +172,10 @@ $(document).ready(function () {
                 data_test[column_name[i]] = $("#form").find("." + column_name[i]).val();
             }
         }
+        console.log(data_test);
         /* 提交表单内容 */
         $.post("", data_test, function (response, status) {
-            if (status == "success") {
+            if (response == "success") {
                 window.location.reload(true);
             }
         });
@@ -179,7 +183,7 @@ $(document).ready(function () {
     /* 提交表单结束 */
 
     /* 表单验证 */
-    $(document).on('change', 'input', function () {
+    $(document).on('change', 'input,textarea', function () {
         /* 在线验证表单内容 */
         text = $(this).val();
         class_name = $(this).attr('class').split(" ")[0];
@@ -208,7 +212,9 @@ $(document).ready(function () {
         $("input").each(function () {
 
             if (($(this).val() == "")) {
-                if ($(this).attr("class").split(" ")[0] != "end_of_term_summary" && $(this).attr("id") != "target_id") {
+                if ($(this).hasClass("end_of_term_summary")) {
+
+                } else {
                     form_complete = 0;
                 }
             }

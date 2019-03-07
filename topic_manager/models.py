@@ -14,6 +14,7 @@ class Target(models.Model):
     semester = models.TextField(null=True)
 
 
+# 计划
 class Plan(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     type = models.CharField(max_length=32)
@@ -30,6 +31,21 @@ class Plan(models.Model):
     actual_end_time = models.DateField(null=True)
     advanced_postponed_time = models.IntegerField()
     remark = models.TextField()
+
+
+# 周报
+class WeeklySummary(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    week = models.IntegerField(default=0)
+    submit_time = models.DateTimeField(auto_now=True)
+    average_work_hour = models.TextField()
+    absent_hour = models.TextField()
+    real_name = models.CharField(max_length=150)
+    this_week_task = models.TextField()
+    next_week_task = models.TextField()
+    is_present = models.BooleanField(default=False)  # 到场
+    is_absent = models.BooleanField(default=False)  # 未到
+    is_left = models.BooleanField(default=False)  # 请假
 
 
 # 会议记录
@@ -59,16 +75,120 @@ class WorkSummary(models.Model):
     remark = models.TextField(null=True)
 
 
-# 周报
-class WeeklySummary(models.Model):
+# 工作成果
+class WorkAchievement(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    week = models.IntegerField(default=0)
-    submit_time = models.DateTimeField(auto_now=True)
-    average_work_hour = models.TextField()
-    absent_hour = models.TextField()
-    real_name = models.CharField(max_length=150)
-    this_week_task = models.TextField()
-    next_week_task = models.TextField()
-    is_present = models.BooleanField(default=False)  # 到场
-    is_absent = models.BooleanField(default=False)  # 未到
-    is_left = models.BooleanField(default=False)  # 请假
+    real_name = models.TextField(blank=True)
+    date = models.DateField()
+    semester = models.TextField()
+    achievement_name = models.TextField()
+    man_day = models.IntegerField()
+    major_contributor = models.TextField()
+    is_finished = models.TextField()
+    paper_published = models.TextField(blank=True)
+    paper_contributed = models.TextField(blank=True)
+    patent_published = models.TextField(blank=True)
+    patent_contributed = models.TextField(blank=True)
+    software_published = models.TextField(blank=True)
+    software_contributed = models.TextField(blank=True)
+    application_composed = models.TextField(blank=True)
+    document_composed = models.TextField(blank=True)
+    software_finished = models.TextField(blank=True)
+    document_summary = models.TextField(blank=True)
+    help_freshmen = models.TextField(blank=True)
+    departure = models.TextField(blank=True)
+    comment = models.TextField(blank=True)
+
+
+# 业绩量化
+class AchievementQuantization(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    real_name = models.TextField(blank=True)
+    # 填写日期
+    date = models.DateField()
+    # 学期
+    semester = models.TextField()
+    # 发表学术论文数量
+    paper_published = models.TextField(blank=True)
+    # 投稿学术论文数量
+    paper_contributed = models.TextField(blank=True)
+    # 获批专利
+    patent_published = models.TextField(blank=True)
+    # 申请专利
+    patent_contributed = models.TextField(blank=True)
+    # 获批软件著作权
+    software_published = models.TextField(blank=True)
+    # 申请软件著作权
+    software_contributed = models.TextField(blank=True)
+    # 撰写申请书
+    application_composed = models.TextField(blank=True)
+    # 撰写项目验收文档
+    document_composed = models.TextField(blank=True)
+    # 完成原型或应用系统
+    software_finished = models.TextField(blank=True)
+    # 获奖数量
+    reward = models.TextField(blank=True)
+    # 学术报告次数
+    scholar_report_times = models.TextField(blank=True)
+    # 学期平均日工作时间
+    average_work_hour = models.TextField(blank=True)
+    # 竞赛出题
+    proposition = models.TextField(blank=True)
+    # 组织竞赛
+    competition_organized = models.TextField(blank=True)
+    # 未参加学术报告次
+    absent_times_for_scholar_report = models.TextField(blank=True)
+    # 未参加学术报告评分次数
+    absent_times_for_ranking = models.TextField(blank=True)
+
+
+# 工作量认定
+class AchievementQuantizationConfirmation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    real_name = models.TextField(blank=True)
+    # 填写日期
+    date = models.DateField()
+    # 大类
+    primary_classification = models.TextField()
+    # 小类
+    secondary_classification = models.TextField()
+    # 编号（小类）
+    number = models.TextField(blank=True)
+    # 完成类型（独立、合作人数/占比）
+    completion_type = models.TextField()
+    # 人日
+    man_days = models.TextField()
+    # 级别
+    level = models.TextField()
+    # 有形工作结果
+    tangible_work = models.TextField()
+    # 备注
+    remark = models.TextField(blank=True)
+    # 组内认定
+    group_confirmation = models.TextField(blank=True)
+    # 导师认定
+    tutor_confirmation = models.TextField(blank=True)
+
+
+# 学术报告
+class ScholarReport(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    real_name = models.TextField(blank=True)
+    # 开始时间
+    start_time = models.DateTimeField()
+    # 持续时间
+    duration = models.TextField()
+    # 分数
+    grade = models.TextField()
+    # 是否归档
+    is_archived = models.TextField()
+    # 报告名称
+    report_title = models.TextField()
+    # 提问人
+    questioner = models.TextField()
+    # 问题描述
+    question = models.TextField()
+    # 回答情况
+    reply_status = models.TextField()
+    # 问题相关的建议
+    remark = models.TextField(blank=True)

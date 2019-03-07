@@ -4,29 +4,17 @@ Author：Antiver
 """
 
 from django.shortcuts import render, HttpResponse
-from topic_manager.models import MeetingRecord, Target, Plan, WorkSummary, WeeklySummary
+from topic_manager.models import MeetingRecord, Target, Plan, WorkSummary, WeeklySummary, WorkAchievement, AchievementQuantization, AchievementQuantizationConfirmation,ScholarReport
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import *
 import re
-from main_site.models import BFS_OA_Config
-
-context = {
-    'menus': {
-        'target': "目标",
-        'plan': "计划",
-        'weekly_summary': "周报",
-        'meeting_record': "会议记录",
-        'work_summary': "工作总结",
-    },
-}
+import json
 
 
 @login_required
 def topic_manager(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    return render(request, 'topic_manager/index.html', context=context)
+    return render(request, 'topic_manager/index.html')
 
 
 # 目标
@@ -48,9 +36,10 @@ def target(request):
                 try:
                     submitted_target.save()
                 except (ValueError, ValidationError) as err:
-                    context['error'] = err
+                    context = {
+                        'error': err,
+                    }
                     return render(request, 'error.html', context=context)
-            return HttpResponseRedirect('/topic_manager/target')
         else:
             submitted_target = Target(
                 user=request.user,
@@ -64,20 +53,22 @@ def target(request):
             try:
                 submitted_target.save()
             except (ValueError, ValidationError) as err:
-                context['error'] = err
+                context = {
+                    'error': err,
+                }
                 return render(request, 'error.html', context=context)
-            return HttpResponseRedirect('/topic_manager/target')
+        return HttpResponse('success')
     else:
         results = Target.objects.filter(user=request.user)
-        context['results'] = results
+        context = {
+            'results': results,
+        }
         return render(request, "topic_manager/target.html", context=context)
 
 
 # 计划
 @login_required
 def plan(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == "POST":
         if request.POST['target_id'] != "" and request.POST['btn'] == "delete":
             target_id = request.POST['target_id']
@@ -121,7 +112,9 @@ def plan(request):
                 try:
                     existing_target.save()
                 except (ValueError, ValidationError) as err:
-                    context['error'] = err
+                    context = {
+                        'error': err,
+                    }
                     return render(request, 'error.html', context=context)
         else:
             new_plan = Plan(
@@ -145,20 +138,22 @@ def plan(request):
             try:
                 new_plan.save()
             except (ValueError, ValidationError) as err:
-                context['error'] = err
+                context = {
+                    'error': err,
+                }
                 return render(request, 'error.html', context=context)
-        return HttpResponseRedirect('/topic_manager/plan')
+        return HttpResponse('success')
     else:
         results = Plan.objects.filter(user=request.user)
-        context['results'] = results
+        context = {
+            'results': results,
+        }
         return render(request, "topic_manager/plan.html", context=context)
 
 
 # 周报
 @login_required
 def weekly_summary(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == 'POST':
         if request.POST['target_id'] != "" and request.POST['btn'] == "delete":
             target_id = request.POST['target_id']
@@ -185,7 +180,9 @@ def weekly_summary(request):
                 try:
                     submitted_weekly_summary.save()
                 except (ValueError, ValidationError) as err:
-                    context['error'] = err
+                    context = {
+                        'error': err,
+                    }
                     return render(request, 'error.html', context=context)
         else:
             submitted_weekly_summary = WeeklySummary(user=request.user, week=week, this_week_task=this_week_task,
@@ -194,21 +191,23 @@ def weekly_summary(request):
             try:
                 submitted_weekly_summary.save()
             except (ValueError, ValidationError) as err:
-                context['error'] = err
+                context = {
+                    'error': err,
+                }
                 return render(request, 'error.html', context=context)
-        return HttpResponseRedirect('/topic_manager/weekly_summary')
+        return HttpResponse('success')
     else:
         weekly_summary = WeeklySummary.objects.filter(user=request.user)
         weekly_summarys = weekly_summary.order_by('week')
-        context['weekly_summarys'] = weekly_summarys
+        context = {
+            'weekly_summarys': weekly_summarys
+        }
         return render(request, 'topic_manager/weekly_summary.html', context=context)
 
 
 # 会议记录
 @login_required
 def record(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == "POST":
         if request.POST['target_id'] != "":
             target_id = request.POST['target_id']
@@ -226,7 +225,9 @@ def record(request):
                 try:
                     existing_record.save()
                 except (ValueError, ValidationError) as err:
-                    context['error'] = err
+                    context = {
+                        'error': err,
+                    }
                     return render(request, 'error.html', context=context)
         else:
             new_record = MeetingRecord(
@@ -243,20 +244,22 @@ def record(request):
             try:
                 new_record.save()
             except (ValueError, ValidationError) as err:
-                context['error'] = err
+                context = {
+                    'error': err,
+                }
                 return render(request, 'error.html', context=context)
-        return HttpResponseRedirect('/topic_manager/meeting_record')
+        return HttpResponse('success')
     else:
         results = MeetingRecord.objects.filter(real_name=request.user.current_user)
-        context['results'] = results
+        context = {
+            'results': results,
+        }
         return render(request, "topic_manager/meeting_record.html", context=context)
 
 
 # 工作总结
 @login_required
 def work_summary(request):
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
     if request.method == "POST":
         if request.POST['target_id'] != "":
             target_id = request.POST['target_id']
@@ -264,17 +267,25 @@ def work_summary(request):
             if request.POST['btn'] == "delete":
                 existing_record.delete()
             else:
-                date = request.POST['date']
+                existing_record.date = request.POST['date']
                 existing_record.type = request.POST['type']
                 existing_record.summary = request.POST['summary']
                 existing_record.average_time = request.POST['average_time']
                 existing_record.man_day = request.POST['man_day']
                 existing_record.natural_day = request.POST['natural_day']
                 existing_record.remark = request.POST['remark']
-                existing_record.all_days = request.POST['all_days']
+                days = json.loads(request.POST['man_day'])
+                all_days = 0
+                for day in days:
+                    all_days += int(day)
+                existing_record.all_days = all_days
                 existing_record.total_man_day = request.POST['total_man_day']
                 existing_record.save()
         else:
+            days = json.loads(request.POST['man_day'])
+            all_days = 0
+            for day in days:
+                all_days += int(day)
             new_work_summary = WorkSummary(
                 user=request.user,
                 type=request.POST['type'],
@@ -284,19 +295,274 @@ def work_summary(request):
                 natural_day=request.POST['natural_day'],
                 remark=request.POST['remark'],
                 date=request.POST['date'],
-                all_days=request.POST['all_days'],
+                all_days=all_days,
                 total_man_day=request.POST['total_man_day'],
             )
             try:
                 new_work_summary.save()
             except (ValueError, ValidationError) as err:
-                context['error'] = err
+                context = {
+                    'error': err,
+                }
                 return render(request, 'error.html', context=context)
-        return HttpResponseRedirect('/topic_manager/work_summary')
+        return HttpResponse('success')
     else:
         results = WorkSummary.objects.filter(user=request.user)
-        context['results'] = results
+        context = {
+            'results': results,
+        }
         return render(request, "topic_manager/work_summary.html", context=context)
+
+
+# 工作成果
+@login_required
+def work_achievement(request):
+    if request.method == "POST":
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = WorkAchievement.objects.get(id=target_id)
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            else:
+                existing_record.date = request.POST['date']
+                existing_record.semester = request.POST['semester']
+                existing_record.achievement_name = request.POST['achievement_name']
+                existing_record.man_day = request.POST['man_day']
+                existing_record.major_contributor = request.POST['major_contributor']
+                existing_record.is_finished = request.POST['is_finished']
+                existing_record.paper_published = request.POST['paper_published']
+                existing_record.paper_contributed = request.POST['paper_contributed']
+                existing_record.patent_published = request.POST['patent_published']
+                existing_record.patent_contributed = request.POST['patent_contributed']
+                existing_record.software_published = request.POST['software_published']
+                existing_record.software_contributed = request.POST['software_contributed']
+                existing_record.application_composed = request.POST['application_composed']
+                existing_record.document_composed = request.POST['document_composed']
+                existing_record.software_finished = request.POST['software_finished']
+                existing_record.document_summary = request.POST['document_summary']
+                existing_record.help_freshmen = request.POST['help_freshmen']
+                existing_record.departure = request.POST['departure']
+                existing_record.comment = request.POST['comment']
+                existing_record.save()
+        else:
+            new_record = WorkAchievement(
+                user=request.user,
+                real_name=request.user.real_name,
+                date=request.POST['date'],
+                semester=request.POST['semester'],
+                achievement_name=request.POST['achievement_name'],
+                man_day=request.POST['man_day'],
+                major_contributor=request.POST['major_contributor'],
+                is_finished=request.POST['is_finished'],
+                paper_published=request.POST['paper_published'],
+                paper_contributed=request.POST['paper_contributed'],
+                patent_published=request.POST['patent_published'],
+                patent_contributed=request.POST['patent_contributed'],
+                software_published=request.POST['software_published'],
+                software_contributed=request.POST['software_contributed'],
+                application_composed=request.POST['application_composed'],
+                document_composed=request.POST['document_composed'],
+                software_finished=request.POST['software_finished'],
+                document_summary=request.POST['document_summary'],
+                help_freshmen=request.POST['help_freshmen'],
+                departure=request.POST['departure'],
+                comment=request.POST['comment'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = WorkAchievement.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "topic_manager/work_achievement.html", context=context)
+
+
+# 业绩量化
+@login_required
+def achievement_quantization(request):
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = AchievementQuantization.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.date = request.POST['date']
+                existing_record.semester = request.POST['semester']
+                existing_record.paper_published = request.POST['paper_published']
+                existing_record.paper_contributed = request.POST['paper_contributed']
+                existing_record.patent_published = request.POST['patent_published']
+                existing_record.patent_contributed = request.POST['patent_contributed']
+                existing_record.software_published = request.POST['software_published']
+                existing_record.software_contributed = request.POST['software_contributed']
+                existing_record.application_composed = request.POST['application_composed']
+                existing_record.document_composed = request.POST['document_composed']
+                existing_record.software_finished = request.POST['software_finished']
+                existing_record.document_summary = request.POST['reward']
+                existing_record.help_freshmen = request.POST['scholar_report_times']
+                existing_record.departure = request.POST['average_work_hour']
+                existing_record.comment = request.POST['proposition']
+                existing_record.comment = request.POST['competition_organized']
+                existing_record.comment = request.POST['absent_times_for_scholar_report']
+                existing_record.comment = request.POST['absent_times_for_ranking']
+                existing_record.save()
+        else:
+            new_record = AchievementQuantization(
+                user=request.user,
+                real_name=request.user.real_name,
+                date=request.POST['date'],
+                semester=request.POST['semester'],
+                paper_published=request.POST['paper_published'],
+                paper_contributed=request.POST['paper_contributed'],
+                patent_published=request.POST['patent_published'],
+                patent_contributed=request.POST['patent_contributed'],
+                software_published=request.POST['software_published'],
+                software_contributed=request.POST['software_contributed'],
+                application_composed=request.POST['application_composed'],
+                document_composed=request.POST['document_composed'],
+                software_finished=request.POST['software_finished'],
+                reward=request.POST['reward'],
+                scholar_report_times=request.POST['scholar_report_times'],
+                average_work_hour=request.POST['average_work_hour'],
+                proposition=request.POST['proposition'],
+                competition_organized=request.POST['competition_organized'],
+                absent_times_for_scholar_report=request.POST['absent_times_for_scholar_report'],
+                absent_times_for_ranking=request.POST['absent_times_for_ranking'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = AchievementQuantization.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "topic_manager/achievement_quantization.html", context=context)
+
+
+# 工作量认定
+@login_required
+def achievement_quantization_confirmation(request):
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = AchievementQuantizationConfirmation.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.date = request.POST['date']
+                existing_record.primary_classification = request.POST['primary_classification']
+                existing_record.secondary_classification = request.POST['secondary_classification']
+                existing_record.number = ""
+                existing_record.completion_type = request.POST['completion_type']
+                existing_record.man_days = request.POST['man_days']
+                existing_record.level = request.POST['level']
+                existing_record.tangible_work = request.POST['tangible_work']
+                existing_record.remark = request.POST['remark']
+                existing_record.group_confirmation = request.POST['group_confirmation']
+                existing_record.tutor_confirmation = request.POST['tutor_confirmation']
+                existing_record.save()
+        else:
+            new_record = AchievementQuantizationConfirmation(
+                user=request.user,
+                real_name=request.user.real_name,
+                date=request.POST['date'],
+                primary_classification=request.POST['primary_classification'],
+                secondary_classification=request.POST['secondary_classification'],
+                number="",
+                completion_type=request.POST['completion_type'],
+                man_days=request.POST['man_days'],
+                level=request.POST['level'],
+                tangible_work=request.POST['tangible_work'],
+                remark=request.POST['remark'],
+                group_confirmation=request.POST['group_confirmation'],
+                tutor_confirmation=request.POST['tutor_confirmation'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = AchievementQuantizationConfirmation.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "topic_manager/achievement_quantization_confirmation.html", context=context)
+
+
+# 学术报告
+@login_required
+def scholar_report(request):
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = ScholarReport.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.start_time = request.POST['start_time']
+                existing_record.duration = request.POST['duration']
+                existing_record.grade = request.POST['grade']
+                existing_record.is_archived = request.POST['is_archived']
+                existing_record.report_title = request.POST['report_title']
+                existing_record.questioner = request.POST['questioner']
+                existing_record.question = request.POST['question']
+                existing_record.reply_status = request.POST['reply_status']
+                existing_record.remark = request.POST['remark']
+                existing_record.save()
+        else:
+            new_record = ScholarReport(
+                user=request.user,
+                real_name=request.user.real_name,
+                start_time=request.POST['start_time'],
+                duration=request.POST['duration'],
+                grade=request.POST['grade'],
+                is_archived=request.POST['is_archived'],
+                report_title=request.POST['report_title'],
+                questioner=request.POST['questioner'],
+                question=request.POST['question'],
+                reply_status=request.POST['reply_status'],
+                remark=request.POST['remark'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = ScholarReport.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "topic_manager/scholar_report.html", context=context)
 
 
 @login_required

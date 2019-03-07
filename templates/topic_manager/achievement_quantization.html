@@ -1,0 +1,213 @@
+{% extends "topic_manager/base.html" %}
+{% block content %}
+    <div class="container-fluid ">
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">工作总结</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label for="date">填表日期</label>
+                                    <input class="date form-control" id="date" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="semester">学期</label>
+                                    <input class="semester form-control" id="semester" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="paper_published">发表学术论文</label>
+                                    <input class="paper_published form-control" id="paper_published" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="paper_contributed">投稿学术论文</label>
+                                    <input class="paper_contributed form-control" id="paper_contributed" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="patent_published">获批专利</label>
+                                    <input class="patent_published form-control" id="patent_published" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="patent_contributed">申请专利</label>
+                                    <input class="patent_contributed form-control" id="patent_contributed" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="software_published">获批软件著作权</label>
+                                    <input class="software_published form-control" id="software_published" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="software_contributed">申请软件著作权</label>
+                                    <input class="software_contributed form-control" id="software_contributed" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="application_composed">撰写申请书</label>
+                                    <input class="application_composed form-control" id="application_composed" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="document_composed">撰写项目验收文档</label>
+                                    <input class="document_composed form-control" id="document_composed" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="software_finished">完成原型或应用系统</label>
+                                    <input class="software_finished form-control" id="software_finished" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="reward">获奖数量</label>
+                                    <input class="reward form-control" id="reward" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="scholar_report_times">学术报告次数</label>
+                                    <input class="scholar_report_times form-control" id="scholar_report_times" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="average_work_hour">学期平均日工作时间</label>
+                                    <input class="average_work_hour form-control" id="average_work_hour" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="proposition">竞赛出题</label>
+                                    <input class="proposition form-control" id="proposition">
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="competition_organized">组织竞赛</label>
+                                    <input class="competition_organized form-control" id="competition_organized">
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="absent_times_for_scholar_report">未参加学术报告次</label>
+                                    <input class="absent_times_for_scholar_report form-control" id="absent_times_for_scholar_report">
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="absent_times_for_ranking">未参加评分次数</label>
+                                    <input class="absent_times_for_ranking form-control" id="absent_times_for_ranking">
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="all_record">
+                                    <div class="record">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="deploy_floating" id="add_target" style="margin-left: 45%">
+                            <span class="fonticon_plus"></span>
+                        </a>
+                        <hr style="margin-top: 26px">
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap style="width:2.5rem;">序号</th>
+                    <th type="normal" class="date" scope="col" nowrap style="width:5.5rem;">填表日期</th>
+                    <th type="normal" class="semester" scope="col" nowrap style="width:6rem;">学期</th>
+                    <th type="normal" class="paper_published" scope="col" nowrap style="width:4rem;">发表学术论文</th>
+                    <th type="normal" class="paper_contributed" scope="col" nowrap style="width:4rem;">投稿学术论文</th>
+                    <th type="normal" class="patent_published" scope="col" nowrap style="width:3.5rem;">获批专利</th>
+                    <th type="normal" class="patent_contributed" scope="col" nowrap style="width:3.5rem;">申请专利</th>
+                    <th type="normal" class="software_published" scope="col" nowrap style="width:5rem;">获批软件著作权</th>
+                    <th type="normal" class="software_contributed" scope="col" nowrap style="width:5rem;">申请软件著作权</th>
+                    <th type="normal" class="application_composed" scope="col" nowrap style="width:4rem;">撰写申请书</th>
+                    <th type="normal" class="document_composed" scope="col" nowrap style="width:5rem;">撰写项目验收文档</th>
+                    <th type="normal" class="software_finished" scope="col" nowrap style="width:6rem;">完成原型或应用系统</th>
+                    <th type="normal" class="reward" scope="col" nowrap style="width:5rem;">获奖数量</th>
+                    <th type="normal" class="scholar_report_times" scope="col" nowrap style="width:5rem;">学术报告次数</th>
+                    <th type="normal" class="average_work_hour" scope="col" nowrap style="width:5rem;">学期平均日工作时间</th>
+                    <th type="normal" class="proposition" scope="col" nowrap style="width:4rem;">竞赛出题</th>
+                    <th type="normal" class="competition_organized" scope="col" nowrap style="width:4rem;">组织竞赛</th>
+                    <th type="normal" class="absent_times_for_scholar_report" scope="col" nowrap style="width:5.5rem;">未参加学术报告次</th>
+                    <th type="normal" class="absent_times_for_ranking" scope="col" nowrap style="width:5.5rem;">未参加学术报告评分次数</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr class="table_content" title="{{ result.id }}">
+                        <td nowrap>{{ forloop.counter }}</td>
+                        <td type="normal" class="date" nowrap>{{ result.date|date:"Y-m-d" }}</td>
+                        <td type="normal" class="semester" nowrap>{{ result.semester }}</td>
+                        <td type="normal" class="paper_published" style="white-space: pre-wrap;width:3vw;">{{ result.paper_published }}</td>
+                        <td type="normal" class="paper_contributed" style="white-space: pre-wrap;width:3vw;">{{ result.paper_contributed }}</td>
+                        <td type="normal" class="patent_published" style="white-space: pre-wrap">{{ result.patent_published }}</td>
+                        <td type="normal" class="patent_contributed" style="white-space: pre-wrap">{{ result.patent_contributed }}</td>
+                        <td type="normal" class="software_published" style="white-space: pre-wrap">{{ result.software_published }}</td>
+                        <td type="normal" class="software_contributed" style="white-space: pre-wrap">{{ result.software_contributed }}</td>
+                        <td type="normal" class="application_composed" style="white-space: pre-wrap">{{ result.application_composed }}</td>
+                        <td type="normal" class="document_composed" style="white-space: pre-wrap">{{ result.document_composed }}</td>
+                        <td type="normal" class="software_finished" style="white-space: pre-wrap">{{ result.software_finished }}</td>
+                        <td type="normal" class="reward" style="white-space: pre-wrap">{{ result.reward }}</td>
+                        <td type="normal" class="scholar_report_times" style="white-space: pre-wrap">{{ result.scholar_report_times }}</td>
+                        <td type="normal" class="average_work_hour" style="white-space: pre-wrap">{{ result.average_work_hour }}</td>
+                        <td type="normal" class="proposition" style="white-space: pre-wrap">{{ result.proposition }}</td>
+                        <td type="normal" class="competition_organized" style="white-space: pre-wrap">{{ result.competition_organized }}</td>
+                        <td type="normal" class="absent_times_for_scholar_report" style="white-space: pre-wrap">{{ result.absent_times_for_scholar_report }}</td>
+                        <td type="normal" class="absent_times_for_ranking" style="white-space: pre-wrap">{{ result.absent_times_for_ranking }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+    </div>
+    <!-- 右下角添加按钮结束 -->
+    </div>
+
+{% endblock %}

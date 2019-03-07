@@ -1,25 +1,16 @@
 {% extends "topic_manager/base.html" %}
 
 {% block content %}
-    {% load static %}
-    <script src="{% static "js/meeting_record.js" %}"></script>
     <style>
         .modal-dialog.modal-800 {
             width: 1100px;
             max-width: 1100px;
         }
-
-
     </style>
+
     <div class="container-fluid mt-3">
-        <!-- Button trigger modal -->
-        <div class="mt-3">
-            <button type="button" class="btn btn-primary" data-toggle="modal" id="addForm" data-target="#exampleModalCenter" hidden>添加</button>
-            <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#exampleModalCenter" id="modifyForm" hidden>修改</button>
-            <button type="button" class="btn btn-primary ml-4" id="deleteForm" hidden>删除</button>
-        </div>
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -29,73 +20,71 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="metting_record_Form">
+                        <div id="form">
                             {% csrf_token %}
-                            <div class="form">
-                                <div class="row">
-                                    <div class="form-group col-3">
-                                        <label for="time">日期</label>
-                                        <input type="text" class="date input form-control" placeholder="" id="date" required>
-                                        <div id="content-valid" class="valid-feedback">OK</div>
-                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
-                                    </div>
-                                    <div class="form-group col-3">
-                                        <label for="time">时间</label>
-                                        <input type="text" class="time input form-control" placeholder="" id="time" required>
-                                        <div id="content-valid" class="valid-feedback">OK</div>
-                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
-                                    </div>
-                                    <div class="form-group col-3">
-                                        <label for="cost_time">用时(分)</label>
-                                        <input type="text" class="cost_time input form-control" placeholder="" id="cost_time" required>
-                                        <div id="content-valid" class="valid-feedback">OK</div>
-                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
-                                    </div>
-                                    <div class="form-group col-3">
-                                        <label for="place">地点</label>
-                                        <input type="text" class="place input form-control" placeholder="" id="place" value="10#420" required>
-                                        <div id="content-valid" class="valid-feedback">OK</div>
-                                        <div id="content-invalid" class="invalid-feedback">ERROR</div>
-                                    </div>
+                            <div class="row">
+                                <div class="form-group col-3">
+                                    <label for="time">日期</label>
+                                    <input type="text" class="date form-control" placeholder="" id="date" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
-                                <div class="all_record">
-                                    <div class="record">
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="theme">主题</label>
-                                                    <input class="theme input form-control" required>
-                                                    <div id="content-valid" class="valid-feedback">OK</div>
-                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="remark">备注</label>
-                                                    <input class="remark input form-control" rows="1"></input>
-                                                    <div id="content-valid" class="valid-feedback">OK</div>
-                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
-                                                </div>
+                                <div class="form-group col-3">
+                                    <label for="time">时间</label>
+                                    <input type="text" class="time form-control" placeholder="" id="time" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label for="cost_time">用时(分)</label>
+                                    <input type="text" class="cost_time form-control" placeholder="" id="cost_time" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label for="place">地点</label>
+                                    <input type="text" class="place form-control" placeholder="" id="place" value="10#420" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                            </div>
+                            <div class="all_record">
+                                <div class="record">
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="theme">主题</label>
+                                                <input class="theme form-control" required>
+                                                <div id="content-valid" class="valid-feedback">OK</div>
+                                                <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                             </div>
-                                            <div class=" col-6">
-                                                <div class="form-group">
-                                                    <label for="theme_content">主题内容说明</label>
-                                                    <textarea class="theme_content input form-control" rows="5" required></textarea>
-                                                    <div id="content-valid" class="valid-feedback">OK</div>
-                                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label for="remark">备注</label>
+                                                <input class="remark form-control" rows="1"></input>
+                                                <div id="content-valid" class="valid-feedback">OK</div>
+                                                <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                            </div>
+                                        </div>
+                                        <div class=" col-6">
+                                            <div class="form-group">
+                                                <label for="theme_content">主题内容说明</label>
+                                                <textarea class="theme_content form-control" rows="5" required></textarea>
+                                                <div id="content-valid" class="valid-feedback">OK</div>
+                                                <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <a class="deploy_floating" id="add_record">
-                                <span class="fonticon_plus"></span>
-                            </a>
-                            <hr style="margin-top: 26px">
                         </div>
+                        <a class="deploy_floating" id="add_record">
+                            <span class="fonticon_plus"></span>
+                        </a>
+                        <hr style="margin-top: 26px">
                         <div class="row">
                             <div class="col-1">
-                                <button class="btn btn-primary" id="submitForm">提交</button>
+                                <button class="btn btn-primary" id="submit_form">提交</button>
                             </div>
                         </div>
                     </div>
@@ -107,25 +96,27 @@
             <table class="mt-1 table table-hover">
                 <thead>
                 <tr>
-                    <th nowrap>日期</th>
-                    <th nowrap>时间</th>
-                    <th nowrap>用时(分)</th>
-                    <th nowrap>地点</th>
-                    <th nowrap>主题</th>
-                    <th nowrap>主题内容说明</th>
-                    <th nowrap>备注</th>
+                    <th scope="col" nowrap style="width:3rem;">序号</th>
+                    <th type="normal" class="date" nowrap style="width:5.5rem;">日期</th>
+                    <th type="normal" class="time" nowrap style="width:5.5rem;">时间</th>
+                    <th type="normal" class="cost_time" nowrap style="width:5rem;">用时(分)</th>
+                    <th type="normal" class="place" nowrap style="width:6rem;">地点</th>
+                    <th type="json" class="theme" nowrap style="width:15rem;">主题</th>
+                    <th type="json" class="theme_content" nowrap style="width:25rem;">主题内容说明</th>
+                    <th type="json" class="remark" nowrap style="width:40rem;">备注</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for result in results %}
                     <tr class="table_content" title="{{ result.id }}">
-                        <td style="white-space: pre;width:5vw">{{ result.date|date:"Y-m-d" }}</td>
-                        <td style="white-space: pre;width:5vw">{{ result.time|time:"G:i" }}</td>
-                        <td style="white-space: pre;width:5vw">{{ result.cost_time }}</td>
-                        <td style="white-space: pre;width:5vw">{{ result.place }}</td>
-                        <td style="white-space: pre">{{ result.theme }}</td>
-                        <td style="white-space: pre-wrap">{{ result.theme_content }}</td>
-                        <td style="white-space: pre;width:10vw">{{ result.remark }}</td>
+                        <th scope="row" style="white-space: pre-wrap;vertical-align: top!important;">{{ forloop.counter }}</th>
+                        <td type="normal" class="date" style="white-space: pre;">{{ result.date|date:"Y-m-d" }}</td>
+                        <td type="normal" class="time" style="white-space: pre;">{{ result.time|time:"G:i" }}</td>
+                        <td type="normal" class="cost_time" style="white-space: pre;">{{ result.cost_time }}</td>
+                        <td type="normal" class="place" style="white-space: pre;">{{ result.place }}</td>
+                        <td type="json" class="theme" style="white-space: pre-wrap;text-align: left!important;">{{ result.theme }}</td>
+                        <td type="json" class="theme_content" style="white-space: pre-wrap;text-align: left!important;">{{ result.theme_content }}</td>
+                        <td type="json" class="remark" style="white-space: pre;text-align: left!important;">{{ result.remark }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
