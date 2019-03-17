@@ -1,0 +1,175 @@
+{% extends "topic_manager/base.html" %}
+{% block content %}
+    <div class="container-fluid ">
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">学术论文</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--此处id与js保持一致，当前id为form-->
+                        <div id="form">
+                            {% csrf_token %}
+                            <!--每个要输入的内容，class里都要包含这个内容对应的类-->
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label for="scanned_version">扫描件</label>
+                                    <select class="scanned_version form-control" id="scanned_version">
+                                        <option value="0">否</option>
+                                        <option value="1">是</option>
+                                    </select>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="award_place_quantization">级别量化</label>
+                                    <input class="award_place_quantization form-control" id="award_place_quantization" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="award_place">获奖级别</label>
+                                    <input class="award_place form-control" id="award_place" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="award_name">获奖名称</label>
+                                    <input class="award_name form-control" id="award_name" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="award_type">获奖类别</label>
+                                    <input class="award_type form-control" id="award_type" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="award_level">级别</label>
+                                    <input class="award_level form-control" id="award_level" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="award_sponsor">评奖单位</label>
+                                    <input class="award_sponsor form-control" id="award_sponsor" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="awarded_staff_with_order">署名及次序</label>
+                                    <input class="awarded_staff_with_order form-control" id="awarded_staff_with_order" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="award_date">获奖时间</label>
+                                    <input class="award_date form-control" id="award_date" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-4">
+                                    <label for="award_order">署名次序</label>
+                                    <input class="award_order form-control" id="award_order" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="award_money">奖金</label>
+                                    <input class="award_money form-control" id="award_money" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+
+                                <div class="form-group col-6">
+                                    <label for="remark">备注</label>
+                                    <input class="remark form-control" id="remark">
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                            </div>
+
+                            <div class="all_record">
+                                <div class="record">
+                                    <div class="row">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="deploy_floating" id="add_target" style="margin-left: 45%">
+                            <span class="fonticon_plus"></span>
+                        </a>
+                        <hr style="margin-top: 26px">
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap style="width:1rem!important;">序号</th>
+                    <th type="normal" class="scanned_version" scope="col" nowrap style="width:5.5rem;">扫描件</th>
+                    <th type="normal" class="award_place_quantization" scope="col" nowrap style="width:6rem;">级别量化</th>
+                    <th type="normal" class="award_place" scope="col" nowrap style="width:4rem;">获奖级别</th>
+                    <th type="json" class="award_name" scope="col" nowrap style="width:10rem;">获奖名称</th>
+                    <th type="json" class="award_type" scope="col" nowrap style="width:3.5rem;">获奖类别</th>
+                    <th type="json" class="award_level" scope="col" nowrap style="width:3.5rem;">级别</th>
+                    <th type="json" class="award_sponsor" scope="col" nowrap style="width:5rem;">评奖单位</th>
+                    <th type="json" class="awarded_staff_with_order" scope="col" nowrap style="width:5rem;">署名及次序</th>
+                    <th type="json" class="award_date" scope="col" nowrap style="width:4rem;">获奖时间</th>
+                    <th type="json" class="award_order" scope="col" nowrap style="width:4rem;">署名次序</th>
+                    <th type="json" class="award_money" scope="col" nowrap style="width:4rem;">奖金</th>
+                    <th type="json" class="remark" scope="col" nowrap style="width:4rem;">备注</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr class="table_content" title="{{ result.id }}">
+                        <td nowrap>{{ forloop.counter }}</td>
+                        <td type="normal" class="scanned_version" nowrap>{{ result.scanned_version }}</td>
+                        <td type="normal" class="award_place_quantization" nowrap>{{ result.award_place_quantization }}</td>
+                        <td type="normal" class="award_place" nowrap>{{ result.award_place }}</td>
+                        <td type="json" class="award_name" style="white-space: pre-wrap;width:3vw;">{{ result.award_name }}</td>
+                        <td type="json" class="award_type" style="white-space: pre-wrap">{{ result.award_type }}</td>
+                        <td type="json" class="award_level" style="white-space: pre-wrap">{{ result.award_level }}</td>
+                        <td type="json" class="award_sponsor" style="white-space: pre-wrap">{{ result.award_sponsor }}</td>
+                        <td type="json" class="awarded_staff_with_order" style="white-space: pre-wrap">{{ result.awarded_staff_with_order }}</td>
+                        <td type="json" class="award_date" style="white-space: pre-wrap">{{ result.award_date }}</td>
+                        <td type="json" class="award_order" style="white-space: pre-wrap">{{ result.award_order }}</td>
+                        <td type="json" class="award_money" style="white-space: pre-wrap">{{ result.award_money }}</td>
+                        <td type="json" class="remark" style="white-space: pre-wrap">{{ result.remark }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+    </div>
+    <!-- 右下角添加按钮结束 -->
+    </div>
+
+{% endblock %}

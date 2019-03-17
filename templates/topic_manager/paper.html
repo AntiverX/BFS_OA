@@ -1,0 +1,180 @@
+{% extends "topic_manager/base.html" %}
+{% block content %}
+    <div class="container-fluid ">
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">学术论文</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--此处id与js保持一致，当前id为form-->
+                        <div id="form">
+                            {% csrf_token %}
+                            <!--每个要输入的内容，class里都要包含这个内容对应的类-->
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label for="person_in_charge">负责人</label>
+                                    <input class="person_in_charge form-control" id="person_in_charge" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="title">论文名称</label>
+                                    <input class="title form-control" id="title" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="grade">作者</label>
+                                    <input class="author form-control" id="author" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                            </div>
+
+                            <div class="all_record">
+                                <div class="record">
+                                    <div class="row">
+                                        <div class="form-group col-2">
+                                            <label for="contribution_date">投稿时间</label>
+                                            <input class="contribution_date form-control" id="contribution_date" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="acceptance_date">录用时间</label>
+                                            <input class="acceptance_date form-control" id="acceptance_date" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="invoice_submitted">发票提交</label>
+                                            <select class="invoice_submitted form-control" id="invoice_submitted">
+                                                <option value="0">否</option>
+                                                <option value="1">是</option>
+                                            </select>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="final_version_submitted">电子版（终稿）提交</label>
+                                            <select class="final_version_submitted form-control" id="final_version_submitted">
+                                                <option value="0">否</option>
+                                                <option value="1">是</option>
+                                            </select>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="journal_received_and_submitted">刊物领取和提交</label>
+                                            <select class="journal_received_and_submitted form-control" id="journal_received_and_submitted">
+                                                <option value="0">否</option>
+                                                <option value="1">是</option>
+                                            </select>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="indexed_by">检索SCI、EI</label>
+                                            <input class="indexed_by form-control" id="indexed_by" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-4">
+                                            <label for="journal_name">期刊名称</label>
+                                            <input class="journal_name form-control" id="journal_name" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="paper_location">发表年卷期页码</label>
+                                            <input class="paper_location form-control" id="paper_location" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+
+                                        <div class="form-group col-6">
+                                            <label for="remark">备注</label>
+                                            <input class="remark form-control" id="remark" required>
+                                            <div id="content-valid" class="valid-feedback">OK</div>
+                                            <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="deploy_floating" id="add_target" style="margin-left: 45%">
+                            <span class="fonticon_plus"></span>
+                        </a>
+                        <hr style="margin-top: 26px">
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap style="width:1rem!important;">序号</th>
+                    <th type="normal" class="person_in_charge" scope="col" nowrap style="width:5.5rem;">负责人</th>
+                    <th type="normal" class="title" scope="col" nowrap style="width:6rem;">论文名称</th>
+                    <th type="normal" class="author" scope="col" nowrap style="width:4rem;">作者</th>
+                    <th type="json" class="contribution_date" scope="col" nowrap style="width:10rem;">投稿时间</th>
+                    <th type="json" class="acceptance_date" scope="col" nowrap style="width:3.5rem;">录用时间</th>
+                    <th type="json" class="invoice_submitted" scope="col" nowrap style="width:3.5rem;">发票提交</th>
+                    <th type="json" class="final_version_submitted" scope="col" nowrap style="width:5rem;">电子版（终稿）提交</th>
+                    <th type="json" class="journal_received_and_submitted" scope="col" nowrap style="width:5rem;">刊物领取和提交</th>
+                    <th type="json" class="journal_name" scope="col" nowrap style="width:4rem;">期刊名称</th>
+                    <th type="json" class="paper_location" scope="col" nowrap style="width:4rem;">发表年卷期页码</th>
+                    <th type="json" class="indexed_by" scope="col" nowrap style="width:4rem;">检索SCI、EI</th>
+                    <th type="json" class="remark" scope="col" nowrap style="width:4rem;">备注</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr class="table_content" title="{{ result.id }}">
+                        <td nowrap>{{ forloop.counter }}</td>
+                        <td type="normal" class="person_in_charge" nowrap>{{ result.person_in_charge }}</td>
+                        <td type="normal" class="title" nowrap>{{ result.title }}</td>
+                        <td type="normal" class="author" nowrap>{{ result.author }}</td>
+                        <td type="json" class="contribution_date" style="white-space: pre-wrap;width:3vw;">{{ result.contribution_date }}</td>
+                        <td type="json" class="acceptance_date" style="white-space: pre-wrap">{{ result.acceptance_date }}</td>
+                        <td type="json" class="invoice_submitted" style="white-space: pre-wrap">{{ result.invoice_submitted }}</td>
+                        <td type="json" class="final_version_submitted" style="white-space: pre-wrap">{{ result.final_version_submitted }}</td>
+                        <td type="json" class="journal_received_and_submitted" style="white-space: pre-wrap">{{ result.journal_received_and_submitted }}</td>
+                        <td type="json" class="journal_name" style="white-space: pre-wrap">{{ result.journal_name }}</td>
+                        <td type="json" class="paper_location" style="white-space: pre-wrap">{{ result.paper_location }}</td>
+                        <td type="json" class="indexed_by" style="white-space: pre-wrap">{{ result.indexed_by }}</td>
+                        <td type="json" class="remark" style="white-space: pre-wrap">{{ result.remark }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+    </div>
+    <!-- 右下角添加按钮结束 -->
+    </div>
+
+{% endblock %}

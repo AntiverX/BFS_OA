@@ -192,3 +192,102 @@ class ScholarReport(models.Model):
     reply_status = models.TextField()
     # 问题相关的建议
     remark = models.TextField(blank=True)
+
+
+# 学术论文
+class Paper(models.Model):
+    # 用户
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # 姓名
+    real_name = models.TextField(blank=True)
+    # 负责人
+    person_in_charge = models.TextField(blank=True)
+    # 论文名称
+    title = models.TextField()
+    # 作者
+    author = models.TextField()
+    # 以下内容为json格式
+    # 投稿时间
+    contribution_date = models.TextField(blank=True)
+    # 录用时间
+    acceptance_date = models.TextField(blank=True)
+    # 发票提交
+    invoice_submitted = models.TextField(default=True)
+    # 电子版（终稿）提交
+    final_version_submitted = models.TextField(default=True)
+    # 刊物领取和提交
+    journal_received_and_submitted = models.TextField(default=True)
+    # 期刊名称
+    journal_name = models.TextField(blank=True)
+    # 发表年卷期页码
+    paper_location = models.TextField(blank=True)
+    # 检索SCI、EI
+    indexed_by = models.TextField(blank=True)
+    # 备注
+    remark = models.TextField(blank=True)
+
+
+# 获奖
+class Award(models.Model):
+    # 用户
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # 姓名
+    real_name = models.TextField(blank=True)
+    # 扫描件
+    scanned_version = models.BooleanField(default=False)
+    # 级别量化
+    award_place_quantization = models.TextField()
+    # 获奖级别
+    award_place = models.TextField()
+    # 获奖名称
+    award_name = models.TextField()
+    # 获奖类别
+    award_type = models.TextField()
+    # 级别
+    award_level = models.TextField()
+    # 评奖单位
+    award_sponsor = models.TextField()
+    # 署名及次序
+    awarded_staff_with_order = models.TextField()
+    # 获奖时间
+    award_date = models.DateField()
+    # 署名次序
+    award_order = models.TextField()
+    # 奖金
+    award_money = models.TextField()
+    # 备注
+    remark = models.DateField(blank=True)
+
+
+# 专利
+class Patent(models.Model):
+    # 用户
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # 姓名
+    real_name = models.TextField(blank=True)
+    # 组名
+    group_name = models.TextField()
+    # 类型
+    type = models.TextField()
+    # 名称
+    name = models.TextField()
+    # 版本号
+    version = models.TextField()
+    # 申请日期
+    application_date = models.DateField()
+    # 授权公告日
+    announcement_date = models.DateField()
+    # 专利号
+    patent_number = models.TextField()
+    # 获得人
+    author = models.TextField()
+    # 署名次序
+    author_order = models.TextField()
+    # 著作权人
+    copyright_owner = models.TextField()
+    # 批准单位
+    authorization_unit = models.TextField()
+    # 日期
+    date = models.DateField(auto_now=True)
+    # 摘要
+    abstract = models.TextField()

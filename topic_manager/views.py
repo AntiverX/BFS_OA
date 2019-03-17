@@ -4,7 +4,9 @@ Author：Antiver
 """
 
 from django.shortcuts import render, HttpResponse
-from topic_manager.models import MeetingRecord, Target, Plan, WorkSummary, WeeklySummary, WorkAchievement, AchievementQuantization, AchievementQuantizationConfirmation,ScholarReport
+from topic_manager.models import MeetingRecord, Target, Plan, WorkSummary, WeeklySummary, WorkAchievement, \
+    AchievementQuantization, AchievementQuantizationConfirmation, ScholarReport, Paper, \
+    Award, Patent
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import *
@@ -563,6 +565,183 @@ def scholar_report(request):
             'results': results,
         }
         return render(request, "topic_manager/scholar_report.html", context=context)
+
+
+# 学术论文
+@login_required
+def paper(request):
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = Paper.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.person_in_charge = request.POST['person_in_charge']
+                existing_record.title = request.POST['title']
+                existing_record.author = request.POST['author']
+                existing_record.contribution_date = request.POST['contribution_date']
+                existing_record.acceptance_date = request.POST['acceptance_date']
+                existing_record.invoice_submitted = request.POST['invoice_submitted']
+                existing_record.final_version_submitted = request.POST['final_version_submitted']
+                existing_record.journal_received_and_submitted = request.POST['journal_received_and_submitted']
+                existing_record.journal_name = request.POST['journal_name']
+                existing_record.paper_location = request.POST['paper_location']
+                existing_record.indexed_by = request.POST['indexed_by']
+                existing_record.remark = request.POST['remark']
+                existing_record.save()
+        else:
+            new_record = Paper(
+                user=request.user,
+                real_name=request.user.real_name,
+                person_in_charge=request.POST['person_in_charge'],
+                title=request.POST['title'],
+                author=request.POST['author'],
+                contribution_date=request.POST['contribution_date'],
+                acceptance_date=request.POST['acceptance_date'],
+                invoice_submitted=request.POST['invoice_submitted'],
+                final_version_submitted=request.POST['final_version_submitted'],
+                journal_received_and_submitted=request.POST['journal_received_and_submitted'],
+                journal_name=request.POST['journal_name'],
+                paper_location=request.POST['paper_location'],
+                indexed_by=request.POST['indexed_by'],
+                remark=request.POST['remark'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = Paper.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "topic_manager/paper.html", context=context)
+
+
+# 获奖
+@login_required
+def award(request):
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = Award.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.scanned_version = request.POST['scanned_version']
+                existing_record.award_place_quantization = request.POST['award_place_quantization']
+                existing_record.award_place = request.POST['award_place']
+                existing_record.award_name = request.POST['award_name']
+                existing_record.award_type = request.POST['award_type']
+                existing_record.award_level = request.POST['award_level']
+                existing_record.award_sponsor = request.POST['award_sponsor']
+                existing_record.awarded_staff_with_order = request.POST['awarded_staff_with_order']
+                existing_record.award_date = request.POST['award_date']
+                existing_record.award_order = request.POST['award_order']
+                existing_record.award_money = request.POST['award_money']
+                existing_record.remark = request.POST['remark']
+                existing_record.save()
+        else:
+            new_record = Award(
+                user=request.user,
+                real_name=request.user.real_name,
+                scanned_version=request.POST['scanned_version'],
+                award_place_quantization=request.POST['award_place_quantization'],
+                award_place=request.POST['award_place'],
+                award_name=request.POST['award_name'],
+                award_type=request.POST['award_type'],
+                award_level=request.POST['award_level'],
+                award_sponsor=request.POST['award_sponsor'],
+                awarded_staff_with_order=request.POST['awarded_staff_with_order'],
+                award_date=request.POST['award_date'],
+                award_order=request.POST['award_order'],
+                award_money=request.POST['award_money'],
+                remark=request.POST['remark'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = Award.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "topic_manager/award.html", context=context)
+
+
+# 专利
+@login_required
+def patent(request):
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = Patent.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.group_name = request.POST['group_name']
+                existing_record.type = request.POST['type']
+                existing_record.name = request.POST['name']
+                existing_record.version = request.POST['version']
+                existing_record.application_date = request.POST['application_date']
+                existing_record.announcement_date = request.POST['announcement_date']
+                existing_record.patent_number = request.POST['patent_number']
+                existing_record.author = request.POST['author']
+                existing_record.author_order = request.POST['author_order']
+                existing_record.copyright_owner = request.POST['copyright_owner']
+                existing_record.authorization_unit = request.POST['authorization_unit']
+                existing_record.date = request.POST['date']
+                existing_record.abstract = request.POST['abstract']
+                existing_record.save()
+        else:
+            new_record = Patent(
+                user=request.user,
+                real_name=request.user.real_name,
+                name=request.POST['name'],
+                version=request.POST['version'],
+                application_date=request.POST['application_date'],
+                announcement_date=request.POST['announcement_date'],
+                patent_number=request.POST['patent_number'],
+                author=request.POST['author'],
+                author_order=request.POST['author_order'],
+                copyright_owner=request.POST['copyright_owner'],
+                authorization_unit=request.POST['authorization_unit'],
+                date=request.POST['date'],
+                abstract=request.POST['abstract'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = Patent.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "topic_manager/patent.html", context=context)
 
 
 @login_required

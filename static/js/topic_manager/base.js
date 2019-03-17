@@ -10,8 +10,8 @@
 提交表单
 表单验证
 */
-
 $(document).ready(function () {
+    var active_table;
     /* 右键菜单的相关实现 */
     $.contextMenu({
         // define which elements trigger this menu
@@ -145,6 +145,7 @@ $(document).ready(function () {
         element_.appendTo(".all_record");
         $("#submit_form").attr("disabled", true);
     });
+    /* 加号按钮结束 */
 
     /* 表格项目被右击后，记录被右击的表格id */
     $('tr').mousedown(function (event) {
