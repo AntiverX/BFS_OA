@@ -18,78 +18,81 @@
                             <!--每个要输入的内容，class里都要包含这个内容对应的类-->
                             <div class="row">
                                 <div class="form-group col-2">
-                                    <label for="scanned_version">扫描件</label>
-                                    <select class="scanned_version form-control" id="scanned_version">
-                                        <option value="0">否</option>
-                                        <option value="1">是</option>
-                                    </select>
+                                    <label for="group_name">组名</label>
+                                    <input class="group_name form-control" id="group_name" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="award_place_quantization">级别量化</label>
-                                    <input class="award_place_quantization form-control" id="award_place_quantization" required>
+                                    <label for="type">类型</label>
+                                    <input class="type form-control" id="type" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="award_place">获奖级别</label>
-                                    <input class="award_place form-control" id="award_place" required>
+                                    <label for="name">名称</label>
+                                    <input class="name form-control" id="name" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="award_name">获奖名称</label>
-                                    <input class="award_name form-control" id="award_name" required>
+                                    <label for="version">版本号</label>
+                                    <input class="version form-control" id="version" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="award_type">获奖类别</label>
-                                    <input class="award_type form-control" id="award_type" required>
+                                    <label for="application_date">申请日期</label>
+                                    <input class="application_date form-control" id="application_date" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="award_level">级别</label>
-                                    <input class="award_level form-control" id="award_level" required>
+                                    <label for="announcement_date">授权公告日</label>
+                                    <input class="announcement_date form-control" id="announcement_date" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="award_sponsor">评奖单位</label>
-                                    <input class="award_sponsor form-control" id="award_sponsor" required>
+                                    <label for="patent_number">专利号</label>
+                                    <input class="patent_number form-control" id="patent_number" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="awarded_staff_with_order">署名及次序</label>
-                                    <input class="awarded_staff_with_order form-control" id="awarded_staff_with_order" required>
+                                    <label for="author">获得人</label>
+                                    <input class="author form-control" id="author" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="award_date">获奖时间</label>
-                                    <input class="award_date form-control" id="award_date" required>
+                                    <label for="author_order">署名次序</label>
+                                    <input class="author_order form-control" id="author_order" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-4">
-                                    <label for="award_order">署名次序</label>
-                                    <input class="award_order form-control" id="award_order" required>
+                                    <label for="copyright_owner">著作权人</label>
+                                    <input class="copyright_owner form-control" id="copyright_owner" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="award_money">奖金</label>
-                                    <input class="award_money form-control" id="award_money" required>
+                                    <label for="authorization_unit">批准单位</label>
+                                    <input class="authorization_unit form-control" id="authorization_unit" required>
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
 
                                 <div class="form-group col-6">
-                                    <label for="remark">备注</label>
-                                    <input class="remark form-control" id="remark">
+                                    <label for="date">日期</label>
+                                    <input class="date form-control" id="date">
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="abstract">摘要</label>
+                                    <input class="abstract form-control" id="abstract">
                                     <div id="content-valid" class="valid-feedback">OK</div>
                                     <div id="content-invalid" class="invalid-feedback">ERROR</div>
                                 </div>
@@ -98,7 +101,6 @@
                             <div class="all_record">
                                 <div class="record">
                                     <div class="row">
-
                                     </div>
                                 </div>
                             </div>
@@ -124,16 +126,16 @@
                     <th type="normal" class="group_name" scope="col" nowrap style="width:5.5rem;">组名</th>
                     <th type="normal" class="type" scope="col" nowrap style="width:6rem;">类型</th>
                     <th type="normal" class="name" scope="col" nowrap style="width:4rem;">名称</th>
-                    <th type="json" class="version" scope="col" nowrap style="width:10rem;">版本号</th>
-                    <th type="json" class="application_date" scope="col" nowrap style="width:3.5rem;">申请日期</th>
-                    <th type="json" class="announcement_date" scope="col" nowrap style="width:3.5rem;">授权公告日</th>
-                    <th type="json" class="patent_number" scope="col" nowrap style="width:5rem;">专利号</th>
-                    <th type="json" class="author" scope="col" nowrap style="width:5rem;">获得人</th>
-                    <th type="json" class="author_order" scope="col" nowrap style="width:4rem;">署名次序</th>
-                    <th type="json" class="copyright_owner" scope="col" nowrap style="width:4rem;">著作权人</th>
-                    <th type="json" class="authorization_unit" scope="col" nowrap style="width:4rem;">批准单位</th>
-                    <th type="json" class="date" scope="col" nowrap style="width:4rem;">日期</th>
-                    <th type="json" class="abstract" scope="col" nowrap style="width:4rem;">摘要</th>
+                    <th type="normal" class="version" scope="col" nowrap style="width:10rem;">版本号</th>
+                    <th type="normal" class="application_date" scope="col" nowrap style="width:3.5rem;">申请日期</th>
+                    <th type="normal" class="announcement_date" scope="col" nowrap style="width:3.5rem;">授权公告日</th>
+                    <th type="normal" class="patent_number" scope="col" nowrap style="width:5rem;">专利号</th>
+                    <th type="normal" class="author" scope="col" nowrap style="width:5rem;">获得人</th>
+                    <th type="normal" class="author_order" scope="col" nowrap style="width:4rem;">署名次序</th>
+                    <th type="normal" class="copyright_owner" scope="col" nowrap style="width:4rem;">著作权人</th>
+                    <th type="normal" class="authorization_unit" scope="col" nowrap style="width:4rem;">批准单位</th>
+                    <th type="normal" class="date" scope="col" nowrap style="width:4rem;">日期</th>
+                    <th type="normal" class="abstract" scope="col" nowrap style="width:4rem;">摘要</th>
                 </tr>
                 </thead>
                 <tbody>

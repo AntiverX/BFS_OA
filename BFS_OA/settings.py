@@ -24,7 +24,7 @@ SECRET_KEY = 'cfnj_h3e_1oe_6lco+o8cqwb-0)v3&5hzywan)^5)f(9#%*3pc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['subject.isclab.org']
+ALLOWED_HOSTS = ['*',]
 
 # Application definition
 
@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     'user_info.apps.UserInfoConfig',
     'weekly_summary.apps.WeeklySummaryConfig',
     'topic_manager.apps.TopicManagerConfig',
-    'main_site.apps.MainSiteConfig'
+    'main_site.apps.MainSiteConfig',
+    'academic_report.apps.AcademicReportConfig',
+    'topic_manager_v2.apps.TopicManagerV2Config',
+    'newcomer.apps.NewcomerConfig',
+    'ftp_search.apps.FtpSearchConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -75,12 +80,24 @@ WSGI_APPLICATION = 'BFS_OA.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'BFS_OA',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

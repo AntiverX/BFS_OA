@@ -1,28 +1,19 @@
-{% extends "base.html" %}
+{% extends "index/base.html" %}
 
 {% block content %}
     <div class="container">
         <div class="row mt-5">
             <ul class="list-group col-12">
-                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="mb-1">[安全事件]List group item heading</h5>
-                        <small class="text-muted">1 days ago</small>
+                {% for result in results %}
+                    <div class="card">
+                        <div class="card-header">
+                            <span>{{ result.title }}</span> <span style="float:right">{{ result.create_time|date:"Y-m-d H:i" }}</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ result.content }}</p>
+                        </div>
                     </div>
-                </a>
-
-                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="mb-1">List group item heading</h5>
-                        <small class="text-muted">2 days ago</small>
-                    </div>
-                </a>
-                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="mb-1">List group item heading</h5>
-                        <small class="text-muted">3 days ago</small>
-                    </div>
-                </a>
+                {% endfor %}
             </ul>
         </div>
 

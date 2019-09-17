@@ -3,7 +3,7 @@ from BFS_OA.settings import BASE_DIR
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
 import os, time, re, random
-from .models import FileRecord, BFS_OA_Config, Lab_Asset, Semester
+from .models import FileRecord, BFS_OA_Config,  Semester,  BulletinAndNews
 from user_info.models import User
 from django.core.exceptions import *
 import datetime
@@ -36,28 +36,70 @@ def index(request):
 # 通知公告
 @login_required
 def bulletin(request):
-    # TODO template及逻辑
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    return render(request, "index/bulletin.html", context=context)
+    if request.method == "GET":
+        bulletins = BulletinAndNews.objects.filter(type="bulletin")
+        context = {
+            'results': bulletins,
+        }
+        return render(request, "index/bulletin.html", context=context)
+    else:
+        return render(request, "index/bulletin.html")
 
 
 # 新闻
 @login_required
 def news(request):
-    # TODO template及逻辑
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    return render(request, "index/news.html", context=context)
+    if request.method == "GET":
+        news = BulletinAndNews.objects.filter(type="news")
+        context = {
+            'results': news,
+        }
+        return render(request, "index/news.html", context=context)
+    else:
+        return render(request, "index/news.html")
 
 
-# 图书馆
+# 图书管理
 @login_required
 def library(request):
-    # TODO template及逻辑
-    context['user'] = request.user
-    context['config'] = BFS_OA_Config.objects.filter()[0] if len(BFS_OA_Config.objects.filter()) != 0 else None
-    return render(request, "index/library.html", context=context)
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = Book.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.title = request.POST['title']
+                existing_record.author = request.POST['author']
+                existing_record.quantity = request.POST['quantity']
+                existing_record.isbn = request.POST['isbn']
+                existing_record.save()
+        else:
+            new_record = Book(
+                user=request.user,
+                real_name=request.user.real_name,
+                title=request.POST['title'],
+                author=request.POST['author'],
+                quantity=request.POST['quantity'],
+                isbn=request.POST['isbn'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = Book.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "index/library.html", context=context)
 
 
 # 竞赛
@@ -104,6 +146,7 @@ def settings(request):
             }
         }
         return render(request, "index/settings.html", context=context)
+
 
 # 设置学期相关的内容
 @login_required
@@ -280,6 +323,92 @@ def random_service(request):
     ]
     random_value = random.randint(0, len(users) - 1)
     return HttpResponse(users[random_value])
+
+
+# 服务器管理
+@login_required
+def server_manage(request):
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = Server.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.server_name = request.POST['server_name']
+                existing_record.ip_address = request.POST['ip_address']
+                existing_record.username = request.POST['username']
+                existing_record.password = request.POST['password']
+                existing_record.remark = request.POST['remark']
+                existing_record.save()
+        else:
+            new_record = Server(
+                user=request.user,
+                real_name=request.user.real_name,
+                server_name=request.POST['server_name'],
+                ip_address=request.POST['ip_address'],
+                username=request.POST['username'],
+                password=request.POST['password'],
+                remark=request.POST['remark'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = Server.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "index/server_manage.html", context=context)
+
+
+# 新闻管理
+@login_required
+def bulletin_and_news_manage(request):
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = BulletinAndNews.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.title = request.POST['title']
+                existing_record.content = request.POST['content']
+                existing_record.type = request.POST['type']
+                existing_record.save()
+        else:
+            new_record = BulletinAndNews(
+                user=request.user,
+                real_name=request.user.real_name,
+                title=request.POST['title'],
+                content=request.POST['content'],
+                type=request.POST['type'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = BulletinAndNews.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "index/bulletin_and_news_manage.html", context=context)
 
 
 @login_required

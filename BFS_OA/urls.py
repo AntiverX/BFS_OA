@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include,re_path
+from django.urls import path, include, re_path
 from main_site import views as main_site_views
 from user_info import views as user_views
 
@@ -24,17 +24,14 @@ urlpatterns = [
     path('register', user_views.register),
     # path('admin/', admin.site.urls),
     path('', main_site_views.index),
+    path('', include("main_site.urls")),
     path('info/', include('user_info.urls')),
     path('weekly_summary/', include('weekly_summary.urls')),
     path('topic_manager/', include('topic_manager.urls')),
-    path('bulletin', main_site_views.bulletin),
-    path('news', main_site_views.news),
-    path('library', main_site_views.library),
+    path('academic_report/', include('academic_report.urls')),
+    path('topic_manager_v2/', include('topic_manager_v2.urls')),
+    path('newcomer/', include('newcomer.urls')),
     path('system/', include('main_site.urls')),
-    path('about', main_site_views.about),
-    path('competition', main_site_views.competition),
-    path('upload', main_site_views.uploader),
-    path('random', main_site_views.random_service),
-    path('get_current_week', main_site_views.get_current_week),
-    path('get_current_week_range', main_site_views.get_current_week_range),
+    path('ftp/',include('ftp_search.urls')),
+
 ]

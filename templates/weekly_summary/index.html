@@ -1,14 +1,6 @@
-{% extends "base.html" %}
+{% extends "weekly_summary/weekly_summary_base.html" %}
 
-{% block content %}
-    <div class="nav-scroller bg-white shadow-sm">
-        <nav class="nav nav-underline">
-            <a class="nav-link" href="{% url "summary_list" %}">周报列表</a>
-            {% if user.is_admin %}
-            <a class="nav-link" href="{% url "report_mode" %}">汇报模式</a>
-            {% endif %}
-        </nav>
-    </div>
+{% block content_2 %}
     <div class="container ">
         {% load static %}
         <div class="text-center h3 mt-5">BFS信息管理系统</div>

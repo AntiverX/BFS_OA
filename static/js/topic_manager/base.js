@@ -11,6 +11,7 @@
 表单验证
 */
 $(document).ready(function () {
+
     var active_table;
     /* 右键菜单的相关实现 */
     $.contextMenu({
@@ -48,8 +49,10 @@ $(document).ready(function () {
                             }
                         } else if (column_type[i] == "select") {
                             $("." + column_name[i]).val($("tr[title=" + active_table + "]").find("." + column_name[i]).text() == "是" ? 1 : 0);
-                        } else {
+                        } else if (column_type[i] == "normal") {
                             $("." + column_name[i]).val($("tr[title=" + active_table + "]").find("." + column_name[i]).text());
+                        } else {
+
                         }
                     }
                     $("input,select,textarea").addClass("is-valid");

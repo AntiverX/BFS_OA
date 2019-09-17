@@ -44,6 +44,8 @@ class User(AbstractBaseUser):
     real_name = models.CharField(max_length=30, blank=True)
     email = models.EmailField(_('email address'), blank=True)
     is_student = models.BooleanField(default=True)
+    # 学生类型
+    student_type = models.TextField(default="新生")
     is_teacher = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -108,32 +110,32 @@ class User(AbstractBaseUser):
 
 
 # 课表
-class TimeTable(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # 班级名称
-    class_name = models.TextField()
-    # 教师名称
-    teacher_name = models.TextField()
-    # 开始周
-    week_start = models.IntegerField()
-    # 结束周
-    week_end = models.IntegerField()
-    # 星期
-    day = models.IntegerField()
-    # 大节
-    class_number = models.IntegerField()
-    # 上课地点
-    class_location = models.TextField()
+# class TimeTable(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     # 班级名称
+#     class_name = models.TextField()
+#     # 教师名称
+#     teacher_name = models.TextField()
+#     # 开始周
+#     week_start = models.IntegerField()
+#     # 结束周
+#     week_end = models.IntegerField()
+#     # 星期
+#     day = models.IntegerField()
+#     # 大节
+#     class_number = models.IntegerField()
+#     # 上课地点
+#     class_location = models.TextField()
 
 
 # 资产
-class Asset(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    type = models.TextField()
-    name = models.TextField()
-    model = models.TextField()
-    manufacturer = models.TextField()
-    number = models.TextField()
-    parameter = models.TextField()
-    buying_date = models.DateField()
-    storing_place = models.TextField()
+# class Asset(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     type = models.TextField()
+#     name = models.TextField()
+#     model = models.TextField()
+#     manufacturer = models.TextField()
+#     number = models.TextField()
+#     parameter = models.TextField()
+#     buying_date = models.DateField()
+#     storing_place = models.TextField()

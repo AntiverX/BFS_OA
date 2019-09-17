@@ -1,52 +1,107 @@
-{% extends "base.html" %}
+{% extends "index/base.html" %}
 
-<style type="text/css">
-    td {
-        padding-top: 15px;
-    }
-</style>
 {% block content %}
-    <div class="container mt-5">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">编号</th>
-                <th scope="col">书名</th>
-                <th scope="col">作者</th>
-                <th scope="col">状态</th>
-                <th scope="col">借阅</th>
-            </tr>
-            </thead>
+    <script>
+    </script>
+    <div class="container-fluid">
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">学术论文</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--此处id与js保持一致，当前id为form-->
+                        <div id="form">
+                            {% csrf_token %}
+                            <!--每个要输入的内容，class里都要包含这个内容对应的类-->
+                            <div class="row">
+                                <div class="form-group col-8">
+                                    <label for="title">书名</label>
+                                    <input class="title form-control" id="title" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-4">
+                                    <label for="author">作者</label>
+                                    <input class="author form-control" id="author" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="quantity">数量</label>
+                                    <input class="quantity form-control" id="quantity" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-10">
+                                    <label for="isbn">ISBN</label>
+                                    <input class="isbn form-control" id="isbn" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
 
-            <tbody>
+                                <div class="all_record">
+                                    <div class="record">
+                                        <div class="row">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="margin-top: 26px">
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <tr>
-                <th scope="row">1</th>
-                <td STYLE="padding-top: 15px;">加密与解密 第4版</td>
-                <td style="padding-top: 15px;">段钢</td>
-                <td style="padding-top: 15px;">可借</td>
-                <td>
-                    <button type="button" class="btn btn-primary btn-sm">借阅</button>
-                </td>
-            </tr>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap style="width:1rem!important;">序号</th>
+                    <th type="normal" class="title" scope="col" nowrap style="width:5.5rem;">书名</th>
+                    <th type="normal" class="author" scope="col" nowrap style="width:6rem;">作者</th>
+                    <th type="normal" class="quantity" scope="col" nowrap style="width:4rem;">数量</th>
+                    <th type="normal" class="isbn" scope="col" nowrap style="width:10rem;">ISBN</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr class="table_content" title="{{ result.id }}">
+                        <td nowrap>{{ forloop.counter }}</td>
+                        <td type="normal" class="server_name" nowrap>{{ result.title }}</td>
+                        <td type="normal" class="ip_address" nowrap>{{ result.author }}</td>
+                        <td type="normal" class="username" nowrap>{{ result.quantity }}</td>
+                        <td type="normal" class="password" nowrap>{{ result.isbn }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-            <tr>
-                <th scope="row">1</th>
-                <td STYLE="padding-top: 15px;">深度学习 [deep learning]</td>
-                <td style="padding-top: 15px;"> Ian Goodfellow</td>
-                <td style="padding-top: 15px;">可借</td>
-                <td>
-                    <button type="button" class="btn btn-primary btn-sm">借阅</button>
-                </td>
-            </tr>
-
-            </tbody>
-
-        </table>
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+        <!-- 右下角添加按钮结束 -->
     </div>
 {% endblock %}
-
-
-
 
 

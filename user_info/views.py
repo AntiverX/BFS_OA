@@ -1,16 +1,11 @@
 from django.shortcuts import render, HttpResponse
-from user_info.models import User, Asset, TimeTable
+from user_info.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 import time
 from django.core.exceptions import *
 from main_site.models import BFS_OA_Config
-
-
-@login_required
-def info(request):
-    return render(request, 'info/index.html')
 
 
 def auth(request):
@@ -44,8 +39,9 @@ def register(request):
         password = request.POST['password']
         real_name = request.POST['real_name']
         student_id = request.POST['student_id']
+        group_name = request.POST['group_name']
         user = User.objects.create_user(username=username, password=password, real_name=real_name, current_user=current_user,
-                                        student_id=student_id, is_display_all=False)
+                                        student_id=student_id, is_display_all=False,group_name=group_name)
         user.save()
         context['success'] = "注册成功！"
         context['return_link'] = "/"
@@ -149,6 +145,7 @@ def time_table_list(request):
         context['results'] = TimeTable.objects.filter(user=request.user)
         return render(request, "info/time_table_list.html", context=context)
 
+
 # 个人信息
 @login_required
 def my_info(request):
@@ -172,6 +169,8 @@ def my_info(request):
         info.past_unit = request.POST['past_unit']
         info.thesis_defense_score = request.POST['thesis_defense_score']
         info.degree_paper = request.POST['degree_paper']
+        info.student_type = request.POST['student_type']
+        info.real_name = request.POST['real_name']
         try:
             info.save()
         except (ValueError, ValidationError) as err:
@@ -251,6 +250,7 @@ def asset(request):
         }
         context['assets'] = results
         return render(request, "info/asset.html", context=context)
+
 
 # 表单验证
 def valid(request):

@@ -4,9 +4,9 @@ Author：Antiver
 """
 
 from django.shortcuts import render, HttpResponse
-from topic_manager.models import MeetingRecord, Target, Plan, WorkSummary, WeeklySummary, WorkAchievement, \
-    AchievementQuantization, AchievementQuantizationConfirmation, ScholarReport, Paper, \
-    Award, Patent
+# from topic_manager.models import MeetingRecord, Target, Plan, WorkSummary, WeeklySummary, WorkAchievement, \
+#     AchievementQuantization, AchievementQuantizationConfirmation, ScholarReport, Paper, \
+#     Award, Patent, Software
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import *
@@ -716,6 +716,8 @@ def patent(request):
             new_record = Patent(
                 user=request.user,
                 real_name=request.user.real_name,
+                group_name=request.POST['group_name'],
+                type=request.POST['type'],
                 name=request.POST['name'],
                 version=request.POST['version'],
                 application_date=request.POST['application_date'],
@@ -742,6 +744,65 @@ def patent(request):
             'results': results,
         }
         return render(request, "topic_manager/patent.html", context=context)
+
+
+# 软件著作权
+@login_required
+def software(request):
+    if request.method == "POST":
+        # 提供了记录的ID，要么删除该记录，要么修改该记录
+        if request.POST['target_id'] != "":
+            target_id = request.POST['target_id']
+            existing_record = Software.objects.get(id=target_id)
+            # 删除该记录
+            if request.POST['btn'] == "delete":
+                existing_record.delete()
+            # 修改该记录
+            else:
+                existing_record.group_name = request.POST['group_name']
+                existing_record.type = request.POST['type']
+                existing_record.name = request.POST['name']
+                existing_record.version = request.POST['version']
+                existing_record.finish_date = request.POST['finish_date']
+                existing_record.announcement_date = request.POST['announcement_date']
+                existing_record.software_number = request.POST['software_number']
+                existing_record.author = request.POST['author']
+                existing_record.author_order = request.POST['author_order']
+                existing_record.copyright_owner = request.POST['copyright_owner']
+                existing_record.authorization_unit = request.POST['authorization_unit']
+                existing_record.date = request.POST['date']
+                existing_record.save()
+        else:
+            new_record = Software(
+                user=request.user,
+                real_name=request.user.real_name,
+                group_name=request.POST['group_name'],
+                type=request.POST['type'],
+                name=request.POST['name'],
+                version=request.POST['version'],
+                finish_date=request.POST['finish_date'],
+                announcement_date=request.POST['announcement_date'],
+                software_number=request.POST['software_number'],
+                author=request.POST['author'],
+                author_order=request.POST['author_order'],
+                copyright_owner=request.POST['copyright_owner'],
+                authorization_unit=request.POST['authorization_unit'],
+                date=request.POST['date'],
+            )
+            try:
+                new_record.save()
+            except (ValueError, ValidationError) as err:
+                context = {
+                    'error': err,
+                }
+                return render(request, 'error.html', context=context)
+        return HttpResponse('success')
+    else:
+        results = Software.objects.filter(user=request.user)
+        context = {
+            'results': results,
+        }
+        return render(request, "topic_manager/software.html", context=context)
 
 
 @login_required

@@ -15,5 +15,7 @@ urlpatterns = [
     re_path('^scholar_report$', views.scholar_report),
     re_path('^paper$', views.paper),
     re_path('^award$', views.award),
+    re_path('^patent$', views.patent),
+    re_path('^software$', views.software),
     re_path('^valid$', views.valid),
 ]

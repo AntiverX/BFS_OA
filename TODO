@@ -11,3 +11,4 @@
 # TODO 各个表格的td style修改成和meeting_record一样
 # TODO table不要用title了，太难看
 # TODO 把其他表格的user改成current_user
+# TODO 显示负责人名单

@@ -58,12 +58,21 @@
                     <a class="nav-link" href="/info">我的</a>
                 </li>
                 <li class="nav-item ml-3">
-                    <a class="nav-link" href="/topic_manager">课题管理</a>
+                    <a class="nav-link" href="/topic_manager_v2/index">课题管理</a>
                 </li>
                 <li class="nav-item ml-3">
                     <a class="nav-link" href="/weekly_summary">周报</a>
                 </li>
+                <li class="nav-item ml-3">
+                    <a class="nav-link" href="/academic_report/index">学术报告</a>
+                </li>
             {% endif %}
+            <li class="nav-item ml-3">
+                <a class="nav-link" href="/newcomer/index">新生培训</a>
+            </li>
+            <li class="nav-item ml-3">
+                <a class="nav-link" href="/ftp/index">FTP</a>
+            </li>
             {% if user.is_admin or user.id == 1 %}
                 <li class="nav-item ml-3">
                     <a class="nav-link" href="/system/settings">系统设置</a>

@@ -18,7 +18,7 @@ if [ -d BFS_OA ];then
 fi
 cd ..
 find . -path "*/main_site/migrations/*.py" -not -name "__init__.py" -delete
-find . -path "*/topic_manager/migrations/*.py" -not -name "__init__.py" -delete
+find . -path "*/topic_manager_v2/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/user_info/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/weekly_summary/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*.pyc"  -delete

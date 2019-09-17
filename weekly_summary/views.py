@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from topic_manager.models import WeeklySummary
 import time
 import datetime
 from main_site.models import BFS_OA_Config
