@@ -1,7 +1,9 @@
 {% extends "base_v2.html" %}
 {% block menu %}
     <li class="nav-item active">
+    {% if user.student_type == "新生" %}
         <a class="nav-link" href="{% url 'newcomer_index' %}">我的培训</a>
+    {% endif %}
     </li>
     <li class="nav-item active">
         <a class="nav-link" href="{% url 'score' type="reference_training" %}">评分</a>

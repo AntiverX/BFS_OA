@@ -35,14 +35,17 @@ def index(request):
     else:
         try:
             context = {
-                'have_uploaded': 1,
+                'show_upload_page': 1 if request.user.student_type == "新生" else 0,
                 'all_record': Train.objects.filter(user_name=request.user.real_name),
             }
         except:
             context = {
-                'have_uploaded': 0,
+                'show_upload_page': 1 if request.user.student_type == "新生" else 0,
             }
-        return render(request, 'newcomer/index.html', context=context)
+        if request.user.student_type == "新生":
+            return render(request, 'newcomer/index.html', context=context)
+        else:
+            return HttpResponseRedirect("/newcomer/score/reference_training/")
 
 
 def score(request, type):
@@ -95,10 +98,10 @@ def score(request, type):
     elif request.method == "POST":
         new_record = PollRecord(
             newcomer_name=request.POST['newcomer_name'],
-            score_1=request.POST['score_1'],
-            score_2=request.POST['score_2'],
-            score_3=request.POST['score_3'],
-            score_4=request.POST['score_4'],
+            score_1=request.POST['score_1'] if int(request.POST['score_1']) <=20 and int(request.POST['score_1'])>0 else 0,
+            score_2=request.POST['score_2'] if int(request.POST['score_2']) <=40 and int(request.POST['score_2'])>0 else 0,
+            score_3=request.POST['score_3'] if int(request.POST['score_3']) <=20 and int(request.POST['score_3'])>0 else 0,
+            score_4=request.POST['score_4'] if int(request.POST['score_4']) <=20 and int(request.POST['score_4'])>0 else 0,
             user_name=request.user.real_name,
             training_type=request.POST['training_type'],
             remark=request.POST['remark'],
