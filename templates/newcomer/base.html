@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block menu %}
+    {% load static %}
+    <div class="nav-scroller bg-white shadow-sm">
+        <nav class="nav nav-underline">
+            <a class="nav-link" href="{% url 'newcomer_index' %}">我的培训</a>
+            <a class="nav-link" href="{% url 'score' type="reference_training" %}">评分</a>
+            <a class="nav-link" href="{% url 'newcomer_status' %}">情况统计</a>
+        </nav>
+    </div>
+{% endblock menu %}

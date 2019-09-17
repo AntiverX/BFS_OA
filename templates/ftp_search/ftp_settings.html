@@ -1,0 +1,14 @@
+{% extends "ftp_search/base.html" %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center mt-3">
+            <div class="col-6">
+                <form method="post">
+                    <input type="text" class="form-control" name="action" value="search_directory" hidden>
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">检测目录变动</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

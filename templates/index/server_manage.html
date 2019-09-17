@@ -1,0 +1,114 @@
+{% extends "index/base.html" %}
+
+{% block content %}
+    <script>
+    </script>
+    <div class="container-fluid">
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">学术论文</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--此处id与js保持一致，当前id为form-->
+                        <div id="form">
+                            {% csrf_token %}
+                            <!--每个要输入的内容，class里都要包含这个内容对应的类-->
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label for="server_name">服务器名称</label>
+                                    <input class="server_name form-control" id="server_name" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="ip_address">地址</label>
+                                    <input class="ip_address form-control" id="ip_address" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="username">用户名</label>
+                                    <input class="username form-control" id="username" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="password">密码</label>
+                                    <input class="password form-control" id="password" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="remark">备注</label>
+                                    <input class="remark form-control" id="remark" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="all_record">
+                                    <div class="record">
+                                        <div class="row">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="margin-top: 26px">
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap style="width:1rem!important;">序号</th>
+                    <th type="normal" class="server_name" scope="col" nowrap style="width:5.5rem;">服务器名称</th>
+                    <th type="normal" class="ip_address" scope="col" nowrap style="width:6rem;">地址</th>
+                    <th type="normal" class="username" scope="col" nowrap style="width:4rem;">用户名</th>
+                    <th type="normal" class="password" scope="col" nowrap style="width:10rem;">密码</th>
+                    <th type="normal" class="remark" scope="col" nowrap style="width:3.5rem;">备注</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr class="table_content" title="{{ result.id }}">
+                        <td nowrap>{{ forloop.counter }}</td>
+                        <td type="normal" class="server_name" nowrap>{{ result.server_name }}</td>
+                        <td type="normal" class="ip_address" nowrap>{{ result.ip_address }}</td>
+                        <td type="normal" class="username" nowrap>{{ result.username }}</td>
+                        <td type="normal" class="password" nowrap>{{ result.password }}</td>
+                        <td type="normal" class="remark" nowrap>{{ result.remark }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+        <!-- 右下角添加按钮结束 -->
+    </div>
+{% endblock %}
+
+

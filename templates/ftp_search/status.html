@@ -1,0 +1,27 @@
+{% extends "topic_manager_v2/base.html" %}
+{% block content %}
+    <div class="container mt-5">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">姓名</th>
+                <th scope="col">上次提交时间</th>
+                <th scope="col">应提交时间</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for record in all_record %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ record.real_name }}</td>
+                    <td>{{ record.last_upload_time|date:"Y-m-d H:i" }}</td>
+                    <td>{{ record.should_upload_time|date:"Y-m-d H:i" }}</td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

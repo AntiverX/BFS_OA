@@ -1,0 +1,28 @@
+{% extends "newcomer/base_v2.html" %}
+{% block content %}
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 class="text-center">{{ type }}评论</h2>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col" nowrap style="width: 10%;">序号</th>
+                            <th scope="col" nowrap>评论</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for cpp_comment in comments %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ cpp_comment.remark }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

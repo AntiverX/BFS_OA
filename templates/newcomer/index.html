@@ -1,0 +1,64 @@
+{% extends "newcomer/base_v2.html" %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-md-center mt-3">
+            <div class="col-6">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-2">培训类型</div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="training_type" id="inlineRadio1" value="reference_training" checked>
+                        <label class="form-check-label" for="inlineRadio1">文献检索</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="training_type" id="inlineRadio2" value="cpp_training">
+                        <label class="form-check-label" for="inlineRadio2">C++培训</label>
+                    </div>
+
+                    <div class="mb-2 mt-2">上传文件</div>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" name="file">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                    </div>
+                    <script>
+                        $('#customFile').on('change', function () {
+                            //get the file name
+                            var fileName = $(this).val().replace('C:\\fakepath\\', "");
+                            //replace the "Choose a file" label
+                            $(this).next('.custom-file-label').html(fileName);
+                        })
+                    </script>
+
+                    <button type="submit" class="btn btn-primary">上传</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">姓名</th>
+                    <th scope="col">培训类型</th>
+                    <th scope="col">上传时间</th>
+                    <th scope="col">下载地址</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for record in all_record %}
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>{{ record.user_name }}</td>
+                        <td>{% if record.training_type == "reference_training" %}文献检索培训{% elif record.training_type == "cpp_training"  %}C++培训{% endif %}</td>
+                        <td>{{ record.upload_time|date:"Y-m-d H:i" }}</td>
+                        <td><a href="{{ record.file_name }}">下载地址</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}

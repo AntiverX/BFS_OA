@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 import time
 from django.core.exceptions import *
 from main_site.models import BFS_OA_Config
+import datetime
 
 
 def auth(request):
@@ -40,8 +41,15 @@ def register(request):
         real_name = request.POST['real_name']
         student_id = request.POST['student_id']
         group_name = request.POST['group_name']
-        user = User.objects.create_user(username=username, password=password, real_name=real_name, current_user=current_user,
-                                        student_id=student_id, is_display_all=False,group_name=group_name)
+        student_type = "新生" if int(request.POST['password'][4:6]) == datetime.datetime.now().year % 100 else "硕士研究生"
+        user = User.objects.create_user(username=username,
+                                        password=password,
+                                        real_name=real_name,
+                                        current_user=current_user,
+                                        student_id=student_id,
+                                        is_display_all=False,
+                                        group_name=group_name,
+                                        student_type=student_type,)
         user.save()
         context['success'] = "注册成功！"
         context['return_link'] = "/"

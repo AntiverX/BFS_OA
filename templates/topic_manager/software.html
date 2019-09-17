@@ -1,0 +1,170 @@
+{% extends "topic_manager/base.html" %}
+{% block content %}
+    <div class="container-fluid ">
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-800 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">学术论文</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--此处id与js保持一致，当前id为form-->
+                        <div id="form">
+                            {% csrf_token %}
+                            <!--每个要输入的内容，class里都要包含这个内容对应的类-->
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label for="group_name">组名</label>
+                                    <input class="group_name form-control" id="group_name" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="type">类型</label>
+                                    <input class="type form-control" id="type" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="name">名称</label>
+                                    <input class="name form-control" id="name" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="version">版本号</label>
+                                    <input class="version form-control" id="version" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="finish_date">开发完成日</label>
+                                    <input class="finish_date form-control" id="finish_date" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="announcement_date">首次发表日</label>
+                                    <input class="announcement_date form-control" id="announcement_date" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="software_number">软件著作权号</label>
+                                    <input class="software_number form-control" id="software_number" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="author">获得人</label>
+                                    <input class="author form-control" id="author" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="author_order">署名次序</label>
+                                    <input class="author_order form-control" id="author_order" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-4">
+                                    <label for="copyright_owner">著作权人</label>
+                                    <input class="copyright_owner form-control" id="copyright_owner" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="authorization_unit">批准单位</label>
+                                    <input class="authorization_unit form-control" id="authorization_unit" required>
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="date">日期</label>
+                                    <input class="date form-control" id="date">
+                                    <div id="content-valid" class="valid-feedback">OK</div>
+                                    <div id="content-invalid" class="invalid-feedback">ERROR</div>
+                                </div>
+                            </div>
+
+                            <div class="all_record">
+                                <div class="record">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="deploy_floating" id="add_target" style="margin-left: 45%">
+                            <span class="fonticon_plus"></span>
+                        </a>
+                        <hr style="margin-top: 26px">
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="submit_form">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" nowrap style="width:1rem!important;">序号</th>
+                    <th type="normal" class="group_name" scope="col" nowrap style="width:5.5rem;">组名</th>
+                    <th type="normal" class="type" scope="col" nowrap style="width:6rem;">类型</th>
+                    <th type="normal" class="name" scope="col" nowrap style="width:4rem;">名称</th>
+                    <th type="normal" class="version" scope="col" nowrap style="width:10rem;">版本号</th>
+                    <th type="normal" class="finish_date" scope="col" nowrap style="width:3.5rem;">开发完成日</th>
+                    <th type="normal" class="announcement_date" scope="col" nowrap style="width:3.5rem;">首次发表日</th>
+                    <th type="normal" class="software_number" scope="col" nowrap style="width:5rem;">软件著作权号</th>
+                    <th type="normal" class="author" scope="col" nowrap style="width:5rem;">获得人</th>
+                    <th type="normal" class="author_order" scope="col" nowrap style="width:4rem;">署名次序</th>
+                    <th type="normal" class="copyright_owner" scope="col" nowrap style="width:4rem;">著作权人</th>
+                    <th type="normal" class="authorization_unit" scope="col" nowrap style="width:4rem;">批准单位</th>
+                    <th type="normal" class="date" scope="col" nowrap style="width:4rem;">日期</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr class="table_content" title="{{ result.id }}">
+                        <td nowrap>{{ forloop.counter }}</td>
+                        <td type="normal" class="group_name" nowrap>{{ result.group_name }}</td>
+                        <td type="normal" class="type" nowrap>{{ result.type }}</td>
+                        <td type="normal" class="name" nowrap>{{ result.name }}</td>
+                        <td type="normal" class="version" style="white-space: pre-wrap;width:3vw;">{{ result.version }}</td>
+                        <td type="normal" class="finish_date" style="white-space: pre-wrap">{{ result.finish_date }}</td>
+                        <td type="normal" class="announcement_date" style="white-space: pre-wrap">{{ result.announcement_date }}</td>
+                        <td type="normal" class="software_number" style="white-space: pre-wrap">{{ result.software_number }}</td>
+                        <td type="normal" class="author" style="white-space: pre-wrap">{{ result.author }}</td>
+                        <td type="normal" class="author_order" style="white-space: pre-wrap">{{ result.author_order }}</td>
+                        <td type="normal" class="copyright_owner" style="white-space: pre-wrap">{{ result.copyright_owner }}</td>
+                        <td type="normal" class="authorization_unit" style="white-space: pre-wrap">{{ result.authorization_unit }}</td>
+                        <td type="normal" class="date" style="white-space: pre-wrap">{{ result.date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 右下角添加按钮 -->
+        <style>
+            #add {
+                bottom: 3rem;
+                right: 3rem;
+                position: fixed;
+            }
+        </style>
+        <a class="deploy_floating add_table_content" id="add" style="margin-left: 45%">
+            <span class="fonticon_plus"></span>
+        </a>
+    </div>
+    <!-- 右下角添加按钮结束 -->
+    </div>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base_v2.html" %}
+{% block menu %}
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'newcomer_index' %}">我的培训</a>
+    </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'score' type="reference_training" %}">评分</a>
+    </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'newcomer_status' %}">情况统计</a>
+    </li>
+{% endblock menu %}

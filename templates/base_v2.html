@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>BFS信息管理系统</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/simple-sidebar.css" rel="stylesheet">
+
+    <script src="/static/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="/static/js/jquery-1.10.2.js"></script>
+    <script src="/static/js/base.js"></script>
+</head>
+
+<body>
+
+<div class="d-flex " id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading" ><a style="text-decoration:none;color:#000000;" href="/">Forest Studio</a></div>
+        <div class="list-group list-group-flush">
+            {% if user.username %}
+                <a href="/info/my_info" class="list-group-item list-group-item-action bg-light">个人中心</a>
+                <a href="/topic_manager_v2/index" class="list-group-item list-group-item-action bg-light">课题管理</a>
+                <a href="/newcomer/index" class="list-group-item list-group-item-action bg-light">新生培训</a>
+            {% endif %}
+
+
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <a class="navbar-brand" href="#" style="padding-top: 0;">
+                <img src="/static/main.ico" id="menu-toggle" width="23" height="23" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+                    {% block menu %}
+                    {% endblock %}
+
+                </ul>
+
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    {% if user.is_authenticated %}
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="" id="current_week">第{{ current_semester_week }}周</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'setting' %}">Welcome {{ user.username }} !</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">注销</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/login">登录</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Bootstrap core JavaScript -->
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+
+</body>
+
+</html>

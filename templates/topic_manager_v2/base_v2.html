@@ -1,0 +1,15 @@
+{% extends "base_v2.html" %}
+{% block menu %}
+    <li class="nav-item active">
+        <a class="nav-link" href="index">我的课题管理表</a>
+    </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="upload_history">上传历史</a>
+    </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="status">情况统计</a>
+    </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'sen_email_to_luosenlin' %}">发送邮件</a>
+    </li>
+{% endblock menu %}
