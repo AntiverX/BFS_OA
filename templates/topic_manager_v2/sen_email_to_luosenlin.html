@@ -4,38 +4,54 @@
         <form method="POST">
             {% csrf_token %}
             <div class="row">
-                <div class="col-5">
+                <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         <label for="start_time">开始时间</label>
-                        <input type="text" class="form-control" id="start_time" name="start_time" value="{{ current_time|date:"Y-m-d H:i" }}">
+                        <input type="text" class="form-control" id="start_time" name="start_time" value="{{ current_time|date:"Y-m-d H:i" }}" required>
                     </div>
                 </div>
-                <div class="col-5">
+                <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         <label for="end_time">结束时间</label>
-                        <input type="text" class="form-control" id="end_time" name="end_time"  value="{{ current_time|date:"Y-m-d H:i" }}">
+                        <input type="text" class="form-control" id="end_time" name="end_time" value="" required>
                     </div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label for="absent">未到</label>
-                <input type="text" class="form-control" id="absent" name="absent">
-            </div>
-
-            <div class="form-group">
-                <label for="late">迟到</label>
-                <input type="text" class="form-control" id="late" name="late">
-            </div>
-
-            <div class="form-group">
-                <label for="ask_for_leave">请假</label>
-                <input type="text" class="form-control" id="ask_for_leave" name="ask_for_leave">
-            </div>
-
-            <div class="form-group">
-                <label for="upload_fail_real_name">未更新课题管理表</label>
-                <input type="text" class="form-control" id="upload_fail_real_name" name="upload_fail_real_name"  value="{{ upload_fail_real_name }}" readonly>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <label for="absent">未到</label>
+                        <input type="text" class="form-control" id="absent" name="absent">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <label for="late">迟到</label>
+                        <input type="text" class="form-control" id="late" name="late">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <label for="ask_for_leave">请假</label>
+                        <input type="text" class="form-control" id="ask_for_leave" name="ask_for_leave">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <label for="upload_fail_real_name">未更新课题管理表</label>
+                        <input type="text" class="form-control" id="upload_fail_real_name" name="upload_fail_real_name" value="{{ upload_fail_real_name }}">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <label for="upload_fail_real_name">发送给</label>
+                        <input type="text" class="form-control" id="send_to" name="send_to" value="luosenlin@bfs.bit.edu.cn">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <label for="upload_fail_real_name">抄送</label>
+                        <input type="text" class="form-control" id="cc" name="cc" value="student@bfs.bit.edu.cn">
+                    </div>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary">提交</button>

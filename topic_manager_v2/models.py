@@ -5,3 +5,4 @@ class UploadRecord(models.Model):
     user_name = models.TextField()
     file_name = models.TextField()
     upload_time = models.DateTimeField()
+    group_name = models.TextField(default="")

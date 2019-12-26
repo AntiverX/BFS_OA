@@ -52,14 +52,15 @@
                 <label for="group_name">组别</label>
 
                 <select class="form-control" id="group_name" name="group_name" required>
-                    <option value="数据挖掘" {% if info.group_name == "数据挖掘" %}selected{% endif %}>数据挖掘</option>
-                    <option value="文本安全" {% if info.group_name == "文本安全" %}selected{% endif %}>文本安全</option>
-                    <option value="网络安全1" {% if info.group_name == "网络安全1" %}selected{% endif %}>网络安全1</option>
-                    <option value="网络安全2" {% if info.group_name == "网络安全2" %}selected{% endif %}>网络安全2</option>
+                    <option value="数据挖掘">数据挖掘</option>
+                    <option value="文本安全">文本安全</option>
+                    <option value="网络安全1">网络安全1</option>
+                    <option value="网络安全2">网络安全2</option>
                 </select>
             </div>
+
             <div class="row">
-                <div class="col-1">
+                <div class="col-md-4 col-4">
                     <button type="submit" id="submitForm" class="btn btn-primary">注册</button>
                 </div>
             </div>

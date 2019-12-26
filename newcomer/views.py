@@ -51,9 +51,10 @@ def index(request):
 def score(request, type):
     if request.method == "GET" and type == "reference_training":
         all_newcomer = User.objects.filter(student_type="新生")
+        # 找出需要被评分的学生
         not_scored_newcomer = []
         for nwecomer in all_newcomer:
-            existing_record = PollRecord.objects.filter(newcomer_name=nwecomer.real_name, training_type="reference_training")
+            existing_record = PollRecord.objects.filter(newcomer_name=nwecomer.real_name, training_type="reference_training",user_name=request.user.real_name)
             if len(existing_record) == 0:
                 not_scored_newcomer.append(nwecomer)
         context = {
@@ -74,9 +75,10 @@ def score(request, type):
         return render(request, 'newcomer/score.html', context=context)
     elif request.method == "GET" and type == "cpp_training":
         all_newcomer = User.objects.filter(student_type="新生")
+        # 找出需要被评分的学生
         not_scored_newcomer = []
         for nwecomer in all_newcomer:
-            existing_record = PollRecord.objects.filter(newcomer_name=nwecomer.real_name, training_type="cpp_training")
+            existing_record = PollRecord.objects.filter(newcomer_name=nwecomer.real_name, training_type="cpp_training",user_name=request.user.real_name)
             if len(existing_record) == 0:
                 not_scored_newcomer.append(nwecomer)
         context = {

@@ -6,6 +6,8 @@ import datetime
 import pytz
 from django.urls import reverse
 import os
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 # Create your views here.
 def index(request):
@@ -20,6 +22,7 @@ def index(request):
             user_name=request.user.real_name,
             file_name=short_file_name,
             upload_time=datetime.datetime.now(),
+            group_name=request.user.group_name,
         )
         new_record.save()
         context = None
@@ -39,7 +42,7 @@ def index(request):
 
 
 def upload_history(request):
-    all_record = UploadRecord.objects.filter(user_name=request.user.real_name)
+    all_record = UploadRecord.objects.filter(group_name=request.user.group_name)
     context = {
         'all_record': all_record,
     }
@@ -68,6 +71,31 @@ def upload_status(request):
     }
     return render(request, 'topic_manager_v2/status.html', context=context)
 
+@csrf_exempt
+def upload_status_api(request):
+    class Status:
+        def __init__(self, real_name, last_upload_time, should_upload_time):
+            self.real_name = real_name
+            self.last_upload_time = last_upload_time
+            self.should_upload_time = should_upload_time
+
+    record = []
+    all_student = User.objects.filter(is_student=True,group_name=request.user.group_name)
+    for student in all_student:
+        try:
+            last_upload_time = UploadRecord.objects.filter(user_name=student.real_name).order_by('-upload_time')[0].upload_time.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Shanghai'))
+        except:
+            last_upload_time = datetime.datetime(2000, 1, 1, 0, 0, 0, 0, pytz.timezone('Asia/Shanghai'))
+        should_upload_time = datetime.datetime.now(pytz.timezone('Asia/Shanghai'))
+        new_status = {
+            'real_name':student.real_name,
+            'last_upload_time':last_upload_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'should_upload_time':should_upload_time.strftime('%Y-%m-%d %H:%M:%S'),
+
+        }
+        record.append(new_status)
+    return JsonResponse(record,safe=False)
+
 
 def sen_email_to_luosenlin(request):
     if request.method == "POST":
@@ -83,14 +111,23 @@ def sen_email_to_luosenlin(request):
         ask_for_leave = request.POST['ask_for_leave']
         # 课题管理表未更新成员名单
         upload_fail_real_name = request.POST['upload_fail_real_name']
+        # 发送给
+        send_to = request.POST['send_to'].split(",")
+        # 额外抄送
+        cc = request.POST['cc'].split(",")
         # 获得组内所有人名单
         group_users = User.objects.filter(group_name=request.user.group_name)
         # 自动打包并发送
-        send_email(start_time, end_time, absent, late, ask_for_leave, upload_fail_real_name, group_users)
+        send_email(request,start_time, end_time, absent, late, ask_for_leave, upload_fail_real_name, group_users,cc,send_to)
         # 获得所有人的管理表路径
         group_path = [UploadRecord.objects.filter(user_name=user.real_name).order_by("-upload_time")[0].file_name for user in group_users if len(UploadRecord.objects.filter(user_name=user.real_name)) > 0]
 
-        return HttpResponseRedirect(reverse("sen_email_to_luosenlin"))
+        # return HttpResponseRedirect(reverse("sen_email_to_luosenlin"))
+        context = {
+            'success':"发送成功",
+            'return_link':reverse("sen_email_to_luosenlin")
+        }
+        return render(request,'success.html',context=context)
     else:
         # 当前时间
         current_time = datetime.datetime.now().replace(tzinfo=pytz.timezone('Asia/Shanghai'))
@@ -105,7 +142,7 @@ def sen_email_to_luosenlin(request):
         return render(request, 'topic_manager_v2/sen_email_to_luosenlin.html', context=context)
 
 
-def send_email(start_time: datetime.datetime, end_time: datetime.datetime, absent: str, late: str, ask_for_leave: str, upload_fail_real_name, group_users):
+def send_email(request, start_time: datetime.datetime, end_time: datetime.datetime, absent: str, late: str, ask_for_leave: str, upload_fail_real_name, group_users,cc,send_to):
     start_time = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M")
     end_time = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M")
     import smtplib
@@ -114,32 +151,71 @@ def send_email(start_time: datetime.datetime, end_time: datetime.datetime, absen
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
     import zipfile
-    port = 25
-    smtp_server = "mail.isclab.org"
-    sender_email = "wangshuaipeng@bfs.bit.edu.cn"
-    receiver_email = "wangshuaipeng@bfs.bit.edu.cn"
+    sender_email = "robot@bfs.bit.edu.cn"
+    receiver_email = send_to
     password = "123456"
     body = '''
-    网络安全3组-组会参会情况-{}
+    {}组-组会参会情况-{}
     时间：2019年08月27日 {}-{}
     未到：{}
     迟到：{}
     请假：{}
-    课题管理表更新情况：全部更新
-    '''.format(start_time.strftime("%Y.%m.%d"),start_time.strftime("%H:%M"),end_time.strftime("%H:%M"),absent,late,ask_for_leave)
+    课题管理表未更新：{}
+    
+    <html>
+    <head></head>
+    <body>
+    <p>Hi!<br>
+       How are you?<br>
+       Here is the <a href="http://www.python.org">link</a> you wanted.
+    </p>
+    </body>
+    </html>
+    '''.format(request.user.group_name,start_time.strftime("%Y.%m.%d"),start_time.strftime("%H:%M"),end_time.strftime("%H:%M"),absent,late,ask_for_leave,upload_fail_real_name)
+
+    html_body ='''
+    <html>
+      <head>
+    
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      </head>
+      <body text="#000000" bgcolor="#FFFFFF">
+        <div class="moz-text-html" lang="x-unicode">
+          <p><span style="color: rgb(0, 0, 128); font-family: 'Microsoft
+              YaHei UI'; text-indent: 28px;">{}组-组会参会情况-{}<br>
+            </span></p>
+          <div style="color: rgb(0, 0, 128); font-family: 'Microsoft YaHei
+            UI'; text-indent: 2em;">时间：{} {}-{}</div>
+          <div style="color: rgb(0, 0, 128); font-family: 'Microsoft YaHei
+            UI'; text-indent: 2em;">未到：{}</div>
+          <div style="color: rgb(0, 0, 128); font-family: 'Microsoft YaHei
+            UI'; text-indent: 2em;">迟到：{}</div>
+          <div style="color: rgb(0, 0, 128); font-family: 'Microsoft YaHei
+            UI'; text-indent: 2em;">请假：{}</div>
+          <div style="color: rgb(0, 0, 128); font-family: 'Microsoft YaHei
+            UI'; text-indent: 2em;">课题管理表未更新：{}</div>
+            <br />
+            <div style="color: rgb(0, 0, 128); font-family: 'Microsoft YaHei
+                UI'; text-indent: 2em;">此邮件为自动生成，请勿回复</div>
+        </div>
+      </body>
+    </html>
+    '''.format(request.user.group_name,start_time.strftime("%Y.%m.%d"),start_time.strftime("%Y年%m月%d日"),start_time.strftime("%H:%M"),end_time.strftime("%H:%M"),absent,late,ask_for_leave,upload_fail_real_name)
     # Create a multipart message and set headers
     message = MIMEMultipart()
     message["From"] = sender_email
-    message["To"] = receiver_email
-    message["Subject"] = "网络安全3组-组会参会情况-" + start_time.strftime("%Y.%m.%d")
-    message["cc"] = receiver_email  # Recommended for mass emails
+    message["To"] = ",".join(receiver_email)
+    message["Subject"] = "{}组-组会参会情况-{}".format(request.user.group_name,start_time.strftime("%Y.%m.%d"))
+    if cc[0] != "":
+        message["cc"] = ",".join(cc)
 
     # Add body to email
 
-    message.attach(MIMEText(body, "plain"))
+    # message.attach(MIMEText(body, "plain"))
+    message.attach(MIMEText(html_body, "html"))
 
     excel_paths = [BASE_DIR + UploadRecord.objects.filter(user_name=user.real_name).order_by("-upload_time")[0].file_name for user in group_users if len(UploadRecord.objects.filter(user_name=user.real_name)) > 0]
-    attach_file_name = "网络安全3组-课题管理表.zip"
+    attach_file_name = "{}组-课题管理表.zip".format(request.user.group_name)
     real_file_path = BASE_DIR + "/static/NSC.zip"
     zf = zipfile.ZipFile(real_file_path, mode='w')
     for excel_path in excel_paths:
@@ -169,4 +245,7 @@ def send_email(start_time: datetime.datetime, end_time: datetime.datetime, absen
     # Log in to server using secure context and send email
     with smtplib.SMTP("mail.isclab.org", 25) as server:
         server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, text)
+        if cc[0] != "":
+            server.sendmail(sender_email, (receiver_email,cc), text)
+        else:
+            server.sendmail(sender_email, receiver_email, text)

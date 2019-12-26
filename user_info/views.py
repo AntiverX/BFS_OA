@@ -41,7 +41,7 @@ def register(request):
         real_name = request.POST['real_name']
         student_id = request.POST['student_id']
         group_name = request.POST['group_name']
-        student_type = "新生" if int(request.POST['password'][4:6]) == datetime.datetime.now().year % 100 else "硕士研究生"
+        student_type = "新生" if int(request.POST['student_id'][4:6]) == datetime.datetime.now().year % 100 else "硕士研究生"
         user = User.objects.create_user(username=username,
                                         password=password,
                                         real_name=real_name,

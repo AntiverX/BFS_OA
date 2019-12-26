@@ -15,28 +15,24 @@
         <form method="post">
             {% csrf_token %}
             <div class="row ml-5">
-                <div class="col-2">
+                <div class="col-sm-12">
                     <button id="modify_info" class="btn btn-primary">修改</button>
-                </div>
-                <div class="row col-2">
                     <button id="submit_modify" class="btn btn-primary" type="submit" hidden>提交</button>
                 </div>
             </div>
             <div class="row ml-5 mr-5">
-                <div class="col-3">
+                <div class="col-sm-12 col-md-3">
                     {% load static %}
                     <img src="{% static "nobody.jpg" %}" class="img-fluid" alt="Responsive image">
                 </div>
-                <div class="col-9">
+                <div class="col-sm-12 col-md-9">
                     <div class="row">
-                        <div class="form-group col-2 col-sm-2">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="real_name">姓名</label>
-                            <input class="form-control" id="real_name" name="real_name" type="text"
-                                    value="{% if info.real_name != "0" %}{{ info.real_name }}{% else %}{% endif %}"
-                                    readonly required>
+                            <input class="form-control" id="real_name" name="real_name" type="text" value="{% if info.real_name != "0" %}{{ info.real_name }}{% else %}{% endif %}" readonly required>
                         </div>
 
-                        <div class="form-group col-1 col-sm-2">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="gender">性别</label>
                             <select class="form-control" id="gender" name="gender"
                                     value="{% if info.gender != "0" %}{{ info.gender }}{% else %}{% endif %}"
@@ -48,36 +44,35 @@
                             </select>
                         </div>
 
-                        <div class="form-group col-2 col-sm-2">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="nationality">民族</label>
                             <input class="form-control" id="nationality" name="nationality" type="text"
                                     value="{% if info.nationality != "0" %}{{ info.nationality }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
 
-                        <div class="form-group col-3 col-sm-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="born_in">生源地</label>
                             <input class="form-control" id="born_in" name="born_in" type="text" placeholder="例如：河南省禹州市"
                                     value="{% if info.born_in != "0" %}{{ info.born_in }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
 
-                        <div class="form-group col-3 col-sm-4">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="id_number">身份证号</label>
                             <input class="form-control" id="id_number" name="id_number" type="text"
                                     value="{% if info.id_number != "0" %}{{ info.id_number }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-2 col-sm-3">
+
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="student_id">学号</label>
                             <input class="form-control" id="student_id" name="student_id" type="text"
                                     value="{% if info.student_id != "0" %}{{ info.student_id }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
 
-                        <div class="form-group col-2 col-sm-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="entrance_time">入学时间</label>
                             <input class="form-control" id="entrance_time" name="entrance_time" type="text"
                                     placeholder="例如：2018-09"
@@ -85,19 +80,19 @@
                                     readonly required>
                         </div>
 
-                        <div class="form-group col- col-sm-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="graduate_time">毕业时间</label>
                             <input class="form-control" id="graduate_time" name="graduate_time" type="text"
                                     value="{% if info.graduate_time != "0" %}{{ info.graduate_time }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
-                        <div class="form-group col-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="major">专业</label>
                             <input class="form-control" id="major" name="major" type="text"
                                     value="{% if info.major != "0" %}{{ info.major }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
-                        <div class="form-group col-2 col-sm-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="group_name">组别</label>
 
                             <select class="form-control" id="group_name" name="group_name" disabled="true" required>
@@ -108,14 +103,14 @@
                             </select>
                         </div>
 
-                        <div class="form-group col-1 col-sm-2">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="tutor">导师</label>
                             <input class="form-control" id="tutor" name="tutor" type="text"
                                     value="{% if info.tutor != "0" %}{{ info.tutor }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
 
-                        <div class="form-group col-1 col-sm-2">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="student_type">类型</label>
                             <select class="form-control" id="student_type" name="student_type" disabled="true" required>
                                 <option value="硕士研究生" {% if info.student_type == "硕士研究生" %}selected{% endif %}>硕士研究生</option>
@@ -123,67 +118,61 @@
                                 <option value="新生" {% if info.student_type == "新生" %}selected{% endif %}>新生</option>
                             </select>
                         </div>
-
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-6">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="bank_name">开户行：</label>
                             <input class="form-control" id="bank_name" name="bank_name" type="text"
                                     value="{% if info.bank_name != "0" %}{{ info.bank_name }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
-                        <div class="form-group col-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="bank_id">银行卡号：</label>
                             <input class="form-control" id="bank_id" name="bank_id" type="text"
                                     value="{% if info.bank_id != "0" %}{{ info.bank_id }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
-                        <div class="form-group col-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="phone_number">电话</label>
                             <input class="form-control" id="phone_number" name="phone_number" type="text"
                                     value="{% if info.phone_number != "0" %}{{ info.phone_number }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
-                    </div>
 
-                    <div class="row">
 
-                        <div class="form-group col-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="email">电子邮件</label>
                             <input class="form-control" id="email" name="email" type="text"
                                     value="{% if info.email != "0" %}{{ info.email }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
 
-                        <div class="form-group col-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="past_school">原毕业学校</label>
                             <input class="form-control" id="past_school" name="past_school" type="text"
                                     value="{% if info.past_school != "0" %}{{ info.past_school }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
-                        <div class="form-group col-6">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="past_unit">原单位</label>
                             <input class="form-control" id="past_unit" name="past_unit" type="text"
                                     value="{% if info.past_unit != "0" %}{{ info.past_unit }}{% else %}{% endif %}"
                                     readonly required>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="form-group col-3">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="thesis_defense_score">答辩成绩</label>
                             <input class="form-control" id="thesis_defense_score" name="thesis_defense_score"
                                     type="text" value="{% if info.thesis_defense_score != "0" %}{{ info.thesis_defense_score }}{% else %}{% endif %}"
                                     readonly>
                         </div>
-                        <div class="form-group col-9">
+                        <div class="form-group col-md-3 col-sm-12">
                             <label for="degree_paper">学位论文</label>
                             <input class="form-control" id="degree_paper" name="degree_paper" type="text"
                                     value="{% if info.degree_paper != "0" %}{{ info.degree_paper }}{% else %}{% endif %}"
                                     readonly>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </form>
