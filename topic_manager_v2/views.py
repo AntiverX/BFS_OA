@@ -48,6 +48,21 @@ def upload_history(request):
     }
     return render(request, 'topic_manager_v2/upload_history.html', context=context)
 
+def upload_history_api(request):
+    all_record = UploadRecord.objects.filter(group_name=request.user.group_name)
+    context = {
+        'all_record': all_record,
+    }
+    record_list = []
+    for record in all_record:
+        new_record = {
+            'name':record.user_name,
+            'upload_time':record.upload_time.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M:%S'),
+            'file_path':record.file_name,
+        }
+        record_list.append(new_record)
+    return JsonResponse(record_list,safe=False)
+
 
 def upload_status(request):
     class Status:

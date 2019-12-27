@@ -82,10 +82,12 @@
             default_active: "2",
         },
         methods: {
-            test() {
-                alert("上传成功");
-            },
+    {% block method %}
+    {% endblock %}
         },
+        mounted() {
+            {% block mounted %}{% endblock %}
+        }
     })
 </script>
 

@@ -20,6 +20,7 @@ from . import views
 urlpatterns = [
     path('index', views.index),
     path('upload_history', views.upload_history),
+    path('upload_history_api', views.upload_history_api),
     path('status', views.upload_status),
     path('status_api', views.upload_status_api),
     path('sen_email_to_luosenlin', views.sen_email_to_luosenlin, name="sen_email_to_luosenlin"),
