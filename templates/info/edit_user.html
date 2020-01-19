@@ -1,0 +1,216 @@
+{% extends "base_v3.html" %}
+
+{% block menu_1 %}
+    <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal">
+        <el-menu-item index="1" onclick="window.location='user_manage';">用户列表</el-menu-item>
+
+        <el-menu-item style="float:right;" onclick="window.location='/logout';">
+            {% if user.is_authenticated %}
+                注销
+            {% else %}
+                <el-menu-item>登录</el-menu-item>
+            {% endif %}
+        </el-menu-item>
+    </el-menu>
+{% endblock %}
+
+{% block content %}
+    <el-row type="flex" class="row-bg" justify="center">
+        <el-col :span="12">
+            <div class="grid-content">
+                <el-table :data="tableData" style="width: 100%">
+                    <el-table-column prop="real_name" label="姓名"></el-table-column>
+                    {% verbatim %}
+                    <el-table-column prop="username" label="用户名"></el-table-column>
+                    {% endverbatim %}
+                    <el-table-column prop="last_login" label="上次登录时间"></el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="handleEdit(scope.row.username)">编辑
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-col>
+    </el-row>
+{% endblock %}
+
+{% block script %}
+    <script type="module">
+        var app = new Vue({
+                el: '#app',
+                data: {
+                    message: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    radio: 1,
+                    default_active: "2",
+                    tableData: null,
+                },
+                methods: {
+                    test() {
+                        alert("上传成功");
+                    },
+                    handleEdit(username) {
+                        window.location = "/info/edit_user/" + username;
+                    },
+            },
+            mounted()
+        {
+            axios
+                .get('user_info_api')
+                .then(response => (this.tableData = response.data))
+        }
+        })
+    </script>
+{% endblock %}
+
+{% block style %}
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0px;
+            padding: 0px;
+
+        }
+
+        #app {
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: #2c3e50;
+            height: 100%;
+        }
+
+        .el-aside {
+            vh: 100%;
+        }
+
+        .el-header, .el-footer {
+            background-color: #B3C0D1;
+            color: #333;
+            line-height: 60px;
+        }
+
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
+
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+    </style>
+{% endblock %}
+{% extends "base_v3.html" %}
+
+{% block menu_1 %}
+    <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal">
+        <el-menu-item index="1" onclick="window.location='user_manage';">用户列表</el-menu-item>
+
+        <el-menu-item style="float:right;" onclick="window.location='/logout';">
+            {% if user.is_authenticated %}
+                注销
+            {% else %}
+                <el-menu-item>登录</el-menu-item>
+            {% endif %}
+        </el-menu-item>
+    </el-menu>
+{% endblock %}
+
+{% block content %}
+    <el-row type="flex" class="row-bg" justify="center">
+        <el-col :span="12">
+            <div class="grid-content">
+                <el-table :data="tableData" style="width: 100%">
+                    <el-table-column prop="real_name" label="姓名"></el-table-column>
+                    {% verbatim %}
+                    <el-table-column prop="username" label="用户名"></el-table-column>
+                    {% endverbatim %}
+                    <el-table-column prop="last_login" label="上次登录时间"></el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="handleEdit(scope.row.username)">编辑
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-col>
+    </el-row>
+{% endblock %}
+
+{% block script %}
+    <script type="module">
+        var app = new Vue({
+                el: '#app',
+                data: {
+                    message: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    radio: 1,
+                    default_active: "2",
+                    tableData: null,
+                },
+                methods: {
+                    test() {
+                        alert("上传成功");
+                    },
+                    handleEdit(username) {
+                        window.location = "/info/edit_user/" + username;
+                    },
+            },
+            mounted()
+        {
+            axios
+                .get('user_info_api')
+                .then(response => (this.tableData = response.data))
+        }
+        })
+    </script>
+{% endblock %}
+
+{% block style %}
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0px;
+            padding: 0px;
+
+        }
+
+        #app {
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: #2c3e50;
+            height: 100%;
+        }
+
+        .el-aside {
+            vh: 100%;
+        }
+
+        .el-header, .el-footer {
+            background-color: #B3C0D1;
+            color: #333;
+            line-height: 60px;
+        }
+
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
+
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+    </style>
+{% endblock %}

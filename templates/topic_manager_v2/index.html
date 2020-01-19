@@ -1,198 +1,112 @@
-{#{% extends "topic_manager_v2/base_v3.html" %}#}
-{#{% block content %}#}
+{% extends "base_v3.html" %}
+
+{% block menu_1 %}
+    <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal">
+        <el-menu-item index="1" onclick="window.location='index';">我的课题管理表</el-menu-item>
+        <el-menu-item index="2" onclick="window.location='upload_history';">上传历史</el-menu-item>
+        <el-menu-item index="3" onclick="window.location='status';">情况统计</el-menu-item>
+        <el-menu-item index="4" onclick="window.location='{% url 'sen_email_to_luosenlin' %}';">发送邮件</el-menu-item>
+        <el-menu-item style="float:right;" onclick="window.location='/logout';">
+            {% if user.is_authenticated %}
+                注销
+            {% else %}
+                <el-menu-item>登录</el-menu-item>
+            {% endif %}
+        </el-menu-item>
+    </el-menu>
+{% endblock %}
+
+{% block content %}
+    <el-row type="flex" class="row-bg" justify="center">
+        <el-col :span="12">
+            <div class="grid-content">
+                <el-alert type="success" :closable="false">
+                    {% if have_uploaded == 1 %}
+                        课题管理表上次更新时间：{{ last_update_time|date:"Y-m-d H:i" }}
+                    {% else %}
+                        {{ last_update_time }}
+                    {% endif %}
+                </el-alert>
 
 
-{##}
-{#    <div class="mt-5">#}
-{#        <div class="row justify-content-center mt-3">#}
-{#            <div class="col-6">#}
-{#                <div class="alert alert-secondary" role="alert">#}
-{##}
-{#                </div>#}
-{#                <form method="post" enctype="multipart/form-data">#}
-{#                    {% csrf_token %}#}
-{#                    <div class="mb-2">上传文件</div>#}
-{#                    <div class="form-group">#}
-{#                        <div class="custom-file">#}
-{#                            <input type="file" class="custom-file-input" id="customFile" name="file">#}
-{#                            <label class="custom-file-label" for="customFile">Choose file</label>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <script>#}
-{#                        $('#customFile').on('change', function () {#}
-{#                            //get the file name#}
-{#                            var fileName = $(this).val().replace('C:\\fakepath\\', "");#}
-{#                            //replace the "Choose a file" label#}
-{#                            $(this).next('.custom-file-label').html(fileName);#}
-{#                        })#}
-{#                    </script>#}
-{##}
-{#                    <button type="submit" class="btn btn-primary">上传</button>#}
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#{% endblock content %}#}
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>BFS信息管理系统</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
-    <!-- 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <!-- 引入组件库 -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-</head>
-<body>
-<div id="app">
-    <el-container>
-        <el-header style="background-color: #F56C6C;padding-right: 0;">
-            <el-container>
-                <el-aside width="230px" style="cursor:pointer;">
-                    <div onclick="window.location='https://baidu.com';">管理控制台</div>
-                </el-aside>
-                <el-main style="padding: 0;">
-                    <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal" router>
-                        <el-menu-item index="1" onclick="window.location='index';">我的课题管理表</el-menu-item>
-                        <el-menu-item index="2" onclick="window.location='upload_history';">上传历史</el-menu-item>
-                        <el-menu-item index="3" onclick="window.location='status';">情况统计</el-menu-item>
-                        <el-menu-item index="4" onclick="window.location='{% url 'sen_email_to_luosenlin' %}';">发送邮件</el-menu-item>
-                        <el-menu-item style="float:right;" onclick="window.location='/logout';">
-                            {% if user.is_authenticated %}
-                                注销
-                            {% else %}
-                                <el-menu-item>登录</el-menu-item>
-                            {% endif %}
-                        </el-menu-item>
-                    </el-menu>
-                </el-main>
-            </el-container>
-        </el-header>
-    </el-container>
-
-    <el-container>
-        <el-aside width="250px">
-            <el-row class="tac">
-                <el-menu default-active="2" class="el-menu-vertical-demo" style="height: calc(100vh - 60px);">
-                    <el-submenu index="1">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span>个人中心</span>
-                        </template>
-                        <el-menu-item index="1-1">
-                            <i class="el-icon-menu"></i>
-                            <span slot="title">我的信息</span>
-                        </el-menu-item>
-                        <el-menu-item index="1-2">
-                            <i class="el-icon-menu"></i>
-                            <span slot="title">设置</span>
-                        </el-menu-item>
-                    </el-submenu>
-                    <el-menu-item index="2">
-                        <i class="el-icon-document"></i>
-                        <span slot="title">课题管理</span>
-                    </el-menu-item>
-                </el-menu>
-            </el-row>
-        </el-aside>
-        <el-main>
-
-            <el-row type="flex" class="row-bg" justify="center">
-                <el-col :span="12">
-                    <div class="grid-content">
-                        <el-alert type="success" :closable="false">
-                            {% if have_uploaded == 1 %}
-                                课题管理表上次更新时间：{{ last_update_time|date:"Y-m-d H:i" }}
-                            {% else %}
-                                {{ last_update_time }}
-                            {% endif %}
-                        </el-alert>
-
-
-                        <el-card class="box-card">
-                            <div slot="header" class="clearfix">
-                                <span>上传文件</span>
-                            </div>
-                            {% csrf_token %}
-                            <el-form ref="form" label-width="80px">
-                                <el-upload
-                                        class="upload-demo"
-                                        action=""
-                                        :data="message"
-                                        :on-success="test"
-                                        :file-list="fileList">
-                                    <el-button size="small" type="primary">点击上传</el-button>
-                                    <div slot="tip" class="el-upload__tip">只能上传excel文件</div>
-                                </el-upload>
-                            </el-form>
-
-                        </el-card>
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <span>上传文件</span>
                     </div>
-                </el-col>
-            </el-row>
-        </el-main>
-    </el-container>
-</div>
+                    {% csrf_token %}
+                    <el-form ref="form" label-width="80px">
+                        <el-upload
+                                class="upload-demo"
+                                action=""
+                                :data="message"
+                                :on-success="test"
+                                :file-list="fileList">
+                            <el-button size="small" type="primary">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传excel文件</div>
+                        </el-upload>
+                    </el-form>
 
-</body>
+                </el-card>
+            </div>
+        </el-col>
+    </el-row>
+{% endblock %}
 
-<script type="module">
-    var app = new Vue({
-        el: '#app',
-        data: {
-            message: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
-            radio: 1,
-            default_active: "2",
-        },
-        methods: {
-            test() {
-                alert("上传成功");
+{% block script %}
+    <script type="module">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                radio: 1,
+                default_active: "2",
             },
-        },
-    })
-</script>
+            methods: {
+                test() {
+                    alert("上传成功");
+                },
+            },
+        })
+    </script>
+{% endblock %}
 
-<style>
-    html, body {
-        height: 100%;
-    }
+{% block style %}
+    <style>
+        html, body {
+            height: 100%;
+        }
 
-    body {
-        margin: 0px;
-        padding: 0px;
+        body {
+            margin: 0px;
+            padding: 0px;
 
-    }
+        }
 
-    #app {
-        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        color: #2c3e50;
-        height: 100%;
-    }
+        #app {
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: #2c3e50;
+            height: 100%;
+        }
 
-    .el-aside {
-        vh: 100%;
-    }
+        .el-aside {
+            vh: 100%;
+        }
 
-    .el-header, .el-footer {
-        background-color: #B3C0D1;
-        color: #333;
-        line-height: 60px;
-    }
+        .el-header, .el-footer {
+            background-color: #B3C0D1;
+            color: #333;
+            line-height: 60px;
+        }
 
-    .el-container:nth-child(5) .el-aside,
-    .el-container:nth-child(6) .el-aside {
-        line-height: 260px;
-    }
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
 
-    .el-container:nth-child(7) .el-aside {
-        line-height: 320px;
-    }
-
-</style>
-</html>
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+    </style>
+{% endblock %}

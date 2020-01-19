@@ -1,13 +1,13 @@
 from django.shortcuts import render, HttpResponse
 from user_info.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 from django.contrib.auth.decorators import login_required
 import time
 from django.core.exceptions import *
 from main_site.models import BFS_OA_Config
 import datetime
-
+import pytz
 
 def auth(request):
     context = {}
@@ -153,6 +153,30 @@ def time_table_list(request):
         context['results'] = TimeTable.objects.filter(user=request.user)
         return render(request, "info/time_table_list.html", context=context)
 
+
+def user_manage(request):
+    return render(request,'info/manage_user.html',context=None)
+
+def user_info_api(request):
+    all_users = User.objects.all()
+    record = []
+
+    for user in all_users:
+        if user.last_login is not None:
+            last_login = user.last_login.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            last_login = None
+        new_record = {
+            'username': user.username,
+            'real_name': user.real_name,
+            'last_login':  last_login,
+        }
+        record.append(new_record)
+    return JsonResponse(record, safe=False)
+
+
+# def edit_user(request):
+#     pass
 
 # 个人信息
 @login_required

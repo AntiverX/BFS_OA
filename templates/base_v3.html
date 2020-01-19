@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BFS信息管理系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header style="background-color: #F56C6C;padding-right: 0;">
+            <el-container>
+                <el-aside width="230px" style="cursor:pointer;">
+                    <div onclick="window.location='https://baidu.com';">管理控制台</div>
+                </el-aside>
+                <el-main style="padding: 0;">
+                    {% block menu_1 %}
+
+                    {% endblock %}
+                </el-main>
+            </el-container>
+        </el-header>
+    </el-container>
+
+    <el-container>
+        <el-aside width="250px">
+            <el-row class="tac">
+                <el-menu default-active="2" class="el-menu-vertical-demo" style="height: calc(100vh - 60px);"  router>
+                        <el-submenu index="1">
+                            <template slot="title">
+                                <i class="el-icon-location"></i>
+                                <span>个人中心</span>
+                            </template>
+                            <el-menu-item index="1-1" onclick="window.location='index';"><i class="el-icon-menu"></i>我的信息</el-menu-item>
+                            <el-menu-item index="1-2" onclick="window.location='/info/user_manage'"><i class="el-icon-menu"></i>用户管理</el-menu-item>
+                        </el-submenu>
+                        <el-menu-item index="2" onclick="window.location='/topic_manager_v2/index'">
+                            <i class="el-icon-document"></i>课题管理</el-menu-item>
+                </el-menu>
+            </el-row>
+        </el-aside>
+        <el-main>
+            {% block content %}
+
+            {% endblock %}
+
+        </el-main>
+    </el-container>
+</div>
+
+</body>
+
+{% block script %}
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+
+</html>
