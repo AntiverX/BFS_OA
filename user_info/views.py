@@ -179,10 +179,13 @@ def edit_user(request,username):
     return render(request,'info/edit_user.html',context=None)
 
 def edit_user_api(request,username):
+    user = User.objects.get(username=username)
     if request.method == "POST":
-        pass
+        try:
+            user.is_active = request.POST['is_active']
+        except Exception as e:
+            return JsonResponse(e, safe=False)
     else:
-        user = User.objects.get(username=username)
         user_dict = {
             'username': user.username,
             'is_active': user.is_active,

@@ -28,6 +28,7 @@
                     <el-form-item label="活动时间">
                         <el-date-picker
                                 size="large"
+                                value-format="yyyy-MM-dd HH:mm"
                                 v-model="form.date_time"
                                 type="datetimerange"
                                 start-placeholder="开始日期"
@@ -54,7 +55,7 @@
                     </el-form-item>
 
                     <el-form-item label="发送给">
-                        <el-input v-model="form.send_to" placeholder="wangshuaipeng@bfs.bit.edu.cn"></el-input>
+                        <el-input v-model="form.send_to" value="wangshuaipeng@bfs.bit.edu.cn"></el-input>
                     </el-form-item>
 
                     <el-form-item label="抄送">
@@ -86,7 +87,7 @@
                     late: '',
                     ask_for_leave: '',
                     upload_fail_real_name: '{{ upload_fail_real_name }}',
-                    send_to: '',
+                    send_to: 'wangshuaipeng@bfs.bit.edu.cn',
                     cc: '',
                 },
             },
@@ -95,15 +96,18 @@
                     alert("上传成功");
                 },
                 onSubmit() {
-                    console.log('submit!');
-                    axios.interceptors.request.use((config) => {
-                        config.headers['X-Requested-With'] = 'XMLHttpRequest';
-                        let regex = /.*csrftoken=([^;.]*).*$/; // 用于从cookie中匹配 csrftoken值
-                        config.headers['X-CSRFToken'] = document.cookie.match(regex) === null ? null : document.cookie.match(regex)[1];
-                        return config
-                    });
 
-                    axios.post('', this.form,)
+
+                    const getParams = (obj) => {
+                        const params = new URLSearchParams();
+                        const keys = Object.keys(obj);
+                        for (let k of keys) {
+                            params.append(k, obj[k]);
+                        }
+                        return params;
+                    }
+
+                    axios.post('', getParams(this.form))
                         .then(function (response) {
                             console.log(response);
                         })
@@ -124,60 +128,48 @@
 
 
 {% block style %}
-    <style>
-        html, body {
-            height: 100%;
+    html, body {
+    height: 100%;
 
-            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            color: #2c3e50;
-            height: 100%;
-        }
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    height: 100%;
+    }
 
-        body {
-            margin: 0;
-            padding: 0;
-        }
+    body {
+    margin: 0;
+    padding: 0;
+    }
 
-        input {
-            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            color: #2c3e50;
-            height: 100%;
-        }
 
-        span {
-            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-        }
 
-        ::placeholder {
-            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            color: #2c3e50;
-            height: 100%;
-        }
+    ::placeholder {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    height: 100%;
+    }
 
-        .el-aside {
-            vh: 100%;
-        }
+    .el-aside {
+    vh: 100%;
+    }
 
-        .el-header, .el-footer {
-            background-color: #B3C0D1;
-            color: #333;
-            line-height: 60px;
-        }
+    .el-header, .el-footer {
+    background-color: #B3C0D1;
+    color: #333;
+    line-height: 60px;
+    }
 
-        .el-container:nth-child(5) .el-aside,
-        .el-container:nth-child(6) .el-aside {
-            line-height: 260px;
-        }
+    .el-container:nth-child(5) .el-aside,
+    .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+    }
 
-        .el-container:nth-child(7) .el-aside {
-            line-height: 320px;
-        }
+    .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+    }
 
-    </style>
 {% endblock %}

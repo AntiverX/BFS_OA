@@ -109,9 +109,9 @@ def upload_status_api(request):
 def sen_email_to_luosenlin(request):
     if request.method == "POST":
         # 开始时间
-        start_time = request.POST['start_time']
+        start_time = request.POST['date_time'].split(',')[0]
         # 结束时间
-        end_time = request.POST['end_time']
+        end_time = request.POST['date_time'].split(',')[1]
         # 未到
         absent = request.POST['absent']
         # 迟到
