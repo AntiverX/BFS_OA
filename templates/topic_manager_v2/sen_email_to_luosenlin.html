@@ -80,7 +80,7 @@
                 default_active: "2",
                 tableData: null,
                 form: {
-                    csrfmiddlewaretoken : '{{ csrf_token }}',
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
                     date_time: '',
                     absent: '',
                     late: '',
@@ -96,7 +96,14 @@
                 },
                 onSubmit() {
                     console.log('submit!');
-                    axios.post('', this.form)
+                    axios.interceptors.request.use((config) => {
+                        config.headers['X-Requested-With'] = 'XMLHttpRequest';
+                        let regex = /.*csrftoken=([^;.]*).*$/; // 用于从cookie中匹配 csrftoken值
+                        config.headers['X-CSRFToken'] = document.cookie.match(regex) === null ? null : document.cookie.match(regex)[1];
+                        return config
+                    });
+
+                    axios.post('', this.form,)
                         .then(function (response) {
                             console.log(response);
                         })
@@ -139,6 +146,10 @@
             -moz-osx-font-smoothing: grayscale;
             color: #2c3e50;
             height: 100%;
+        }
+
+        span {
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
         }
 
         ::placeholder {

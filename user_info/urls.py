@@ -12,5 +12,6 @@ urlpatterns = [
     path('valid', views.valid),
     path('user_info_api', views.user_info_api, name="user_info_my_info"),
     path('user_manage', views.user_manage, name="user_manage"),
-    # path('edit_user/<str:username>/', views.edit_user, name="edit_user"),
+    path('edit_user/<str:username>/', views.edit_user, name="edit_user"),
+    path('edit_user_api/<str:username>/', views.edit_user_api, name="edit_user_api"),
 ]

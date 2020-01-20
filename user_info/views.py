@@ -175,8 +175,21 @@ def user_info_api(request):
     return JsonResponse(record, safe=False)
 
 
-# def edit_user(request):
-#     pass
+def edit_user(request,username):
+    return render(request,'info/edit_user.html',context=None)
+
+def edit_user_api(request,username):
+    if request.method == "POST":
+        pass
+    else:
+        user = User.objects.get(username=username)
+        user_dict = {
+            'username': user.username,
+            'is_active': user.is_active,
+            'group_name': user.group_name,
+        }
+        return JsonResponse(user_dict, safe=False)
+
 
 # 个人信息
 @login_required

@@ -46,7 +46,7 @@ def upload_history(request):
     return render(request, 'topic_manager_v2/upload_history.html', context=None)
 
 def upload_history_api(request):
-    all_history = UploadRecord.objects.filter(group_name=request.user.group_name)
+    all_history = UploadRecord.objects.filter(group_name=request.user.group_name).order_by('-upload_time')
     all_record = []
     for history in all_history:
         new_record = {
@@ -108,30 +108,30 @@ def upload_status_api(request):
 # @csrf_exempt
 def sen_email_to_luosenlin(request):
     if request.method == "POST":
-        # # 开始时间
-        # start_time = request.POST['start_time']
-        # # 结束时间
-        # end_time = request.POST['end_time']
-        # # 未到
-        # absent = request.POST['absent']
-        # # 迟到
-        # late = request.POST['late']
-        # # 请假
-        # ask_for_leave = request.POST['ask_for_leave']
-        # # 课题管理表未更新成员名单
-        # upload_fail_real_name = request.POST['upload_fail_real_name']
-        # # 发送给
-        # send_to = request.POST['send_to'].split(",")
-        # # 额外抄送
-        # cc = request.POST['cc'].split(",")
-        # # 获得组内所有人名单
-        # group_users = User.objects.filter(group_name=request.user.group_name)
-        # # 自动打包并发送
-        # send_email(request,start_time, end_time, absent, late, ask_for_leave, upload_fail_real_name, group_users,cc,send_to)
-        # # 获得所有人的管理表路径
-        # group_path = [UploadRecord.objects.filter(user_name=user.real_name).order_by("-upload_time")[0].file_name for user in group_users if len(UploadRecord.objects.filter(user_name=user.real_name)) > 0]
-        #
-        # # return HttpResponseRedirect(reverse("sen_email_to_luosenlin"))
+        # 开始时间
+        start_time = request.POST['start_time']
+        # 结束时间
+        end_time = request.POST['end_time']
+        # 未到
+        absent = request.POST['absent']
+        # 迟到
+        late = request.POST['late']
+        # 请假
+        ask_for_leave = request.POST['ask_for_leave']
+        # 课题管理表未更新成员名单
+        upload_fail_real_name = request.POST['upload_fail_real_name']
+        # 发送给
+        send_to = request.POST['send_to'].split(",")
+        # 额外抄送
+        cc = request.POST['cc'].split(",")
+        # 获得组内所有人名单
+        group_users = User.objects.filter(group_name=request.user.group_name)
+        # 自动打包并发送
+        send_email(request,start_time, end_time, absent, late, ask_for_leave, upload_fail_real_name, group_users,cc,send_to)
+        # 获得所有人的管理表路径
+        group_path = [UploadRecord.objects.filter(user_name=user.real_name).order_by("-upload_time")[0].file_name for user in group_users if len(UploadRecord.objects.filter(user_name=user.real_name)) > 0]
+
+        # return HttpResponseRedirect(reverse("sen_email_to_luosenlin"))
         context = {
             'success':"发送成功",
             'return_link':reverse("sen_email_to_luosenlin")
