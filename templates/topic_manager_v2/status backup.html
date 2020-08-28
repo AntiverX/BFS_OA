@@ -1,27 +1,27 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>BFS信息管理系统</title>
-        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
-        <!-- axios -->
+    <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <script src="/static/components/topic_manager/index.js"></script>
 </head>
 <body>
 <div id="app">
     <el-container>
-        <el-header style="padding-right: 0;">
+        <el-header style="background-color: #F56C6C;padding-right: 0;">
             <el-container>
                 <el-aside width="230px" style="cursor:pointer;">
                     <div onclick="window.location='https://baidu.com';">管理控制台</div>
                 </el-aside>
                 <el-main style="padding: 0;">
-                    <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal" router>
+                    <el-menu :default-active="'3'" class="el-menu-demo" mode="horizontal" router>
                         <el-menu-item index="1" onclick="window.location='index';">我的课题管理表</el-menu-item>
                         <el-menu-item index="2" onclick="window.location='upload_history';">上传历史</el-menu-item>
                         <el-menu-item index="3" onclick="window.location='status';">情况统计</el-menu-item>
@@ -66,8 +66,32 @@
         </el-aside>
         <el-main>
 
-        <index :csrf_token="message"></index>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-col :span="12">
+                    <div class="grid-content">
 
+                        <el-table
+                                :data="tableData"
+                                style="width: 100%">
+                            <el-table-column
+                                    prop="real_name"
+                                    label="姓名"
+                                    >
+                            </el-table-column>
+                            <el-table-column
+                                    prop="last_upload_time"
+                                    label="上次提交时间"
+                                    >
+                            </el-table-column>
+                            <el-table-column
+                                    prop="should_upload_time"
+                                    label="应提交时间">
+                            </el-table-column>
+                        </el-table>
+
+                    </div>
+                </el-col>
+            </el-row>
         </el-main>
     </el-container>
 </div>
@@ -78,21 +102,22 @@
     var app = new Vue({
         el: '#app',
         data: {
-            message: '{{ csrf_token }}',
+            message: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
             radio: 1,
             default_active: "2",
-    {% block data %}{% endblock %}
+            tableData: null,
         },
         methods: {
-    {% block method %}
-    {% endblock %}
+            test() {
+                alert("上传成功");
+            },
         },
         mounted() {
-            {% block mounted %}{% endblock %}
+            axios
+                .get('status_api')
+                .then(response => (this.tableData = response.data))
         }
-    });
-
-
+    })
 </script>
 
 <style>
@@ -112,6 +137,10 @@
         -moz-osx-font-smoothing: grayscale;
         color: #2c3e50;
         height: 100%;
+    }
+
+    .el-aside {
+        vh: 100%;
     }
 
     .el-header, .el-footer {
