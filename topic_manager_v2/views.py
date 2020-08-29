@@ -13,7 +13,7 @@ from django.http import JsonResponse
 def index(request):
     if request.method == "POST" and request.FILES['file']:
         file = request.FILES['file']
-        short_file_name = "/static/file/topic_manager/" + request.user.group_name + "-课题管理-" + request.user.47174real_name + "-v3.6-" + datetime.datetime.now().strftime('%Y.%m.%d') + ".xlsx"
+        short_file_name = "/static/file/topic_manager/" + request.user.group_name + "-课题管理-" + request.user.real_name + "-v3.6-" + datetime.datetime.now().strftime('%Y.%m.%d') + ".xlsx"
         file_name = BASE_DIR + "/static/file/topic_manager/" + request.user.group_name + "-课题管理-" + request.user.real_name + "-v3.6-" + datetime.datetime.now().strftime('%Y.%m.%d') + ".xlsx"
         with open(file_name.encode(), "wb+") as destination:
             for chunk in file.chunks():
@@ -263,9 +263,46 @@ def send_email(request, start_time: datetime.datetime, end_time: datetime.dateti
 def daily_report(request):
     if request.method == "POST":
         date = request.POST['date']
-        finished_work = request.POST['finished_work']
-        tomorrow_work = request.POST['tomorrow_work']
-        remarks = request.POST['remarks']
+        today_1_name = request.POST['today_1_name']
+        today_1_day = request.POST['today_1_day']
+        today_1_quantitative = request.POST['today_1_quantitative']
+        today_1_qualitative = request.POST['today_1_qualitative']
+        today_2_name = request.POST['today_2_name']
+        today_2_day = request.POST['today_2_day']
+        today_2_quantitative = request.POST['today_2_quantitative']
+        today_2_qualitative = request.POST['today_2_qualitative']
+        today_3_name = request.POST['today_3_name']
+        today_3_day = request.POST['today_3_day']
+        today_3_quantitative = request.POST['today_3_quantitative']
+        today_3_qualitative = request.POST['today_3_qualitative']
+        today_4_name = request.POST['today_4_name']
+        today_4_day = request.POST['today_4_day']
+        today_4_quantitative = request.POST['today_4_quantitative']
+        today_4_qualitative = request.POST['today_4_qualitative']
+        today_5_name = request.POST['today_5_name']
+        today_5_day = request.POST['today_5_day']
+        today_5_quantitative = request.POST['today_5_quantitative']
+        today_5_qualitative = request.POST['today_5_qualitative']
+        tomorrow_1_name = request.POST['tomorrow_1_name']
+        tomorrow_1_day = request.POST['tomorrow_1_day']
+        tomorrow_1_quantitative = request.POST['tomorrow_1_quantitative']
+        tomorrow_1_qualitative = request.POST['tomorrow_1_qualitative']
+        tomorrow_2_name = request.POST['tomorrow_2_name']
+        tomorrow_2_day = request.POST['tomorrow_2_day']
+        tomorrow_2_quantitative = request.POST['tomorrow_2_quantitative']
+        tomorrow_2_qualitative = request.POST['tomorrow_2_qualitative']
+        tomorrow_3_name = request.POST['tomorrow_3_name']
+        tomorrow_3_day = request.POST['tomorrow_3_day']
+        tomorrow_3_quantitative = request.POST['tomorrow_3_quantitative']
+        tomorrow_3_qualitative = request.POST['tomorrow_3_qualitative']
+        tomorrow_4_name = request.POST['tomorrow_4_name']
+        tomorrow_4_day = request.POST['tomorrow_4_day']
+        tomorrow_4_quantitative = request.POST['tomorrow_4_quantitative']
+        tomorrow_4_qualitative = request.POST['tomorrow_4_qualitative']
+        tomorrow_5_name = request.POST['tomorrow_5_name']
+        tomorrow_5_day = request.POST['tomorrow_5_day']
+        tomorrow_5_quantitative = request.POST['tomorrow_5_quantitative']
+        tomorrow_5_qualitative = request.POST['tomorrow_5_qualitative']
         existing_record = DailyReport.objects.filter(date=date,username=request.user.username)
         if len(existing_record) > 0:
             return JsonResponse("error", safe=False)
@@ -273,9 +310,46 @@ def daily_report(request):
             username=request.user.username,
             real_name=request.user.real_name,
             date=date,
-            finished_work=finished_work,
-            tomorrow_work=tomorrow_work,
-            remarks=remarks,
+            today_1_name=today_1_name,
+            today_1_day=today_1_day,
+            today_1_quantitative=today_1_quantitative,
+            today_1_qualitative=today_1_qualitative,
+            today_2_name=today_2_name,
+            today_2_day=today_2_day,
+            today_2_quantitative=today_2_quantitative,
+            today_2_qualitative=today_2_qualitative,
+            today_3_name=today_3_name,
+            today_3_day=today_3_day,
+            today_3_quantitative=today_3_quantitative,
+            today_3_qualitative=today_3_qualitative,
+            today_4_name=today_4_name,
+            today_4_day=today_4_day,
+            today_4_quantitative=today_4_quantitative,
+            today_4_qualitative=today_4_qualitative,
+            today_5_name=today_5_name,
+            today_5_day=today_5_day,
+            today_5_quantitative=today_5_quantitative,
+            today_5_qualitative=today_5_qualitative,
+            tomorrow_1_name=tomorrow_1_name,
+            tomorrow_1_day=tomorrow_1_day,
+            tomorrow_1_quantitative=tomorrow_1_quantitative,
+            tomorrow_1_qualitative=tomorrow_1_qualitative,
+            tomorrow_2_name=tomorrow_2_name,
+            tomorrow_2_day=tomorrow_2_day,
+            tomorrow_2_quantitative=tomorrow_2_quantitative,
+            tomorrow_2_qualitative=tomorrow_2_qualitative,
+            tomorrow_3_name=tomorrow_3_name,
+            tomorrow_3_day=tomorrow_3_day,
+            tomorrow_3_quantitative=tomorrow_3_quantitative,
+            tomorrow_3_qualitative=tomorrow_3_qualitative,
+            tomorrow_4_name=tomorrow_4_name,
+            tomorrow_4_day=tomorrow_4_day,
+            tomorrow_4_quantitative=tomorrow_4_quantitative,
+            tomorrow_4_qualitative=tomorrow_4_qualitative,
+            tomorrow_5_name=tomorrow_5_name,
+            tomorrow_5_day=tomorrow_5_day,
+            tomorrow_5_quantitative=tomorrow_5_quantitative,
+            tomorrow_5_qualitative=tomorrow_5_qualitative,
         )
         new_record.save()
         return JsonResponse("success",safe=False)
