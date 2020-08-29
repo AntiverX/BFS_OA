@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from BFS_OA.settings import BASE_DIR
-from .models import UploadRecord
+from .models import UploadRecord,DailyReport
 from user_info.models import User
 import datetime
 import pytz
@@ -13,8 +13,8 @@ from django.http import JsonResponse
 def index(request):
     if request.method == "POST" and request.FILES['file']:
         file = request.FILES['file']
-        short_file_name = "/static/file/topic_manager/" + request.user.group_name + "-课题管理-" + request.user.real_name + "-" + datetime.datetime.now().strftime('%Y_%m_%d_%H_%M') + ".xlsx"
-        file_name = BASE_DIR + "/static/file/topic_manager/" + request.user.group_name + "-课题管理-" + request.user.real_name + "-" + datetime.datetime.now().strftime('%Y_%m_%d_%H_%M') + ".xlsx"
+        short_file_name = "/static/file/topic_manager/" + request.user.group_name + "-课题管理-" + request.user.47174real_name + "-v3.6-" + datetime.datetime.now().strftime('%Y.%m.%d') + ".xlsx"
+        file_name = BASE_DIR + "/static/file/topic_manager/" + request.user.group_name + "-课题管理-" + request.user.real_name + "-v3.6-" + datetime.datetime.now().strftime('%Y.%m.%d') + ".xlsx"
         with open(file_name.encode(), "wb+") as destination:
             for chunk in file.chunks():
                 destination.write(chunk)
@@ -258,3 +258,52 @@ def send_email(request, start_time: datetime.datetime, end_time: datetime.dateti
             server.sendmail(sender_email, (receiver_email,cc), text)
         else:
             server.sendmail(sender_email, receiver_email, text)
+
+
+def daily_report(request):
+    if request.method == "POST":
+        date = request.POST['date']
+        finished_work = request.POST['finished_work']
+        tomorrow_work = request.POST['tomorrow_work']
+        remarks = request.POST['remarks']
+        existing_record = DailyReport.objects.filter(date=date,username=request.user.username)
+        if len(existing_record) > 0:
+            return JsonResponse("error", safe=False)
+        new_record = DailyReport(
+            username=request.user.username,
+            real_name=request.user.real_name,
+            date=date,
+            finished_work=finished_work,
+            tomorrow_work=tomorrow_work,
+            remarks=remarks,
+        )
+        new_record.save()
+        return JsonResponse("success",safe=False)
+    else:
+        return render(request,'topic_manager_v2/daily_report.html',context=None)
+
+def daily_report_summary(request):
+    return render(request, 'topic_manager_v2/daily_report_summary.html', context=None)
+
+def daily_report_summary_api(request):
+    class Status:
+        def __init__(self, real_name, date, finished_work, tomorrow_work, remarks):
+            self.real_name = real_name
+            self.date = date
+            self.finished_work = finished_work
+            self.tomorrow_work = tomorrow_work
+            self.remarks = remarks
+
+    records = []
+    all_records = DailyReport.objects.filter(username=request.user.username)
+    for record in all_records:
+        new_status = {
+            'real_name':record.real_name,
+            'date':record.date,
+            'finished_work':record.finished_work,
+            'tomorrow_work': record.tomorrow_work,
+            'remarks': record.remarks,
+
+        }
+        records.append(new_status)
+    return JsonResponse(records,safe=False)
