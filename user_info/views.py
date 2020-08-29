@@ -41,7 +41,7 @@ def register(request):
         real_name = request.POST['real_name']
         student_id = request.POST['student_id']
         group_name = request.POST['group_name']
-        student_type = "新生" if int(request.POST['student_id'][4:6]) == datetime.datetime.now().year % 100 else "硕士研究生"
+        # student_type = "新生" if int(request.POST['student_id'][4:6]) == datetime.datetime.now().year % 100 else "硕士研究生"
         user = User.objects.create_user(username=username,
                                         password=password,
                                         real_name=real_name,
@@ -49,7 +49,7 @@ def register(request):
                                         student_id=student_id,
                                         is_display_all=False,
                                         group_name=group_name,
-                                        student_type=student_type,)
+                                        )
         user.save()
         context['success'] = "注册成功！"
         context['return_link'] = "/"
@@ -182,9 +182,15 @@ def edit_user_api(request,username):
     user = User.objects.get(username=username)
     if request.method == "POST":
         try:
-            user.is_active = request.POST['is_active']
+            user.is_active = True if request.POST['is_active'] == 'true' else False
+            user.group_name = request.POST['group_name']
+            user.save()
         except Exception as e:
-            return JsonResponse(e, safe=False)
+            return JsonResponse(str(e), safe=False)
+        dict = {
+            'message': 'success',
+        }
+        return JsonResponse(dict, safe=False)
     else:
         user_dict = {
             'username': user.username,

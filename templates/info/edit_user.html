@@ -2,7 +2,7 @@
 
 {% block menu_1 %}
     <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal">
-        <el-menu-item index="1" onclick="window.location='user_manage';">用户列表</el-menu-item>
+        <el-menu-item index="1" onclick="window.location='/info/user_manage';">用户列表</el-menu-item>
 
         <el-menu-item style="float:right;" onclick="window.location='/logout';">
             {% if user.is_authenticated %}
@@ -45,22 +45,44 @@
             data() {
                 return {
                     form: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
                         username: '',
                         is_active: '',
                         group_name: '',
-                    }
+                    },
+                    menu : "1-2",
                 }
             },
             methods: {
                 onSubmit() {
-                    console.log('submit!');
-                }
+                    const getParams = (obj) => {
+                        const params = new URLSearchParams();
+                        const keys = Object.keys(obj);
+                        for (let k of keys) {
+                            params.append(k, obj[k]);
+                        }
+                        return params;
+                    }
+
+                    axios.post('/info/edit_user_api/' + window.location.href.split('/').slice(-2)[0] + "/", getParams(this.form))
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
             },
             mounted() {
                 axios
                     .get('/info/edit_user_api/' + window.location.href.split('/').slice(-2)[0],)
-                    .then(response => (this.form = response.data))
-            }
+                    .then(
+                        response => {
+                            this.form.username = response.data.username;
+                            this.form.is_active = response.data.is_active;
+                            this.form.group_name = response.data.group_name;
+                        }
+                    )}
         })
     </script>
 {% endblock %}

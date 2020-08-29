@@ -19,6 +19,9 @@ from . import views
 
 urlpatterns = [
     path('index', views.index),
+    path('my_daily_report', views.daily_report),
+    path('daily_report_summary', views.daily_report_summary),
+    path('daily_report_summary_api', views.daily_report_summary_api),
     path('upload_history', views.upload_history),
     path('upload_history_api', views.upload_history_api),
     path('status', views.upload_status),

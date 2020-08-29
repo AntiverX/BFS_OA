@@ -32,7 +32,7 @@
     <el-container>
         <el-aside width="250px">
             <el-row class="tac">
-                <el-menu default-active="2" class="el-menu-vertical-demo" style="height: calc(100vh - 60px);" router>
+                <el-menu :default-active="menu" class="el-menu-vertical-demo" style="height: calc(100vh - 60px);" router>
                     <el-submenu index="1">
                         <template slot="title">
                             <i class="el-icon-location"></i>
@@ -43,6 +43,9 @@
                     </el-submenu>
                     <el-menu-item index="2" onclick="window.location='/topic_manager_v2/index'">
                         <i class="el-icon-document"></i>课题管理
+                    </el-menu-item>
+                    <el-menu-item index="3" onclick="window.location='/topic_manager_v2/my_daily_report'">
+                        <i class="el-icon-document"></i>日报
                     </el-menu-item>
                 </el-menu>
             </el-row>
