@@ -34,294 +34,63 @@
                     </el-form-item>
 
                     <el-form-item label="今日工作">
-                            <el-slider
-                                style="margin-left: 20px;"
-                                v-model="form.today_value"
-                                :min=1
-                                :max=5
-                                @input="today_number_changed"
-                                 show-input>
-                            </el-slider>
-
+                        <el-progress :text-inside="true" :stroke-width="24" :percentage="{{ today_percentage }}" style="margin-top: 8px;"></el-progress>
                     </el-form-item>
-
-                    <el-row v-show="today_1">
-                        <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项1">
-                                    <el-input v-model="form.today_1_name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                 <el-form-item label="实际人日数">
-                                    <el-input v-model="form.today_1_day"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定量描述">
-                                <el-input v-model="form.today_1_quantitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定性描述">
-                                <el-input v-model="form.today_1_qualitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
-
-                    <el-row v-show="today_2">
-                        <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项2">
-                                    <el-input v-model="form.today_2_name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                 <el-form-item label="实际人日数">
-                                    <el-input v-model="form.today_2_day"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定量描述">
-                                <el-input v-model="form.today_2_quantitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定性描述">
-                                <el-input v-model="form.today_2_qualitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
-
-                    <el-row v-show="today_3">
-                        <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项3">
-                                    <el-input v-model="form.today_3_name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                 <el-form-item label="实际人日数">
-                                    <el-input v-model="form.today_3_day"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定量描述">
-                                <el-input v-model="form.today_3_quantitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定性描述">
-                                <el-input v-model="form.today_3_qualitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
-
-                    <el-row v-show="today_4">
-                        <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项4">
-                                    <el-input v-model="form.today_4_name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                 <el-form-item label="实际人日数">
-                                    <el-input v-model="form.today_4_day"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定量描述">
-                                <el-input v-model="form.today_4_quantitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定性描述">
-                                <el-input v-model="form.today_4_qualitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
-
-                    <el-row v-show="today_5">
-                        <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项5">
-                                    <el-input v-model="form.today_5_name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                 <el-form-item label="实际人日数">
-                                    <el-input v-model="form.today_5_day"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定量描述">
-                                <el-input v-model="form.today_5_quantitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定性描述">
-                                <el-input v-model="form.today_5_qualitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
-
                     <el-form-item label="明日计划">
-                            <el-slider
-                                style="margin-left: 20px;"
-                                v-model="form.tomorrow_value"
-                                :min=1
-                                :max=5
-                                @input="tomorrow_number_changed"
-                                 show-input>
-                            </el-slider>
-
+                        <el-progress :text-inside="true" :stroke-width="24" :percentage="{{ tomorrow_percentage }}" style="margin-top: 8px;"></el-progress>
                     </el-form-item>
 
-                    <el-row v-show="tomorrow_1">
                         <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项1">
-                                    <el-input v-model="form.tomorrow_1_name"></el-input>
-                                 </el-form-item>
+
+                            <el-col :span="4">
+                                <el-form-item label="大项">
+                                    <el-tooltip class="item" effect="dark" content="今日工作指的是今天完成的所有工作" placement="top">
+                                        <el-select v-model="form.type" placeholder="请选择">
+                                            <el-option
+                                              v-for="item in options"
+                                              :label="item.label"
+                                              :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-tooltip>
+                                </el-form-item>
                             </el-col>
+
                             <el-col :span="8">
-                                 <el-form-item label="计划人日数">
-                                    <el-input v-model="form.tomorrow_1_day"></el-input>
+                                 <el-form-item label="小项">
+                                     <el-tooltip class="item" effect="dark" content="今日工作指的是今天完成的所有工作" placement="top">
+                                         <el-input v-model="form.tomorrow_name"></el-input>
+                                     </el-tooltip>
                                  </el-form-item>
                             </el-col>
+
+                            <el-col :span="8">
+                                 <el-form-item label="分项">
+                                    <el-input v-model="form.sub_name"></el-input>
+                                 </el-form-item>
+                            </el-col>
+
+                            <el-col :span="4">
+                                 <el-form-item label="人日数">
+                                    <el-input v-model="form.tomorrow_day"></el-input>
+                                 </el-form-item>
+                            </el-col>
+
                         </el-row>
 
                         <el-row>
                              <el-form-item label="定量描述">
-                                <el-input v-model="form.tomorrow_1_quantitative"></el-input>
+                                <el-input v-model="form.tomorrow_quantitative"></el-input>
                              </el-form-item>
                         </el-row>
 
                         <el-row>
                              <el-form-item label="定性描述">
-                                <el-input v-model="form.tomorrow_1_qualitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
-                    <el-row v-show="tomorrow_2">
-                        <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项2">
-                                    <el-input v-model="form.name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                 <el-form-item label="计划人日数">
-                                    <el-input v-model="form.name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定量描述">
-                                <el-input v-model="form.name"></el-input>
+                                <el-input v-model="form.tomorrow_qualitative"></el-input>
                              </el-form-item>
                         </el-row>
 
-                        <el-row>
-                             <el-form-item label="定性描述">
-                                <el-input v-model="form.name"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
-                    <el-row v-show="tomorrow_3">
-                        <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项3">
-                                    <el-input v-model="form.tomorrow_3_name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                 <el-form-item label="计划人日数">
-                                    <el-input v-model="form.tomorrow_3_day"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                        </el-row>
 
-                        <el-row>
-                             <el-form-item label="定量描述">
-                                <el-input v-model="form.tomorrow_3_quantitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定性描述">
-                                <el-input v-model="form.tomorrow_3_qualitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
-                    <el-row v-show="tomorrow_4">
-                        <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项4">
-                                    <el-input v-model="form.tomorrow_4_name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                 <el-form-item label="计划人日数">
-                                    <el-input v-model="form.tomorrow_4_day"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定量描述">
-                                <el-input v-model="form.tomorrow_4_quantitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定性描述">
-                                <el-input v-model="form.tomorrow_4_qualitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
-                    <el-row v-show="tomorrow_5">
-                        <el-row>
-                            <el-col :span="16">
-                                 <el-form-item label="小项5">
-                                    <el-input v-model="form.tomorrow_5_name"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                 <el-form-item label="计划人日数">
-                                    <el-input v-model="form.tomorrow_5_day"></el-input>
-                                 </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定量描述">
-                                <el-input v-model="form.tomorrow_5_quantitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-
-                        <el-row>
-                             <el-form-item label="定性描述">
-                                <el-input v-model="form.tomorrow_5_qualitative"></el-input>
-                             </el-form-item>
-                        </el-row>
-                    </el-row>
 
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit" size="small">创建</el-button>
@@ -338,6 +107,7 @@
         var app = new Vue({
             el: '#app',
             data: {
+                menu: "",
                 radio: 1,
                 default_active: "2",
                 tableData: null,
@@ -351,51 +121,22 @@
                 today_3: false,
                 today_4: false,
                 today_5: false,
+                options: [{
+                  value: '本日工作',
+                  label: '本日工作'
+                }, {
+                  value: '明日计划',
+                  label: '明日计划'
+                }],
                 form: {
-                    date: new Date(),
-                    today_value: 1,
-                    tomorrow_value: 1,
+                    type:"",
+                    date: "",
+                    tomorrow_name : "",
+                    sub_name : "",
+                    tomorrow_day : 0,
+                    tomorrow_quantitative : "",
+                    tomorrow_qualitative : "",
                     csrfmiddlewaretoken: '{{ csrf_token }}',
-                    today_1_name: '',
-                    today_1_day: '',
-                    today_1_quantitative: '',
-                    today_1_qualitative: '',
-                    today_2_name: '',
-                    today_2_day: '',
-                    today_2_quantitative: '',
-                    today_2_qualitative: '',
-                    today_3_name: '',
-                    today_3_day: '',
-                    today_3_quantitative: '',
-                    today_3_qualitative: '',
-                    today_4_name: '',
-                    today_4_day: '',
-                    today_4_quantitative: '',
-                    today_4_qualitative: '',
-                    today_5_name: '',
-                    today_5_day: '',
-                    today_5_quantitative: '',
-                    today_5_qualitative: '',
-                    tomorrow_1_name: '',
-                    tomorrow_1_day: '',
-                    tomorrow_1_quantitative: '',
-                    tomorrow_1_qualitative: '',
-                    tomorrow_2_name: '',
-                    tomorrow_2_day: '',
-                    tomorrow_2_quantitative: '',
-                    tomorrow_2_qualitative: '',
-                    tomorrow_3_name: '',
-                    tomorrow_3_day: '',
-                    tomorrow_3_quantitative: '',
-                    tomorrow_3_qualitative: '',
-                    tomorrow_4_name: '',
-                    tomorrow_4_day: '',
-                    tomorrow_4_quantitative: '',
-                    tomorrow_4_qualitative: '',
-                    tomorrow_5_name: '',
-                    tomorrow_5_day: '',
-                    tomorrow_5_quantitative: '',
-                    tomorrow_5_qualitative: '',
                 },
             },
             methods: {
@@ -490,9 +231,9 @@
                         .then(function (response) {
                             if (response.data === "success") {
                                 alert("提交成功");
-                            }
-                            if (response.data === "error") {
-                                alert("提交失败，你已经提交过了");
+                                location.reload();
+                            } else {
+                                alert(response.data);
                             }
                         })
                         .catch(function (error) {
@@ -501,14 +242,14 @@
                 },
             },
             mounted() {
-                axios
-                    .get('daily_report_summary_api')
-                    .then(response => (this.tableData = response.data));
+
                 var now = new Date();
                 var year = now.getFullYear();       //年
                 var month = now.getMonth() + 1;     //月
                 var day = now.getDate();            //日
                 this.form.date = year + "-" + month + "-" + day;
+
+                this.today_percentage = 10;
             },
         })
     </script>
