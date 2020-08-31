@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from BFS_OA.settings import BASE_DIR
-from .models import UploadRecord,DailyReport
+from .models import UploadRecord,DailyReport,Semester
 from user_info.models import User
 import datetime
 import pytz
@@ -321,16 +321,6 @@ def daily_report_summary(request):
     return render(request, 'topic_manager_v2/daily_report_summary.html', context=None)
 
 def daily_report_summary_api(request):
-    class Status:
-        def __init__(self, real_name, date, name, sub_name, day,quantitative,qualitative, type):
-            self.real_name = real_name
-            self.date = date
-            self.name = name
-            self.sub_name = sub_name
-            self.day = day
-            self.quantitative = quantitative
-            self.qualitative = qualitative
-            self.type = type
     records = []
     all_records = DailyReport.objects.filter(username=request.user.username)
     for record in all_records:
@@ -347,3 +337,34 @@ def daily_report_summary_api(request):
         records.append(new_status)
     return JsonResponse(records,safe=False)
 
+def semester_manage(request):
+    if request.method == "POST":
+        semester_name = request.POST['semester_name']
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        if semester_name == "" or start_date == "" or end_date == "":
+            return JsonResponse("有未完成的内容", safe=False)
+        new_record = Semester(
+            semester_name=semester_name,
+            start_date=start_date,
+            end_date=end_date,
+        )
+        new_record.save()
+        return JsonResponse("success",safe=False)
+    else:
+        return render(request, 'topic_manager_v2/semester_manage.html', context=None)
+
+def semester_manage_history(request):
+    return render(request, 'topic_manager_v2/semester_manage_history.html', context=None)
+
+def semester_manage_api(request):
+    records = []
+    all_records = Semester.objects.all()
+    for record in all_records:
+        new_status = {
+            'semester_name':record.semester_name,
+            'start_date':record.start_date,
+            'end_date':record.end_date,
+        }
+        records.append(new_status)
+    return JsonResponse(records,safe=False)

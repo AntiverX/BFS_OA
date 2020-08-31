@@ -27,4 +27,7 @@ urlpatterns = [
     path('status', views.upload_status),
     path('status_api', views.upload_status_api),
     path('sen_email_to_luosenlin', views.sen_email_to_luosenlin, name="sen_email_to_luosenlin"),
+    path('semester_manage', views.semester_manage),
+    path('semester_manage_history', views.semester_manage_history),
+    path('semester_manage_api', views.semester_manage_api),
 ]

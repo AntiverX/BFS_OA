@@ -20,3 +20,9 @@ class DailyReport(models.Model):
     quantitative = models.TextField(default="")
     qualitative = models.TextField(default="")
     type = models.TextField(default="")
+
+class Semester(models.Model):
+    edit_time = models.DateTimeField(default=now)
+    semester_name = models.TextField()
+    start_date = models.DateField()
+    end_date = models.DateField()
