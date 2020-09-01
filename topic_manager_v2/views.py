@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from BFS_OA.settings import BASE_DIR
-from .models import UploadRecord,DailyReport,Semester
+from .models import UploadRecord,DailyReport,WeeklyReport
 from user_info.models import User
 import datetime
 import pytz
@@ -277,7 +277,7 @@ def daily_report(request):
             existing_day = float(day)
             for record in existing_record1:
                 existing_day += float(ecord.day)
-            if existing_day >= 1.0:
+            if existing_day > 1.0:
                 return JsonResponse("本日工作超过了1人日", safe=False)
         else:
             existing_record1 = DailyReport.objects.filter(date=date,username=request.user.username, type="明日计划")
@@ -285,7 +285,7 @@ def daily_report(request):
             existing_day = float(day)
             for record in existing_record1:
                 existing_day += float(ecord.day)
-            if existing_day >= 1.0:
+            if existing_day > 1.0:
                 return JsonResponse("明日计划超过了1人日", safe=False)
 
         new_record = DailyReport(
@@ -337,6 +337,110 @@ def daily_report_summary_api(request):
         records.append(new_status)
     return JsonResponse(records,safe=False)
 
+def base_weekly_report(request):
+    if request.method == "POST":
+        date = request.POST['date']
+        name = request.POST.get('tomorrow_name', '')
+        sub_name = request.POST['sub_name']
+        day = request.POST.get('tomorrow_day', '')
+        quantitative = request.POST['tomorrow_quantitative']
+        qualitative = request.POST['tomorrow_qualitative']
+        type = request.POST['type']
+        if name == "" or sub_name == "" or day == "" or qualitative == "" or qualitative == "":
+            return JsonResponse("有未完成的内容", safe=False)
+        new_record = DailyReport(
+            username=request.user.username,
+            real_name=request.user.real_name,
+            date=date,
+            name=name,
+            sub_name=sub_name,
+            day = day,
+            quantitative = quantitative,
+            qualitative = qualitative,
+            type = type,
+        )
+        new_record.save()
+        return JsonResponse("success",safe=False)
+    else:
+        return render(request,'topic_manager_v2/base_weekly_report.html',context=None)
+
+def weekly_report(request):
+    if request.method == "POST":
+        date = request.POST['date']
+        name = request.POST.get('tomorrow_name', '')
+        sub_name = request.POST['sub_name']
+        day = request.POST.get('tomorrow_day', '')
+        quantitative = request.POST['tomorrow_quantitative']
+        qualitative = request.POST['tomorrow_qualitative']
+        type = request.POST['type']
+        if name == "" or sub_name == "" or day == "" or qualitative == "" or qualitative == "":
+            return JsonResponse("有未完成的内容", safe=False)
+        if type == "本日工作":
+            existing_record1 = WeeklyReport.objects.filter(date=date,username=request.user.username, type="本日工作")
+            # if len(existing_record) > 0:
+            existing_day = float(day)
+            for record in existing_record1:
+                existing_day += float(ecord.day)
+            if existing_day > 1.0:
+                return JsonResponse("本日工作超过了1人日", safe=False)
+        else:
+            existing_record1 = WeeklyReport.objects.filter(date=date,username=request.user.username, type="明日计划")
+            # if len(existing_record) > 0:
+            existing_day = float(day)
+            for record in existing_record1:
+                existing_day += float(ecord.day)
+            if existing_day > 1.0:
+                return JsonResponse("明日计划超过了1人日", safe=False)
+
+        new_record = DailyReport(
+            username=request.user.username,
+            real_name=request.user.real_name,
+            date=date,
+            name=name,
+            sub_name=sub_name,
+            day = day,
+            quantitative = quantitative,
+            qualitative = qualitative,
+            type = type,
+        )
+        new_record.save()
+        return JsonResponse("success",safe=False)
+    else:
+        today = datetime.datetime.now()
+        records = WeeklyReport.objects.filter(username=request.user.username, date=today.strftime("%Y-%m-%d"), type="本日工作")
+        today_percentage = 0.0
+        for record in records:
+            today_percentage += record.day * 100
+        records = WeeklyReport.objects.filter(username=request.user.username, date=today.strftime("%Y-%m-%d"), type="明日计划")
+        tomorrow_percentage = 0.0
+        for record in records:
+            tomorrow_percentage += record.day * 100
+        context = {
+            'today_percentage' : today_percentage,
+            'tomorrow_percentage' : tomorrow_percentage,
+        }
+        return render(request,'topic_manager_v2/weekly_report.html',context=context)
+
+def weekly_report_summary(request):
+    return render(request, 'topic_manager_v2/weekly_report_summary.html', context=None)
+
+def weekly_report_summary_api(request):
+    records = []
+    all_records = WeeklyReport.objects.filter(username=request.user.username)
+    for record in all_records:
+        new_status = {
+            'real_name':record.real_name,
+            'date':record.date,
+            'sub_name':record.sub_name,
+            'day': record.day,
+            'quantitative': record.quantitative,
+            'qualitative': record.qualitative,
+            'type': record.type,
+
+        }
+        records.append(new_status)
+    return JsonResponse(records,safe=False)
+
 def semester_manage(request):
     if request.method == "POST":
         semester_name = request.POST['semester_name']
@@ -368,3 +472,14 @@ def semester_manage_api(request):
         }
         records.append(new_status)
     return JsonResponse(records,safe=False)
+
+def edit_semester_api(request, semester_name):
+    try:
+        record = Semester.objects.get(semester_name=semester_name)
+        record.delete()
+    except Exception as e:
+        return JsonResponse(str(e), safe=False)
+    dict = {
+        'message': 'success',
+    }
+    return JsonResponse(dict, safe=False)

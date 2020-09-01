@@ -21,6 +21,18 @@ class DailyReport(models.Model):
     qualitative = models.TextField(default="")
     type = models.TextField(default="")
 
+class WeeklyReport(models.Model):
+    username = models.TextField()
+    real_name = models.TextField()
+    fill_time = models.DateTimeField(default=now)
+    date = models.DateField()
+    name = models.TextField(default="")
+    sub_name = models.TextField(default="")
+    day = models.FloatField(default=0.0)
+    quantitative = models.TextField(default="")
+    qualitative = models.TextField(default="")
+    type = models.TextField(default="")
+
 class Semester(models.Model):
     edit_time = models.DateTimeField(default=now)
     semester_name = models.TextField()

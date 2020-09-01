@@ -1,9 +1,10 @@
 {% extends "base_v3.html" %}
 
 {% block menu_1 %}
-    <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal" router>
-        <el-menu-item index="1" onclick="window.location='my_daily_report';">我的日报</el-menu-item>
-        <el-menu-item index="2" onclick="window.location='daily_report_summary';">日报记录</el-menu-item>
+    <el-menu :default-active="'2'" class="el-menu-demo" mode="horizontal" router>
+        <el-menu-item index="1" onclick="window.location='my_base_weekly_report';">本周基本情况</el-menu-item>
+        <el-menu-item index="2" onclick="window.location='my_weekly_report';">我的周报</el-menu-item>
+        <el-menu-item index="3" onclick="window.location='weekly_report_summary';">周报记录</el-menu-item>
         <el-menu-item style="float:right;" onclick="window.location='/logout';">
             {% if user.is_authenticated %}
                 注销
@@ -33,10 +34,10 @@
                         </el-date-picker>
                     </el-form-item>
 
-                    <el-form-item label="今日工作">
+                    <el-form-item label="本周工作">
                         <el-progress :text-inside="true" :stroke-width="24" :percentage="{{ today_percentage }}" style="margin-top: 8px;"></el-progress>
                     </el-form-item>
-                    <el-form-item label="明日计划">
+                    <el-form-item label="下周计划">
                         <el-progress :text-inside="true" :stroke-width="24" :percentage="{{ tomorrow_percentage }}" style="margin-top: 8px;"></el-progress>
                     </el-form-item>
 
@@ -68,6 +69,8 @@
                                  <el-form-item label="分项">
                                     <el-input v-model="form.sub_name"></el-input>
                                  </el-form-item>
+
+
                             </el-col>
 
                             <el-col :span="4">
@@ -107,26 +110,17 @@
         var app = new Vue({
             el: '#app',
             data: {
-                menu: "3",
+                time_status: 1,
+                menu: "4",
                 radio: 1,
                 default_active: "2",
                 tableData: null,
-                tomorrow_1: true,
-                tomorrow_2: false,
-                tomorrow_3: false,
-                tomorrow_4: false,
-                tomorrow_5: false,
-                today_1: true,
-                today_2: false,
-                today_3: false,
-                today_4: false,
-                today_5: false,
                 options: [{
-                  value: '本日工作',
-                  label: '本日工作'
+                  value: '本周工作',
+                  label: '本周工作'
                 }, {
-                  value: '明日计划',
-                  label: '明日计划'
+                  value: '下周计划',
+                  label: '下周计划'
                 }],
                 form: {
                     type:"",
@@ -142,80 +136,6 @@
             methods: {
                 test() {
                     alert("上传成功");
-                },
-                tomorrow_number_changed(num) {
-                    if(num == 1) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = false;
-                        this.tomorrow_3 = false;
-                        this.tomorrow_4 = false;
-                        this.tomorrow_5 = false;
-                    }
-                    if(num == 2) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = true;
-                        this.tomorrow_3 = false;
-                        this.tomorrow_4 = false;
-                        this.tomorrow_5 = false;
-                    }
-                    if(num == 3) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = true;
-                        this.tomorrow_3 = true;
-                        this.tomorrow_4 = false;
-                        this.tomorrow_5 = false;
-                    }
-                    if(num == 4) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = true;
-                        this.tomorrow_3 = true;
-                        this.tomorrow_4 = true;
-                        this.tomorrow_5 = false;
-                    }
-                    if(num == 5) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = true;
-                        this.tomorrow_3 = true;
-                        this.tomorrow_4 = true;
-                        this.tomorrow_5 = true;
-                    }
-                },
-                today_number_changed(num) {
-                    if(num == 1) {
-                        this.today_1 = true;
-                        this.today_2 = false;
-                        this.today_3 = false;
-                        this.today_4 = false;
-                        this.today_5 = false;
-                    }
-                    if(num == 2) {
-                        this.today_1 = true;
-                        this.today_2 = true;
-                        this.today_3 = false;
-                        this.today_4 = false;
-                        this.today_5 = false;
-                    }
-                    if(num == 3) {
-                        this.today_1 = true;
-                        this.today_2 = true;
-                        this.today_3 = true;
-                        this.today_4 = false;
-                        this.today_5 = false;
-                    }
-                    if(num == 4) {
-                        this.today_1 = true;
-                        this.today_2 = true;
-                        this.today_3 = true;
-                        this.today_4 = true;
-                        this.today_5 = false;
-                    }
-                    if(num == 5) {
-                        this.today_1 = true;
-                        this.today_2 = true;
-                        this.today_3 = true;
-                        this.today_4 = true;
-                        this.today_5 = true;
-                    }
                 },
                 onSubmit() {
                     const getParams = (obj) => {
@@ -275,6 +195,10 @@
 
     .el-date-editor.el-input, .el-date-editor.el-input__inner {
     width: 100%;
+    }
+
+    .el-input__inner {
+    width: 100%!important;
     }
 
     ::placeholder {

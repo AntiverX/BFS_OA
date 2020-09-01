@@ -23,6 +23,12 @@ urlpatterns = [
     path('daily_report_summary', views.daily_report_summary),
     path('daily_report_summary_api', views.daily_report_summary_api),
     path('upload_history', views.upload_history),
+    # 周报相关
+    path('my_base_weekly_report', views.base_weekly_report),
+    path('my_weekly_report', views.weekly_report),
+    path('weekly_report_summary', views.weekly_report_summary),
+    path('weekly_report_summary_api', views.weekly_report_summary_api),
+
     path('upload_history_api', views.upload_history_api),
     path('status', views.upload_status),
     path('status_api', views.upload_status_api),
@@ -30,4 +36,5 @@ urlpatterns = [
     path('semester_manage', views.semester_manage),
     path('semester_manage_history', views.semester_manage_history),
     path('semester_manage_api', views.semester_manage_api),
+    path('edit_semester_api/<str:semester_name>/', views.edit_semester_api),
 ]

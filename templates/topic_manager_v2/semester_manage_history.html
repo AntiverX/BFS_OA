@@ -27,11 +27,7 @@
                         <template slot-scope="scope">
                             <el-button
                                     size="mini"
-                                    @click="handleEdit(scope.row.username)">编辑
-                            </el-button>
-                            <el-button
-                                    size="mini"
-                                    @click="handleEdit(scope.row.username)">删除
+                                    @click="handleEdit(scope.row.semester_name)">删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -56,8 +52,14 @@
                     test() {
                         alert("上传成功");
                     },
-                    handleEdit(username) {
-                        window.location = "/info/edit_user/" + username;
+                    handleEdit(name) {
+                        axios
+                        .get('edit_semester_api/' + name + "/")
+                        .then(function (response) {
+                              if (response.data === "success") {
+                                  alert("删除成功");
+                              }
+                        });
                     },
             },
             mounted()

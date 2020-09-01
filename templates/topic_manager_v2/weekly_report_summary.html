@@ -1,9 +1,10 @@
 {% extends "base_v3.html" %}
 
 {% block menu_1 %}
-    <el-menu :default-active="'2'" class="el-menu-demo" mode="horizontal" router>
-        <el-menu-item index="1" onclick="window.location='my_daily_report';">我的日报</el-menu-item>
-        <el-menu-item index="2" onclick="window.location='daily_report_summary';">日报记录</el-menu-item>
+    <el-menu :default-active="'3'" class="el-menu-demo" mode="horizontal" router>
+        <el-menu-item index="1" onclick="window.location='my_base_weekly_report';">本周基本情况</el-menu-item>
+        <el-menu-item index="2" onclick="window.location='my_weekly_report';">我的周报</el-menu-item>
+        <el-menu-item index="3" onclick="window.location='weekly_report_summary';">周报记录</el-menu-item>
         <el-menu-item style="float:right;" onclick="window.location='/logout';">
             {% if user.is_authenticated %}
                 注销
@@ -64,6 +65,7 @@
     var app = new Vue({
         el: '#app',
         data: {
+            menu: "4",
             message: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
             radio: 1,
             default_active: "2",
@@ -76,7 +78,7 @@
         },
         mounted() {
             axios
-                .get('daily_report_summary_api')
+                .get('weekly_report_summary_api')
                 .then(response => (this.tableData = response.data))
         }
     })
