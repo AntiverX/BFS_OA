@@ -22,6 +22,7 @@
         <div class="grid-content">
             <el-table
                     :data="tableData"
+                    :span-method="arraySpanMethod"
                     style="width: 100%">
                 <el-table-column
                         width="80px"
@@ -68,7 +69,12 @@
                     <template slot-scope="scope">
                         <el-button
                                 size="mini"
-                                @click="handleEdit(scope.row.id)">删除
+                                @click="handleEdit(scope.row)">编辑
+                        </el-button>
+                        <el-button
+                                size="mini"
+                                type="danger"
+                                @click="handleDelete(scope.row.id)">删除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -76,6 +82,89 @@
         </div>
     </el-col>
 </el-row>
+
+<el-dialog title="修改日报" :visible.sync="dialogFormVisible">
+    <el-form ref="form" :model="form" label-width="100px">
+                    {% csrf_token %}
+
+                    <el-form-item label="日期" v-show="0">
+                        <el-date-picker
+                                value-format="yyyy-MM-dd"
+                                size="large"
+                                v-model="form.date"
+                                type="date"
+                                placeholder="选择日期">
+                        </el-date-picker>
+                    </el-form-item>
+
+                    <el-form-item label="日期" v-show="0">
+                        <el-input v-model="form.id"></el-input>
+                    </el-form-item>
+
+                        <el-row>
+
+                            <el-col :span="4">
+                                <el-form-item label="大项" >
+                                    <el-tooltip class="item" effect="dark" content="日报的大项分为本日工作和明日计划" placement="top">
+                                        <el-select v-model="form.type" placeholder="请选择">
+                                            <el-option
+                                              v-for="item in options"
+                                              :label="item.label"
+                                              :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-tooltip>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="8">
+                                 <el-form-item label="小项">
+                                     <el-tooltip class="item" effect="dark" content="小项填写内容为项目、课题的名称，如ISCC、电力仿真系统" placement="top">
+                                         <el-input v-model="form.name"></el-input>
+                                     </el-tooltip>
+                                 </el-form-item>
+                            </el-col>
+
+                            <el-col :span="8">
+                                 <el-form-item label="分项">
+                                     <el-tooltip class="item" effect="dark" content="分项填写的内容较为固定，一般按照类型进行分类，例如文档、会议、代码" placement="top">
+                                         <el-select v-model="form.sub_name" placeholder="请选择">
+                                             <el-option
+                                                 v-for="item in options2"
+                                                 :key="item.value"
+                                                 :label="item.label"
+                                                 :value="item.value">
+                                             </el-option>
+                                         </el-select>
+                                     </el-tooltip>
+                                 </el-form-item>
+                            </el-col>
+
+                            <el-col :span="4">
+                                 <el-form-item label="人日数">
+                                    <el-input v-model="form.day"></el-input>
+                                 </el-form-item>
+                            </el-col>
+
+                        </el-row>
+
+                        <el-row>
+                             <el-form-item label="定量描述">
+                                <el-input v-model="form.quantitative"></el-input>
+                             </el-form-item>
+                        </el-row>
+
+                        <el-row>
+                             <el-form-item label="定性描述">
+                                <el-input v-model="form.qualitative"></el-input>
+                             </el-form-item>
+                        </el-row>
+                </el-form>
+<div slot="footer" class="dialog-footer">
+<el-button size="mini" @click="dialogFormVisible = false">取 消</el-button>
+<el-button size="mini" type="primary" @click="postData">确 定</el-button>
+</div>
+</el-dialog>
 {% endblock %}
 
 {% block script %}
@@ -83,17 +172,82 @@
     var app = new Vue({
         el: '#app',
         data: {
+            dialogTableVisible: false,
+            dialogFormVisible: false,
             show: false,
             message: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
             radio: 1,
             default_active: "2",
+            data:null,
             tableData: null,
+            options: [{
+                  value: '本日工作',
+                  label: '本日工作'
+                }, {
+                  value: '明日计划',
+                  label: '明日计划'
+                }],
+                options2: [{
+                  value: '代码',
+                  label: '代码'
+                }, {
+                  value: '文档',
+                  label: '文档'
+                }, {
+                  value: '会议',
+                  label: '会议'
+                }],
+            form: {
+                id: "",
+                type:"",
+                date: "",
+                name : "",
+                sub_name : "",
+                day : 0,
+                quantitative : "",
+                qualitative : "",
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
         },
         methods: {
             test() {
                 alert("上传成功");
             },
-            handleEdit(id) {
+            handleEdit(row) {
+                this.dialogFormVisible = true;
+                console.log(row);
+                this.form.id = row.id
+                this.form.type = row.type;
+                this.form.date = row.date;
+                this.form.name = row.name;
+                this.form.sub_name = row.sub_name;
+                this.form.day = row.day;
+                this.form.quantitative = row.quantitative;
+                this.form.qualitative = row.qualitative;
+            },
+            postData() {
+                const getParams = (obj) => {
+                    const params = new URLSearchParams();
+                    const keys = Object.keys(obj);
+                    for (let k of keys) {
+                        params.append(k, obj[k]);
+                    }
+                    return params;
+                }
+                axios.post('edit_daily_report_summary_api', getParams(this.form))
+                        .then(function (response) {
+                            if (response.data === "success") {
+                                alert("修改成功");
+                                location.reload();
+                            } else {
+                                alert(response.data);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+            },
+            handleDelete(id) {
                 const params = new URLSearchParams();
                 params.append('id', id);
                 axios.post('delete_daily_report_summary_api', params)
@@ -108,12 +262,37 @@
                         .catch(function (error) {
                             console.log(error);
                         });
-            }
+            },
+            getSpanArr(data) {　
+                for (var i = 0; i < data.length; i++) {
+                    if (i === 0) {
+                          this.tableData.push(1);
+                          this.pos = 0
+                    } else {
+                      // 判断当前元素与上一个元素是否相同
+                if (data[i].name === data[i - 1].name) {
+                            this.tableData[this.pos] += 1;
+                            this.tableData.push(0);
+                          } else {
+                            this.tableData.push(1);
+                            this.pos = i;
+                          }
+                    }
+                }
+            },
         },
+
         mounted() {
-            axios
-                .get('daily_report_summary_api')
-                .then(response => (this.tableData = response.data))
+            const getSrc = () =>  {
+                return axios.get('daily_report_summary_api');
+            }
+
+            this.getSrc.then(function (response) {
+                return response.data; // now the data is accessable from here.
+            }).catch(function (response) {
+                console.log(response);
+            });
+            console.log(data);
         }
     })
 </script>
@@ -142,6 +321,10 @@
 
     .el-aside {
         vh: 100%;
+    }
+
+    .el-dialog {
+         width: 90%;
     }
 
     .el-header, .el-footer {

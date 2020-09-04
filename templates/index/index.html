@@ -1,0 +1,155 @@
+{% extends "base_v3.html" %}
+
+{% block menu_1 %}
+    <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal" router>
+        <el-menu-item index="1" onclick="window.location='';">主页</el-menu-item>
+        <el-menu-item style="float:right;" onclick="window.location='/logout';">
+            {% if user.is_authenticated %}
+                注销
+            {% else %}
+                <el-menu-item>登录</el-menu-item>
+            {% endif %}
+        </el-menu-item>
+    </el-menu>
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+<el-row type="flex" class="row-bg" justify="center">
+        <div class="grid-content bg-purple" style="font-size: 4rem;line-height: 2;">BFS信息管理系统</div>
+</el-row>
+
+<el-row type="flex" class="row-bg" justify="center">
+
+        <img src="{% static "bfs.jpg" %}">
+
+</el-row>
+
+<el-row type="flex" class="row-bg" justify="center">
+        <div class="grid-content bg-purple" style="font-size: 4rem;line-height: 2;">厚德 明理 慎独 求是</div>
+</el-row>
+
+<el-row type="flex" class="row-bg" justify="center">
+        <div class="grid-content bg-purple" style="font-size: 2rem;line-height: 2;">请使用Chrome浏览器访问</div>
+</el-row>
+
+{% endblock %}
+
+{% block script %}
+    <script type="module">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                time_status: 1,
+                menu: "5",
+                radio: 1,
+                default_active: "2",
+                tableData: null,
+                form: {
+                    date:"",
+                    average_work_time:"",
+                    valid_work_time: "",
+                    absence : "",
+                    rate : "",
+                    self_rate : 0,
+                    any_questions : "",
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+            },
+            methods: {
+                test() {
+                    alert("上传成功");
+                },
+                onSubmit() {
+                    const getParams = (obj) => {
+                        const params = new URLSearchParams();
+                        const keys = Object.keys(obj);
+                        for (let k of keys) {
+                            params.append(k, obj[k]);
+                        }
+                        return params;
+                    }
+
+                    axios.post('', getParams(this.form))
+                        .then(function (response) {
+                            if (response.data === "success") {
+                                alert("提交成功");
+                                location.reload();
+                            } else {
+                                alert(response.data);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+            },
+            mounted() {
+
+                var now = new Date();
+                var year = now.getFullYear();       //年
+                var month = now.getMonth() + 1;     //月
+                var day = now.getDate();            //日
+                this.form.date = year + "-" + month + "-" + day;
+
+                this.today_percentage = 10;
+            },
+        })
+    </script>
+{% endblock %}
+
+
+
+{% block style %}
+    html, body {
+    height: 100%;
+
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    height: 100%;
+    }
+
+    body {
+    margin: 0;
+    padding: 0;
+    }
+
+    .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 100%;
+    }
+
+    .el-input__inner {
+    width: 100%!important;
+    }
+
+    ::placeholder {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    height: 100%;
+    }
+
+    .el-aside {
+    vh: 100%;
+    }
+
+    .el-header, .el-footer {
+    background-color: #B3C0D1;
+    color: #333;
+    line-height: 60px;
+    }
+
+    .el-container:nth-child(5) .el-aside,
+    .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+    }
+
+    .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+    }
+
+{% endblock %}

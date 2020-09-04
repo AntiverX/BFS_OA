@@ -23,6 +23,7 @@ urlpatterns = [
     path('daily_report_summary', views.daily_report_summary),
     path('daily_report_summary_api', views.daily_report_summary_api),
     path('delete_daily_report_summary_api', views.delete_daily_report_summary_api),
+    path('edit_daily_report_summary_api', views.edit_daily_report_summary_api),
     path('group_daily_report_summary', views.group_daily_report_summary),
     path('group_daily_report_summary_api', views.group_daily_report_summary_api),
     path('upload_history', views.upload_history),

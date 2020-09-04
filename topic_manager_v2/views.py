@@ -262,11 +262,11 @@ def send_email(request, start_time: datetime.datetime, end_time: datetime.dateti
 def daily_report(request):
     if request.method == "POST":
         date = request.POST['date']
-        name = request.POST.get('tomorrow_name', '')
+        name = request.POST.get('name', '')
         sub_name = request.POST['sub_name']
-        day = request.POST.get('tomorrow_day', '')
-        quantitative = request.POST['tomorrow_quantitative']
-        qualitative = request.POST['tomorrow_qualitative']
+        day = request.POST.get('day', '')
+        quantitative = request.POST['quantitative']
+        qualitative = request.POST['qualitative']
         type = request.POST['type']
         if name == "" or sub_name == "" or day == "" or qualitative == "" or qualitative == "":
             return JsonResponse("有未完成的内容", safe=False)
@@ -322,7 +322,7 @@ def daily_report_summary(request):
 
 def daily_report_summary_api(request):
     records = []
-    all_records = DailyReport.objects.filter(username=request.user.username).order_by('fill_time', 'type')
+    all_records = DailyReport.objects.filter(username=request.user.username).order_by('date', '-type')
     date_occur = []
     for record in all_records:
         new_status = {
@@ -337,10 +337,10 @@ def daily_report_summary_api(request):
             'type': record.type if record.date.strftime("%d %b %Y")+record.type not in date_occur else "",
         }
 
-        if record.date not in date_occur:
-            date_occur.append(record.date)
-        if record.date.strftime("%d %b %Y")+record.type not in date_occur:
-            date_occur.append(record.date.strftime("%d %b %Y")+record.type)
+        # if record.date not in date_occur:
+        #     date_occur.append(record.date)
+        # if record.date.strftime("%d %b %Y")+record.type not in date_occur:
+        #     date_occur.append(record.date.strftime("%d %b %Y")+record.type)
         records.append(new_status)
     return JsonResponse(records,safe=False)
 
@@ -350,6 +350,46 @@ def delete_daily_report_summary_api(request):
     if len(record) > 0:
         record.delete()
     return JsonResponse("success",safe=False)
+
+@csrf_exempt
+def edit_daily_report_summary_api(request):
+    if request.method == "POST":
+        date = request.POST['date']
+        name = request.POST.get('name', '')
+        sub_name = request.POST['sub_name']
+        day = request.POST.get('day', '')
+        quantitative = request.POST['quantitative']
+        qualitative = request.POST['qualitative']
+        type = request.POST['type']
+        id =  request.POST['id']
+        if name == "" or sub_name == "" or day == "" or qualitative == "" or qualitative == "":
+            return JsonResponse("有未完成的内容", safe=False)
+        if type == "本日工作":
+            existing_record1 = DailyReport.objects.filter(username=request.user.username)
+            # if len(existing_record) > 0:
+            existing_day = float(day)
+            for record in existing_record1:
+                existing_day += float(record.day)
+            if existing_day > 1.0:
+                return JsonResponse("本日工作超过了1人日", safe=False)
+        else:
+            existing_record1 = DailyReport.objects.filter(date=date,username=request.user.username, type="明日计划")
+            # if len(existing_record) > 0:
+            existing_day = float(day)
+            for record in existing_record1:
+                existing_day += float(record.day)
+            if existing_day > 1.0:
+                return JsonResponse("明日计划超过了1人日", safe=False)
+        existing_record = DailyReport.objects.filter(id=id, username=request.user.username)
+        existing_record.date = date
+        existing_record.name = name
+        existing_record.sub_name = sub_name
+        existing_record.day = day
+        existing_record.day = day
+        existing_record.quantitative = quantitative
+        existing_record.qualitative = qualitative
+        existing_record.save()
+        return JsonResponse("success", safe=False)
 
 def group_daily_report_summary(request):
     return render(request, 'topic_manager_v2/group_daily_report_summary.html', context=None)

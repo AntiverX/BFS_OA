@@ -60,7 +60,7 @@
                             <el-col :span="8">
                                  <el-form-item label="小项">
                                      <el-tooltip class="item" effect="dark" content="小项填写内容为项目、课题的名称，如ISCC、电力仿真系统" placement="top">
-                                         <el-input v-model="form.tomorrow_name"></el-input>
+                                         <el-input v-model="form.name"></el-input>
                                      </el-tooltip>
                                  </el-form-item>
                             </el-col>
@@ -82,7 +82,7 @@
 
                             <el-col :span="4">
                                  <el-form-item label="人日数">
-                                    <el-input v-model="form.tomorrow_day"></el-input>
+                                    <el-input v-model="form.day"></el-input>
                                  </el-form-item>
                             </el-col>
 
@@ -90,13 +90,13 @@
 
                         <el-row>
                              <el-form-item label="定量描述">
-                                <el-input v-model="form.tomorrow_quantitative"></el-input>
+                                <el-input v-model="form.quantitative"></el-input>
                              </el-form-item>
                         </el-row>
 
                         <el-row>
                              <el-form-item label="定性描述">
-                                <el-input v-model="form.tomorrow_qualitative"></el-input>
+                                <el-input v-model="form.qualitative"></el-input>
                              </el-form-item>
                         </el-row>
 
@@ -141,91 +141,17 @@
                 form: {
                     type:"",
                     date: "",
-                    tomorrow_name : "",
+                    name : "",
                     sub_name : "",
-                    tomorrow_day : 0,
-                    tomorrow_quantitative : "",
-                    tomorrow_qualitative : "",
+                    day : 0,
+                    quantitative : "",
+                    qualitative : "",
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
             },
             methods: {
                 test() {
                     alert("上传成功");
-                },
-                tomorrow_number_changed(num) {
-                    if(num == 1) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = false;
-                        this.tomorrow_3 = false;
-                        this.tomorrow_4 = false;
-                        this.tomorrow_5 = false;
-                    }
-                    if(num == 2) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = true;
-                        this.tomorrow_3 = false;
-                        this.tomorrow_4 = false;
-                        this.tomorrow_5 = false;
-                    }
-                    if(num == 3) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = true;
-                        this.tomorrow_3 = true;
-                        this.tomorrow_4 = false;
-                        this.tomorrow_5 = false;
-                    }
-                    if(num == 4) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = true;
-                        this.tomorrow_3 = true;
-                        this.tomorrow_4 = true;
-                        this.tomorrow_5 = false;
-                    }
-                    if(num == 5) {
-                        this.tomorrow_1 = true;
-                        this.tomorrow_2 = true;
-                        this.tomorrow_3 = true;
-                        this.tomorrow_4 = true;
-                        this.tomorrow_5 = true;
-                    }
-                },
-                today_number_changed(num) {
-                    if(num == 1) {
-                        this.today_1 = true;
-                        this.today_2 = false;
-                        this.today_3 = false;
-                        this.today_4 = false;
-                        this.today_5 = false;
-                    }
-                    if(num == 2) {
-                        this.today_1 = true;
-                        this.today_2 = true;
-                        this.today_3 = false;
-                        this.today_4 = false;
-                        this.today_5 = false;
-                    }
-                    if(num == 3) {
-                        this.today_1 = true;
-                        this.today_2 = true;
-                        this.today_3 = true;
-                        this.today_4 = false;
-                        this.today_5 = false;
-                    }
-                    if(num == 4) {
-                        this.today_1 = true;
-                        this.today_2 = true;
-                        this.today_3 = true;
-                        this.today_4 = true;
-                        this.today_5 = false;
-                    }
-                    if(num == 5) {
-                        this.today_1 = true;
-                        this.today_2 = true;
-                        this.today_3 = true;
-                        this.today_4 = true;
-                        this.today_5 = true;
-                    }
                 },
                 onSubmit() {
                     const getParams = (obj) => {
