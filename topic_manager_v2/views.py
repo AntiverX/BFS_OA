@@ -1,11 +1,10 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from BFS_OA.settings import BASE_DIR
-from .models import UploadRecord,DailyReport,WeeklyReport
+from .models import UploadRecord,DailyReport,WeeklyReport, Semester
 from user_info.models import User
 import datetime
 import pytz
 from django.urls import reverse
-import os
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
@@ -276,7 +275,7 @@ def daily_report(request):
             # if len(existing_record) > 0:
             existing_day = float(day)
             for record in existing_record1:
-                existing_day += float(ecord.day)
+                existing_day += float(record.day)
             if existing_day > 1.0:
                 return JsonResponse("本日工作超过了1人日", safe=False)
         else:
@@ -284,13 +283,14 @@ def daily_report(request):
             # if len(existing_record) > 0:
             existing_day = float(day)
             for record in existing_record1:
-                existing_day += float(ecord.day)
+                existing_day += float(record.day)
             if existing_day > 1.0:
                 return JsonResponse("明日计划超过了1人日", safe=False)
 
         new_record = DailyReport(
             username=request.user.username,
             real_name=request.user.real_name,
+            group_name=request.user.group_name,
             date=date,
             name=name,
             sub_name=sub_name,
@@ -322,42 +322,141 @@ def daily_report_summary(request):
 
 def daily_report_summary_api(request):
     records = []
-    all_records = DailyReport.objects.filter(username=request.user.username)
+    all_records = DailyReport.objects.filter(username=request.user.username).order_by('fill_time', 'type')
+    date_occur = []
     for record in all_records:
         new_status = {
+            'id': record.id,
             'real_name':record.real_name,
-            'date':record.date,
+            'date':record.date if record.date not in date_occur else "",
+            'name':record.name,
             'sub_name':record.sub_name,
             'day': record.day,
             'quantitative': record.quantitative,
             'qualitative': record.qualitative,
-            'type': record.type,
-
+            'type': record.type if record.date.strftime("%d %b %Y")+record.type not in date_occur else "",
         }
+
+        if record.date not in date_occur:
+            date_occur.append(record.date)
+        if record.date.strftime("%d %b %Y")+record.type not in date_occur:
+            date_occur.append(record.date.strftime("%d %b %Y")+record.type)
+        records.append(new_status)
+    return JsonResponse(records,safe=False)
+
+@csrf_exempt
+def delete_daily_report_summary_api(request):
+    record = DailyReport.objects.filter(username=request.user.username, id=request.POST['id'])
+    if len(record) > 0:
+        record.delete()
+    return JsonResponse("success",safe=False)
+
+def group_daily_report_summary(request):
+    return render(request, 'topic_manager_v2/group_daily_report_summary.html', context=None)
+
+def group_daily_report_summary_api(request):
+    records = []
+    all_records = DailyReport.objects.filter(group_name=request.user.group_name).order_by('username', 'fill_time', 'type')
+    date_occur = []
+    for record in all_records:
+        new_status = {
+            'real_name':record.real_name,
+            'date':record.date if record.real_name+record.date.strftime("%d %b %Y") not in date_occur else "",
+            'name':record.name,
+            'sub_name':record.sub_name,
+            'day': record.day,
+            'quantitative': record.quantitative,
+            'qualitative': record.qualitative,
+            'type': record.type if record.real_name+record.date.strftime("%d %b %Y")+record.type not in date_occur else "",
+        }
+
+        if record.real_name+record.date.strftime("%d %b %Y") not in date_occur:
+            date_occur.append(record.real_name+record.date.strftime("%d %b %Y"))
+        if record.real_name+record.date.strftime("%d %b %Y")+record.type not in date_occur:
+            date_occur.append(record.real_name+record.date.strftime("%d %b %Y")+record.type)
         records.append(new_status)
     return JsonResponse(records,safe=False)
 
 def base_weekly_report(request):
     if request.method == "POST":
         date = request.POST['date']
-        name = request.POST.get('tomorrow_name', '')
-        sub_name = request.POST['sub_name']
-        day = request.POST.get('tomorrow_day', '')
-        quantitative = request.POST['tomorrow_quantitative']
-        qualitative = request.POST['tomorrow_qualitative']
-        type = request.POST['type']
-        if name == "" or sub_name == "" or day == "" or qualitative == "" or qualitative == "":
+        average_work_time = request.POST['average_work_time']
+        valid_work_time = request.POST['valid_work_time']
+        absence = request.POST['absence']
+        rate = request.POST['rate']
+        self_rate = request.POST['self_rate']
+        any_questions = request.POST['any_questions']
+
+        if date == "" or average_work_time == "" or valid_work_time == "" or absence == "" or rate == "" or self_rate == "" or any_questions == "":
             return JsonResponse("有未完成的内容", safe=False)
-        new_record = DailyReport(
+        # 平均工作时间/有效时间
+        new_record = WeeklyReport(
             username=request.user.username,
             real_name=request.user.real_name,
             date=date,
-            name=name,
-            sub_name=sub_name,
-            day = day,
-            quantitative = quantitative,
-            qualitative = qualitative,
-            type = type,
+            type="用时情况",
+            name="平均工作时间",
+            day = 0,
+            quantitative = average_work_time,
+            hidden_order = 0,
+        )
+        new_record = WeeklyReport(
+            username=request.user.username,
+            real_name=request.user.real_name,
+            date=date,
+            type="用时情况",
+            name="有效时间",
+            day = 0,
+            quantitative = valid_work_time,
+            hidden_order=1,
+        )
+        new_record.save()
+        # 请假情况
+        new_record = WeeklyReport(
+            username=request.user.username,
+            real_name=request.user.real_name,
+            date=date,
+            type="用时情况",
+            name="请假情况",
+            day = 0,
+            quantitative = absence,
+            hidden_order=3,
+        )
+        new_record.save()
+        # 周评分（组长意见）
+        new_record = WeeklyReport(
+            username=request.user.username,
+            real_name=request.user.real_name,
+            date=date,
+            type="本周工作",
+            name="周评分",
+            day = 0,
+            quantitative = rate,
+            hidden_order=4,
+        )
+        new_record.save()
+        # 自评级（优/良/中/差）
+        new_record = WeeklyReport(
+            username=request.user.username,
+            real_name=request.user.real_name,
+            date=date,
+            type="本周工作",
+            name="自评级",
+            day = 0,
+            quantitative = self_rate,
+            hidden_order=5,
+        )
+        new_record.save()
+        # 问题建议
+        new_record = WeeklyReport(
+            username=request.user.username,
+            real_name=request.user.real_name,
+            date=date,
+            type="问题建议",
+            name="",
+            day = 0,
+            quantitative = any_questions,
+            hidden_order=999,
         )
         new_record.save()
         return JsonResponse("success",safe=False)
@@ -380,7 +479,7 @@ def weekly_report(request):
             # if len(existing_record) > 0:
             existing_day = float(day)
             for record in existing_record1:
-                existing_day += float(ecord.day)
+                existing_day += float(record.day)
             if existing_day > 1.0:
                 return JsonResponse("本日工作超过了1人日", safe=False)
         else:
@@ -388,11 +487,11 @@ def weekly_report(request):
             # if len(existing_record) > 0:
             existing_day = float(day)
             for record in existing_record1:
-                existing_day += float(ecord.day)
+                existing_day += float(record.day)
             if existing_day > 1.0:
                 return JsonResponse("明日计划超过了1人日", safe=False)
 
-        new_record = DailyReport(
+        new_record = WeeklyReport(
             username=request.user.username,
             real_name=request.user.real_name,
             date=date,
@@ -402,6 +501,7 @@ def weekly_report(request):
             quantitative = quantitative,
             qualitative = qualitative,
             type = type,
+            hidden_order= 6 if type == "本周工作" else 7,
         )
         new_record.save()
         return JsonResponse("success",safe=False)
@@ -426,18 +526,23 @@ def weekly_report_summary(request):
 
 def weekly_report_summary_api(request):
     records = []
-    all_records = WeeklyReport.objects.filter(username=request.user.username)
+    all_records = WeeklyReport.objects.filter(username=request.user.username).order_by('date', 'hidden_order')
+    date_occur = []
     for record in all_records:
         new_status = {
             'real_name':record.real_name,
-            'date':record.date,
+            'date':record.date if record.date not in date_occur else "",
+            'name': record.name,
             'sub_name':record.sub_name,
-            'day': record.day,
+            'day': record.day if record.day != 0 else "",
             'quantitative': record.quantitative,
             'qualitative': record.qualitative,
-            'type': record.type,
-
+            'type': record.type if record.date.strftime("%d %b %Y")+record.type not in date_occur else "",
         }
+        if record.date not in date_occur:
+            date_occur.append(record.date)
+        if record.date.strftime("%d %b %Y")+record.type not in date_occur:
+            date_occur.append(record.date.strftime("%d %b %Y")+record.type)
         records.append(new_status)
     return JsonResponse(records,safe=False)
 

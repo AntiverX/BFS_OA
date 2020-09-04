@@ -37,33 +37,33 @@
                         <el-row>
                             <el-col :span="4">
                                 <el-form-item label="平均工作时间">
-                                    <el-input v-model="form.tomorrow_quantitative"></el-input>
+                                    <el-input v-model="form.average_work_time"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="4">
                                 <el-form-item label="有效时间">
-                                    <el-input v-model="form.tomorrow_quantitative"></el-input>
+                                    <el-input v-model="form.valid_work_time"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="4">
                                 <el-form-item label="请假情况">
-                                    <el-input v-model="form.tomorrow_quantitative"></el-input>
+                                    <el-input v-model="form.absence"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="4">
                                 <el-form-item label="周评分">
-                                    <el-input v-model="form.tomorrow_quantitative"></el-input>
+                                    <el-input v-model="form.rate"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="4">
                                 <el-form-item label="自评级">
-                                    <el-input v-model="form.tomorrow_quantitative"></el-input>
+                                    <el-input v-model="form.self_rate"></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
 
                         <el-form-item label="问题建议">
-                            <el-input v-model="form.tomorrow_quantitative"></el-input>
+                            <el-input v-model="form.any_questions"></el-input>
                         </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit" size="small">创建</el-button>
@@ -85,37 +85,14 @@
                 radio: 1,
                 default_active: "2",
                 tableData: null,
-                tomorrow_1: true,
-                tomorrow_2: false,
-                tomorrow_3: false,
-                tomorrow_4: false,
-                tomorrow_5: false,
-                today_1: true,
-                today_2: false,
-                today_3: false,
-                today_4: false,
-                today_5: false,
-                options: [{
-                  value: '用时情况',
-                  label: '用时情况'
-                },  {
-                  value: '本周工作',
-                  label: '本周工作'
-                }, {
-                  value: '下周计划',
-                  label: '下周计划'
-                }, {
-                  value: '问题建议',
-                  label: '问题建议'
-                }],
                 form: {
-                    type:"",
-                    date: "",
-                    tomorrow_name : "",
-                    sub_name : "",
-                    tomorrow_day : 0,
-                    tomorrow_quantitative : "",
-                    tomorrow_qualitative : "",
+                    date:"",
+                    average_work_time:"",
+                    valid_work_time: "",
+                    absence : "",
+                    rate : "",
+                    self_rate : 0,
+                    any_questions : "",
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
             },

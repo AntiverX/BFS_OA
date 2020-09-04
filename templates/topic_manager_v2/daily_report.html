@@ -4,6 +4,7 @@
     <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal" router>
         <el-menu-item index="1" onclick="window.location='my_daily_report';">我的日报</el-menu-item>
         <el-menu-item index="2" onclick="window.location='daily_report_summary';">日报记录</el-menu-item>
+        <el-menu-item index="3" onclick="window.location='group_daily_report_summary';">本组日报</el-menu-item>
         <el-menu-item style="float:right;" onclick="window.location='/logout';">
             {% if user.is_authenticated %}
                 注销
@@ -23,7 +24,7 @@
                 <el-form ref="form" :model="form" label-width="100px">
                     {% csrf_token %}
 
-                    <el-form-item label="日期">
+                    <el-form-item label="日期" v-show="0">
                         <el-date-picker
                                 value-format="yyyy-MM-dd"
                                 size="large"
@@ -44,7 +45,7 @@
 
                             <el-col :span="4">
                                 <el-form-item label="大项">
-                                    <el-tooltip class="item" effect="dark" content="今日工作指的是今天完成的所有工作" placement="top">
+                                    <el-tooltip class="item" effect="dark" content="日报的大项分为本日工作和明日计划" placement="top">
                                         <el-select v-model="form.type" placeholder="请选择">
                                             <el-option
                                               v-for="item in options"
@@ -58,7 +59,7 @@
 
                             <el-col :span="8">
                                  <el-form-item label="小项">
-                                     <el-tooltip class="item" effect="dark" content="今日工作指的是今天完成的所有工作" placement="top">
+                                     <el-tooltip class="item" effect="dark" content="小项填写内容为项目、课题的名称，如ISCC、电力仿真系统" placement="top">
                                          <el-input v-model="form.tomorrow_name"></el-input>
                                      </el-tooltip>
                                  </el-form-item>
@@ -66,7 +67,16 @@
 
                             <el-col :span="8">
                                  <el-form-item label="分项">
-                                    <el-input v-model="form.sub_name"></el-input>
+                                     <el-tooltip class="item" effect="dark" content="分项填写的内容较为固定，一般按照类型进行分类，例如文档、会议、代码" placement="top">
+                                         <el-select v-model="form.sub_name" placeholder="请选择">
+                                             <el-option
+                                                 v-for="item in options2"
+                                                 :key="item.value"
+                                                 :label="item.label"
+                                                 :value="item.value">
+                                             </el-option>
+                                         </el-select>
+                                     </el-tooltip>
                                  </el-form-item>
                             </el-col>
 
@@ -111,22 +121,22 @@
                 radio: 1,
                 default_active: "2",
                 tableData: null,
-                tomorrow_1: true,
-                tomorrow_2: false,
-                tomorrow_3: false,
-                tomorrow_4: false,
-                tomorrow_5: false,
-                today_1: true,
-                today_2: false,
-                today_3: false,
-                today_4: false,
-                today_5: false,
                 options: [{
                   value: '本日工作',
                   label: '本日工作'
                 }, {
                   value: '明日计划',
                   label: '明日计划'
+                }],
+                options2: [{
+                  value: '代码',
+                  label: '代码'
+                }, {
+                  value: '文档',
+                  label: '文档'
+                }, {
+                  value: '会议',
+                  label: '会议'
                 }],
                 form: {
                     type:"",

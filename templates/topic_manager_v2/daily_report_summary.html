@@ -4,6 +4,7 @@
     <el-menu :default-active="'2'" class="el-menu-demo" mode="horizontal" router>
         <el-menu-item index="1" onclick="window.location='my_daily_report';">我的日报</el-menu-item>
         <el-menu-item index="2" onclick="window.location='daily_report_summary';">日报记录</el-menu-item>
+        <el-menu-item index="3" onclick="window.location='group_daily_report_summary';">本组日报</el-menu-item>
         <el-menu-item style="float:right;" onclick="window.location='/logout';">
             {% if user.is_authenticated %}
                 注销
@@ -29,13 +30,13 @@
                 >
                 </el-table-column>
                 <el-table-column
-                        width="160px"
+                        width="100px"
                         prop="date"
                         label="日期"
                 >
                 </el-table-column>
                 <el-table-column
-                        width="160px"
+                        width="100px"
                         prop="type"
                         label="大项"
                 >
@@ -46,12 +47,30 @@
                         label="小项">
                 </el-table-column>
                 <el-table-column
+                        width="100px"
                         prop="sub_name"
                         label="分项">
                 </el-table-column>
                 <el-table-column
+                        prop="quantitative"
+                        label="定量描述">
+                </el-table-column>
+                <el-table-column
+                        prop="qualitative"
+                        label="定性描述">
+                </el-table-column>
+                <el-table-column
+                        width="100px"
                         prop="day"
                         label="人日">
+                </el-table-column>
+                <el-table-column label="操作" prop="id">
+                    <template slot-scope="scope">
+                        <el-button
+                                size="mini"
+                                @click="handleEdit(scope.row.id)">删除
+                        </el-button>
+                    </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -64,6 +83,7 @@
     var app = new Vue({
         el: '#app',
         data: {
+            show: false,
             message: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
             radio: 1,
             default_active: "2",
@@ -73,6 +93,22 @@
             test() {
                 alert("上传成功");
             },
+            handleEdit(id) {
+                const params = new URLSearchParams();
+                params.append('id', id);
+                axios.post('delete_daily_report_summary_api', params)
+                        .then(function (response) {
+                            if (response.data === "success") {
+                                alert("删除成功");
+                                location.reload();
+                            } else {
+                                alert(response.data);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+            }
         },
         mounted() {
             axios

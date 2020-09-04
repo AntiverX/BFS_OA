@@ -33,6 +33,9 @@
         <el-aside width="250px">
             <el-row class="tac">
                 <el-menu :default-active="menu" class="el-menu-vertical-demo" style="height: calc(100vh - 60px);" router>
+                    <el-menu-item index="5" onclick="window.location='/'">
+                        <i class="el-icon-document"></i>BFS
+                    </el-menu-item>
                     <el-submenu index="1">
                         <template slot="title">
                             <i class="el-icon-location"></i>

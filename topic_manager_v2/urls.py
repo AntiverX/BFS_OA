@@ -22,6 +22,9 @@ urlpatterns = [
     path('my_daily_report', views.daily_report),
     path('daily_report_summary', views.daily_report_summary),
     path('daily_report_summary_api', views.daily_report_summary_api),
+    path('delete_daily_report_summary_api', views.delete_daily_report_summary_api),
+    path('group_daily_report_summary', views.group_daily_report_summary),
+    path('group_daily_report_summary_api', views.group_daily_report_summary_api),
     path('upload_history', views.upload_history),
     # 周报相关
     path('my_base_weekly_report', views.base_weekly_report),
