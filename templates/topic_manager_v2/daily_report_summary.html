@@ -22,7 +22,7 @@
         <div class="grid-content">
             <el-table
                     :data="tableData"
-                    :span-method="arraySpanMethod"
+                    :span-method="cellMerge"
                     style="width: 100%">
                 <el-table-column
                         width="80px"
@@ -175,6 +175,7 @@
             dialogTableVisible: false,
             dialogFormVisible: false,
             show: false,
+            spanArr: [],
             message: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
             radio: 1,
             default_active: "2",
@@ -215,7 +216,6 @@
             },
             handleEdit(row) {
                 this.dialogFormVisible = true;
-                console.log(row);
                 this.form.id = row.id
                 this.form.type = row.type;
                 this.form.date = row.date;
@@ -263,36 +263,43 @@
                             console.log(error);
                         });
             },
-            getSpanArr(data) {　
+            getSpanArr(data, that) {
                 for (var i = 0; i < data.length; i++) {
                     if (i === 0) {
-                          this.tableData.push(1);
-                          this.pos = 0
+                        that.spanArr.push(1);
+                        that.pos = 0
                     } else {
-                      // 判断当前元素与上一个元素是否相同
-                if (data[i].name === data[i - 1].name) {
-                            this.tableData[this.pos] += 1;
-                            this.tableData.push(0);
-                          } else {
-                            this.tableData.push(1);
-                            this.pos = i;
-                          }
+                        // 判断当前元素与上一个元素是否相同
+                        if (data[i].type === data[i - 1].type) {
+                            that.spanArr[this.pos] += 1;
+                            that.spanArr.push(0);
+                        } else {
+                            that.spanArr.push(1);
+                            that.pos = i;
+                        }
+                    }
+                }
+            },
+            cellMerge({ row, column, rowIndex, columnIndex }) {
+                console.log(this.spanArr);
+                if (columnIndex === 2) {
+                    const _row = this.spanArr[rowIndex];
+                    const _col = _row > 0 ? 1 : 0;
+                    return {
+                          rowspan: _row,
+                          colspan: _col
                     }
                 }
             },
         },
-
         mounted() {
-            const getSrc = () =>  {
-                return axios.get('daily_report_summary_api');
-            }
-
-            this.getSrc.then(function (response) {
-                return response.data; // now the data is accessable from here.
-            }).catch(function (response) {
-                console.log(response);
-            });
-            console.log(data);
+            axios
+                .get('daily_report_summary_api')
+                .then(response => {
+                    this.tableData = response.data;
+                    console.log(this.tableData);
+                    this.getSpanArr(this.tableData, this);
+                })
         }
     })
 </script>
