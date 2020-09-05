@@ -22,7 +22,6 @@
         <div class="grid-content">
             <el-table
                     :data="tableData"
-                    :span-method="cellMerge"
                     style="width: 100%">
                 <el-table-column
                         width="80px"
@@ -172,6 +171,7 @@
     var app = new Vue({
         el: '#app',
         data: {
+            menu: "3",
             dialogTableVisible: false,
             dialogFormVisible: false,
             show: false,
@@ -263,42 +263,13 @@
                             console.log(error);
                         });
             },
-            getSpanArr(data, that) {
-                for (var i = 0; i < data.length; i++) {
-                    if (i === 0) {
-                        that.spanArr.push(1);
-                        that.pos = 0
-                    } else {
-                        // 判断当前元素与上一个元素是否相同
-                        if (data[i].type === data[i - 1].type) {
-                            that.spanArr[this.pos] += 1;
-                            that.spanArr.push(0);
-                        } else {
-                            that.spanArr.push(1);
-                            that.pos = i;
-                        }
-                    }
-                }
-            },
-            cellMerge({ row, column, rowIndex, columnIndex }) {
-                console.log(this.spanArr);
-                if (columnIndex === 2) {
-                    const _row = this.spanArr[rowIndex];
-                    const _col = _row > 0 ? 1 : 0;
-                    return {
-                          rowspan: _row,
-                          colspan: _col
-                    }
-                }
-            },
+
         },
         mounted() {
             axios
                 .get('daily_report_summary_api')
                 .then(response => {
                     this.tableData = response.data;
-                    console.log(this.tableData);
-                    this.getSpanArr(this.tableData, this);
                 })
         }
     })
